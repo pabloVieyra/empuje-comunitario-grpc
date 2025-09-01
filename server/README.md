@@ -1,6 +1,6 @@
 # Empuje Comunitario - Backend Java
 
-### Basic Arquitecture
+### Basic Architecture
 ![img.png](src/main/resources/static/img.png)
 
 ## Software Development Agreements
