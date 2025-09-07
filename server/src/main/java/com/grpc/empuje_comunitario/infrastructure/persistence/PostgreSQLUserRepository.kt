@@ -18,6 +18,7 @@ open class PostgreSQLUserRepository : NetworkDatabase {
     override fun saveUser(userEntity: UserEntity): Boolean {
         try {
             entityManager.persist(userEntity)
+            entityManager.flush() // Forces Hibernate to execute SQL now
             return true
         } catch (e: Exception) {
             // Log the exception but rethrow it so higher layers can handle it properly
