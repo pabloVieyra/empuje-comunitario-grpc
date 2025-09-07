@@ -1,17 +1,16 @@
 package com.grpc.empuje_comunitario.application.user;
 
 import com.grpc.empuje_comunitario.domain.user.*;
-import io.grpc.Status;
 import org.springframework.stereotype.Service;
-
+/*
 @Service
 public class UserCreator {
 
-    private final UserRepository userRepository;
+    private final UserRepositoryImpl userRepository;
     private final PasswordEncryptor passwordEncryptor;
     private final EmailNotificationService emailNotificationService;
 
-    public UserCreator(UserRepository userRepository,
+    public UserCreator(UserRepositoryImpl userRepository,
                        PasswordEncryptor passwordEncryptor,
                        EmailNotificationService emailNotificationService) {
         this.userRepository = userRepository;
@@ -34,21 +33,19 @@ public class UserCreator {
         }
 
         Username username = new Username(usernameValue);
-        Email email = new Email(emailValue);
+        validateUniqueConstraints(username, emailValue);
 
-        validateUniqueConstraints(username, email);
-
-        String plainPassword = PasswordGenerator.generateRandomPassword();
+        String plainPassword = PasswordGeneratorImpl.generateRandomPassword();
         String encryptedPassword = passwordEncryptor.encrypt(plainPassword);
 
-        User user = User.create(username, name, lastname, phone, email, encryptedPassword, role);
+        User user = User.create(username, name, lastname, phone, emailValue, encryptedPassword, role);
 
-        userRepository.save(user);
+        userRepository.create(user);
 
         notifyUserByEmail(user, plainPassword);
     }
 
-    private void validateUniqueConstraints(Username username, Email email) {
+    private void validateUniqueConstraints(Username username, String email) {
         if (userRepository.existsByUsername(username)) {
             throw new IllegalArgumentException("Username already exists");
         }
@@ -75,3 +72,4 @@ public class UserCreator {
         emailNotificationService.sendEmail(user.email().value(), subject, message);
     }
 }
+ */

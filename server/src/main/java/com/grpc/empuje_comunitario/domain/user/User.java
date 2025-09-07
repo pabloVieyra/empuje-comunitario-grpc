@@ -4,27 +4,33 @@ import java.util.Objects;
 
 public class User {
     private final UserId id;
-    private final Username username;
+    private final String username;
     private String name;
     private String lastname;
     private String phone;
-    private final Email email;
-    private final String password;
+    private final String email;
     private Role role;
     private boolean active;
+    private final FieldValidator emailValidator;
 
     private User(UserId id,
-                 Username username,
+                 String username,
                  String name,
                  String lastname,
                  String phone,
-                 Email email,
-                 String password,
+                 String email,
                  Role role,
-                 boolean active) {
+                 boolean active,
+                 EmailValidator emailValidator
+    ) {
+        this.emailValidator = emailValidator;
 
         this.id = Objects.requireNonNull(id);
-        this.username = Objects.requireNonNull(username);
+        //this.username = Objects.requireNonNull(username);
+
+        if(username == null|| username.isBlank())
+            throw new IllegalArgumentException("Username is required");
+        this.username = username.trim();
 
         if (name == null || name.isBlank())
             throw new IllegalArgumentException("Name is required");
@@ -35,34 +41,35 @@ public class User {
         this.lastname = lastname.trim();
 
         this.phone = phone == null ? "" : phone.trim();
+        if (!this.emailValidator.validate(email))
+            throw new IllegalArgumentException("Invalid email");
         this.email = Objects.requireNonNull(email);
 
-        if (password == null || password.isBlank())
-            throw new IllegalArgumentException("Password is required");
-        this.password = password;
+//        if (password == null || password.isBlank())
+//            throw new IllegalArgumentException("Password is required");
+//        this.password = password;
 
         this.role = Objects.requireNonNull(role);
 
         this.active = active;
+
     }
 
-    public static User create(Username username,
+    public static User create(String username,
                               String name,
                               String lastname,
                               String phone,
-                              Email email,
-                              String password,
+                              String email,
                               Role role) {
-        return new User(UserId.newId(), username, name, lastname, phone, email, password, role, true);
+        return new User(UserId.newId(), username, name, lastname, phone, email, role, true, new EmailValidator());
     }
 
     public UserId id() { return id; }
-    public Username username() { return username; }
+    public String username() { return username; }
     public String name() { return name; }
     public String lastname() { return lastname; }
     public String phone() { return phone; }
-    public Email email() { return email; }
-    public String password() { return password; }
+    public String email() { return email; }
     public Role role() { return role; }
     public boolean isActive() { return active; }
 
