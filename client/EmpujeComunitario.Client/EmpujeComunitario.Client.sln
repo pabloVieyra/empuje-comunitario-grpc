@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpujeComunitario.Client.Api", "EmpujeComunitario.Client.Api\EmpujeComunitario.Client.Api.csproj", "{C29CB789-364E-4DE3-BA43-8158D8815442}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C29CB789-364E-4DE3-BA43-8158D8815442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C29CB789-364E-4DE3-BA43-8158D8815442}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C29CB789-364E-4DE3-BA43-8158D8815442}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C29CB789-364E-4DE3-BA43-8158D8815442}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {02323107-0F2F-4EBF-A6F6-975A19E74CE6}
+	EndGlobalSection
+EndGlobal
