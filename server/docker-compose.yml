@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: empuje-app
+    ports:
+      - "8080:8080"
+      - "9090:9090"  # gRPC port
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/empuje
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_MAIL_HOST: mailhog
+      SPRING_MAIL_PORT: 1025
+    depends_on:
+      - postgres
+    networks:
+      - empuje-network
+
+  postgres:
+    image: postgres:latest
+    container_name: empuje-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: empuje
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - empuje-network
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: empuje-mailhog
+    ports:
+      - "1025:1025"  # SMTP server port
+      - "8025:8025"  # Web UI port
+    networks:
+      - empuje-network
+
+networks:
+  empuje-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
