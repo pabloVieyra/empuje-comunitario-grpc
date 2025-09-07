@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package grpc;
+
+option java_package = "com.grpc.empuje_comunitario.proto";
+option java_multiple_files = true;
+option java_outer_classname = "UserServiceProto";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+service UserService {
+  rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
+}
+
+message CreateUserRequest {
+  string username = 1;
+  string name = 2;
+  string lastname = 3;
+  string phone = 4;
+  string email = 5;
+  string role = 6;
+}
+
+message CreateUserResponse {
+  bool success = 1;
+  string message = 2;
+}
