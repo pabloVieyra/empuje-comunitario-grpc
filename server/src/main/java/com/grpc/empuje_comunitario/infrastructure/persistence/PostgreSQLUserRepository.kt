@@ -1,6 +1,6 @@
 package com.grpc.empuje_comunitario.infrastructure.persistence
 
-import com.grpc.empuje_comunitario.application.user.NetworkDatabase
+import com.grpc.empuje_comunitario.repository.NetworkDatabase
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.slf4j.Logger
@@ -23,21 +23,7 @@ open class PostgreSQLUserRepository : NetworkDatabase {
         } catch (e: Exception) {
             // Log the exception but rethrow it so higher layers can handle it properly
             logger.error("Database error while saving user: ${e.message}")
-            throw e
+            return false
         }
     }
 }
-
-//    private fun toEntity (user:User, password:String):UserEntity {
-//        return UserEntity(
-//                user.id.value(),
-//                user.username,
-//                user.name,
-//                user.lastname,
-//                user.phone,
-//                user.email,
-//                password,
-//                user.role.name,
-//                user.isActive
-//        )
-//    }

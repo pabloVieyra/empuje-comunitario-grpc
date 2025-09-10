@@ -11,8 +11,8 @@ class User private constructor(
     val email: String,
     var role: Role,
     var active: Boolean,
-    private val emailValidator: FieldValidator,
-    private val requiredFieldValidator: FieldValidator
+    private val emailValidator: FieldValidator = EmailValidator(),
+    private val requiredFieldValidator: FieldValidator = RequiredFieldValidator()
 ) {
 
     init {
@@ -37,6 +37,8 @@ class User private constructor(
         Objects.requireNonNull(role)
     }
 
+
+    // TODO: deprecated , llevar el ID
     companion object {
         fun create(
             username: String,
@@ -47,6 +49,7 @@ class User private constructor(
             role: Role
         ): User {
             return User(
+                //TODO: delegar al repositorio
                 UserId.newId(),
                 username.trim(),
                 name.trim(),
@@ -54,9 +57,7 @@ class User private constructor(
                 phone,
                 email,
                 role,
-                true,
-                EmailValidator(),
-                RequiredFieldValidator()
+                true
             )
         }
     }
