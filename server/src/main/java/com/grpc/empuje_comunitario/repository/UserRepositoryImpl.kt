@@ -13,8 +13,8 @@ open class UserRepositoryImpl(
 
     override fun createWithPassword(user: User, password: String): MyResult<Unit> {
         try {
-            networkDatabase.saveUser(user.toUserEntity(password))
-            return MyResult.Success(Unit)
+            val success = networkDatabase.saveUser(user.toUserEntity(password))
+            return if(success) MyResult.Success(Unit) else MyResult.Failure(Exception("Failed to save user"))
         } catch (e: Exception) {
             return MyResult.Failure(e)
         }

@@ -15,11 +15,11 @@ class CreateUserUseCase(
     operator fun invoke(user: User) {
         val result = passwordGenerator.generateRandomPassword()
         if (result !is MyResult.Success) {
-            return
+            throw Exception("[PASSWORD]Failed to generate user password. Please try again later.")
         }
         val userRepositoryResult = createUserRepository.createWithPassword(user, result.data.encrypted)
         if (userRepositoryResult !is MyResult.Success) {
-            return
+            throw Exception("[PERSISTANT]Failed to persist the new user in the repository.")
         }
         val sendEmailResult = sendEmailUseCase(
             user.email,
@@ -27,7 +27,7 @@ class CreateUserUseCase(
             "Your password is: ${result.data.plain}"
         )
         if (sendEmailResult !is MyResult.Success) {
-            return
+            throw Exception("[MAIL]Failed to send welcome email to the user.")
         }
     }
 }

@@ -23,7 +23,7 @@ open class PostgreSQLUserRepository : NetworkDatabase {
         } catch (e: Exception) {
             // Log the exception but rethrow it so higher layers can handle it properly
             logger.error("Database error while saving user: ${e.message}")
-            return false
+            throw e
         }
     }
 }

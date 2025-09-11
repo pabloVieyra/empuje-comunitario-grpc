@@ -1,4 +1,4 @@
-package com.grpc.empuje_comunitario.network
+package com.grpc.empuje_comunitario.network.grpc
 
 import com.grpc.empuje_comunitario.controller.user.UserController
 import com.grpc.empuje_comunitario.domain.MyResult
@@ -27,25 +27,27 @@ open class UserGrpcService @Autowired constructor(
             role = request.role
         )
 
-        val response = when (result) {
+        responseObserver.onNext(result.toGenericResponse())
+        responseObserver.onCompleted()
+    }
+
+    private fun MyResult<Unit>.toGenericResponse(): GenericResponse {
+        return when (this) {
             is MyResult.Success -> GenericResponse.newBuilder()
                 .setSuccess(true)
                 .setMessage("User created successfully")
                 .build()
-            is MyResult.Failure -> {
-                val errorMessage = when {
-                    result.error is IllegalArgumentException -> "Validation error: ${result.error.message}"
-                    result.error.message?.contains("duplicate key") == true -> "User already exists"
-                    else -> "Error creating user: ${result.error.message ?: "Unknown error"}"
-                }
-                GenericResponse.newBuilder()
-                    .setSuccess(false)
-                    .setMessage(errorMessage)
-                    .build()
-            }
+            is MyResult.Failure -> GenericResponse.newBuilder()
+                .setSuccess(false)
+                .setMessage(mapErrorMessage(this.error))
+                .build()
         }
-
-        responseObserver.onNext(response)
-        responseObserver.onCompleted()
     }
+
+    private fun mapErrorMessage(error: Throwable): String =
+        when {
+            error is IllegalArgumentException -> "Validation error: ${error.message}"
+            error.message?.contains("duplicate key") == true -> "User already exists"
+            else -> "Error creating user: ${error.message ?: "Unknown error"}"
+        }
 }
