@@ -10,11 +10,11 @@ syntax = "proto3";
    rpc CreateUser (CreateUserRequest) returns (GenericResponse);
    rpc UpdateUser (UpdateUserRequest) returns (GenericResponse);
    rpc DisabledUser (DisabledUserRequest) returns (GenericResponse);
-   rpc ListUsers (ListUsersRequest) returns (GenericResponse);
+   rpc ListUsers (ListUsersRequest) returns (ListUsersResponse);
  }
 
  // Modelo de usuario
- message User {
+ message UserProto {
    string id = 1;
    string username = 2;
    string name = 3;
@@ -57,4 +57,10 @@ syntax = "proto3";
  message GenericResponse {
    bool success = 1;
    string message = 2;
+ }
+
+ message ListUsersResponse {
+   bool success = 1;
+   string message = 2;
+   repeated UserProto users = 3;
  }
