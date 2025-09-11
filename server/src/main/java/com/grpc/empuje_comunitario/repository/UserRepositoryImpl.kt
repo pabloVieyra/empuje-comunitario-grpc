@@ -19,4 +19,8 @@ open class UserRepositoryImpl(
             return MyResult.Failure(e)
         }
     }
+
+    override fun findAll(): MyResult<List<User>> {
+        TODO("Not yet implemented")
+    }
 }

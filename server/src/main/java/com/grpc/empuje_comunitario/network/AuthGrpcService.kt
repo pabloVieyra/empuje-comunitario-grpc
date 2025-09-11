@@ -1,6 +1,6 @@
 package com.grpc.empuje_comunitario.network
 
-import com.grpc.empuje_comunitario.controller.auth.AuthController
+import com.grpc.empuje_comunitario.controller.AuthController
 import com.grpc.empuje_comunitario.domain.MyResult
 import com.grpc.empuje_comunitario.proto.LoginRequest
 import com.grpc.empuje_comunitario.proto.LoginResponse

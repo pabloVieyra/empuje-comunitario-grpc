@@ -32,14 +32,19 @@ open class JwtTokenGenerator : TokenGenerator {
             .compact()
     }
 
-    fun validateAndGetSubject(token: String?): String? {
-        return Jwts.parserBuilder()
+fun validateAndGetSubjectAndRole(token: String?): Pair<Boolean, String?> {
+    return try {
+        val claims = Jwts.parserBuilder()
             .setSigningKey(key)
             .build()
             .parseClaimsJws(token)
-            .getBody()
-            .getSubject()
+            .body
+        val role = claims["role"] as? String
+        Pair(true, role)
+    } catch (ex: Exception) {
+        Pair(false, null)
     }
+}
 
     companion object {
         private const val SECRET = "this-is-a-very-strong-secret-key-32-chars-minimum!"

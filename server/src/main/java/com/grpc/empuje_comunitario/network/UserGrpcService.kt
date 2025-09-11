@@ -31,6 +31,18 @@ open class UserGrpcService @Autowired constructor(
         responseObserver.onCompleted()
     }
 
+    @Transactional
+    override fun listUsers(
+        request: ListUsersRequest,
+        responseObserver: StreamObserver<GenericResponse>
+    ) {
+        val apiToken = request.token
+        val users = userController.listUsers(apiToken)
+//        return ListUsersResponse.newBuilder()
+//            .addAllUsers(users.map { it.toProto() }) // .toProto() es un mapper que debes tener
+//            .build()
+    }
+
     private fun MyResult<Unit>.toGenericResponse(): GenericResponse {
         return when (this) {
             is MyResult.Success -> GenericResponse.newBuilder()

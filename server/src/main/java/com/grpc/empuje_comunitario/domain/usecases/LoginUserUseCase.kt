@@ -10,7 +10,7 @@ class LoginUserUseCase(
     private val authRepository: AuthRepository,
     private val tokenGenerator: TokenGenerator
 ) {
-    operator fun invoke(email: String, password: String): String {
+     fun invoke(email: String, password: String): String {
         //TODO: pendiente hacerlo tambien por username
         val userResult = authRepository.findUserByEmail(email)
         if (userResult !is MyResult.Success) {
