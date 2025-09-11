@@ -1,17 +1,15 @@
-package com.grpc.empuje_comunitario.domain.user;
+package com.grpc.empuje_comunitario.domain.user
 
-public final class UserId {
-    private final String value;
+import java.util.UUID
 
-    private UserId(String value) {
-        this.value = value;
-    }
+data class UserId  constructor(val value: String) {
+    companion object {
+        fun newId(): UserId {
+            return UserId(UUID.randomUUID().toString())
+        }
 
-    public static UserId newId() {
-        return new UserId(java.util.UUID.randomUUID().toString());
-    }
-
-    public String value() {
-        return value;
+        fun from(value: String): UserId {
+            return UserId(value)
+        }
     }
 }

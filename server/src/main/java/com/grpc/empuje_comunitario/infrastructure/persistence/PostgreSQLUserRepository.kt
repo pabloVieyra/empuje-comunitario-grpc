@@ -26,4 +26,18 @@ open class PostgreSQLUserRepository : NetworkDatabase {
             throw e
         }
     }
+
+    override fun findUserByEmail(email: String?): UserEntity? {
+        return try {
+            val query = entityManager.createQuery(
+                "SELECT u FROM UserEntity u WHERE u.email = :email",
+                UserEntity::class.java
+            )
+            query.setParameter("email", email)
+            query.resultList.firstOrNull()
+        } catch (e: Exception) {
+            logger.error("Database error while finding user by email: ${e.message}")
+            throw e
+        }
+    }
 }

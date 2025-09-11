@@ -1,8 +1,9 @@
 package com.grpc.empuje_comunitario.domain.user
 
+import com.grpc.empuje_comunitario.infrastructure.persistence.UserEntity
 import java.util.Objects
 
-class User private constructor(
+class User(
     val id: UserId,
     val username: String,
     var name: String,
@@ -61,4 +62,19 @@ class User private constructor(
             )
         }
     }
+}
+
+
+fun UserEntity.toUser(): User {
+    return User(
+        id = UserId.from(this.id),
+        username = this.username,
+        name = this.name,
+        lastname = this.lastname,
+        phone = this.phone ?: "",
+        email = this.email,
+        role = this.role.toRole(),
+        active = this.active,
+
+    )
 }

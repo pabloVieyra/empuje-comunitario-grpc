@@ -11,4 +11,8 @@ class BCryptEncrypterImpl() : Encrypter {
     override fun encrypt(data: String): String {
         return encoder.encode(data)
     }
+
+    override fun matches(raw: String, encrypted: String): Boolean {
+        return encoder.matches(raw, encrypted)
+    }
 }

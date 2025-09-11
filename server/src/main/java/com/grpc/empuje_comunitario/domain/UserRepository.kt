@@ -1,7 +1,7 @@
-package com.grpc.empuje_comunitario.domain;
+package com.grpc.empuje_comunitario.domain
 
-import com.grpc.empuje_comunitario.domain.user.User;
+import com.grpc.empuje_comunitario.domain.user.User
 
 interface UserRepository {
-    fun createWithPassword(user: User,password: String): MyResult<Unit>
+    fun createWithPassword(user: User, password: String): MyResult<Unit>
 }
