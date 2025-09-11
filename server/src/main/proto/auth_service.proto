@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package grpc;
+
+option java_package = "com.grpc.empuje_comunitario.proto";
+option java_multiple_files = true;
+option java_outer_classname = "AuthServiceProto";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+service AuthService {
+  rpc Login(LoginRequest) returns (LoginResponse);
+}
+
+message LoginRequest {
+  string usernameOrEmail = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string token = 1;
+  string role = 2;
+}
