@@ -3,6 +3,7 @@ package com.grpc.empuje_comunitario.repository
 import com.grpc.empuje_comunitario.domain.MyResult
 import com.grpc.empuje_comunitario.domain.UserRepository
 import com.grpc.empuje_comunitario.domain.user.User
+import com.grpc.empuje_comunitario.domain.user.toUser
 import com.grpc.empuje_comunitario.infrastructure.persistence.toUserEntity
 import org.springframework.stereotype.Repository
 
@@ -21,6 +22,11 @@ open class UserRepositoryImpl(
     }
 
     override fun findAll(): MyResult<List<User>> {
-        TODO("Not yet implemented")
+        try {
+            val users = networkDatabase.findAllUsers().map { it.toUser() }
+            return MyResult.Success(users)
+        }catch (e: Exception) {
+            return MyResult.Failure(e)
+        }
     }
 }

@@ -42,6 +42,7 @@ class UserController @Autowired constructor(
 
     fun listUsers(token: String): MyResult<List<User>> {
         return try {
+            //TODO: revisar si esta bien hubicar esta logica aqui
             val user = jwtTokenGenerator.validateAndGetSubjectAndRole(token)
             if(!user.first) throw IllegalArgumentException("Token inválido o expirado")
             if (user.second != Role.PRESIDENT.toString()) {

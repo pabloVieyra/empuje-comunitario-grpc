@@ -18,10 +18,9 @@ open class PostgreSQLUserRepository : NetworkDatabase {
     override fun saveUser(userEntity: UserEntity): Boolean {
         try {
             entityManager.persist(userEntity)
-            entityManager.flush() // Forces Hibernate to execute SQL now
+            entityManager.flush()
             return true
         } catch (e: Exception) {
-            // Log the exception but rethrow it so higher layers can handle it properly
             logger.error("Database error while saving user: ${e.message}")
             throw e
         }
@@ -37,6 +36,16 @@ open class PostgreSQLUserRepository : NetworkDatabase {
             query.resultList.firstOrNull()
         } catch (e: Exception) {
             logger.error("Database error while finding user by email: ${e.message}")
+            throw e
+        }
+    }
+
+    override fun findAllUsers(): List<UserEntity> {
+        return try {
+            val query = entityManager.createQuery("SELECT u FROM UserEntity u", UserEntity::class.java)
+            query.resultList
+        } catch (e: Exception) {
+            logger.error("Database error while fetching all users: ${e.message}")
             throw e
         }
     }

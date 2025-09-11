@@ -2,6 +2,7 @@ package com.grpc.empuje_comunitario.network.grpc
 
 import com.grpc.empuje_comunitario.controller.user.UserController
 import com.grpc.empuje_comunitario.domain.MyResult
+import com.grpc.empuje_comunitario.domain.user.User
 import com.grpc.empuje_comunitario.proto.*
 import io.grpc.stub.StreamObserver
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,13 +35,29 @@ open class UserGrpcService @Autowired constructor(
     @Transactional
     override fun listUsers(
         request: ListUsersRequest,
-        responseObserver: StreamObserver<GenericResponse>
+        responseObserver: StreamObserver<ListUsersResponse>
     ) {
         val apiToken = request.token
-        val users = userController.listUsers(apiToken)
-//        return ListUsersResponse.newBuilder()
-//            .addAllUsers(users.map { it.toProto() }) // .toProto() es un mapper que debes tener
-//            .build()
+        val usersResult = userController.listUsers(apiToken)
+
+        when (usersResult) {
+            is MyResult.Success -> {
+                val response = ListUsersResponse.newBuilder()
+                    .setSuccess(true)
+                    .setMessage("Users fetched successfully")
+                    .addAllUsers(usersResult.data.map { it.toProto() })
+                    .build()
+                responseObserver.onNext(response)
+            }
+            is MyResult.Failure -> {
+                val response = ListUsersResponse.newBuilder()
+                    .setSuccess(false)
+                    .setMessage(mapErrorMessage(usersResult.error))
+                    .build()
+                responseObserver.onNext(response)
+            }
+        }
+        responseObserver.onCompleted()
     }
 
     private fun MyResult<Unit>.toGenericResponse(): GenericResponse {
@@ -62,4 +79,16 @@ open class UserGrpcService @Autowired constructor(
             error.message?.contains("duplicate key") == true -> "User already exists"
             else -> "Error creating user: ${error.message ?: "Unknown error"}"
         }
+}
+
+private fun User.toProto(): UserProto? {
+    return UserProto.newBuilder()
+        .setId(this.id.toString())
+        .setUsername(this.username)
+        .setName(this.name)
+        .setLastname(this.lastname)
+        .setPhone(this.phone)
+        .setEmail(this.email)
+        .setRole(this.role.toString())
+        .build()
 }
