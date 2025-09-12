@@ -25,14 +25,19 @@ syntax = "proto3";
    bool active = 8;
  }
 
- // Requests
- message CreateUserRequest {
+ message CreateUserProto {
    string username = 1;
    string name = 2;
    string lastname = 3;
    string phone = 4;
    string email = 5;
    string role = 6;
+ }
+
+ // Requests
+ message CreateUserRequest {
+    string token = 1;
+    CreateUserProto user = 2;
  }
 
  message UpdateUserRequest {

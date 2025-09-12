@@ -25,9 +25,11 @@ class UserController @Autowired constructor(
         lastname: String,
         phone: String,
         email: String,
-        role: String
+        role: String,
+        token: String
     ): MyResult<Unit> {
         return try {
+            validatePresidentToken(token)
             val user = User.create(
                 username = username,
                 name = name,

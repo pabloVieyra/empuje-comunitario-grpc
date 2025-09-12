@@ -20,12 +20,13 @@ open class UserGrpcService @Autowired constructor(
         responseObserver: StreamObserver<GenericResponse>
     ) {
         val result = userController.createUser(
-            username = request.username,
-            name = request.name,
-            lastname = request.lastname,
-            phone = request.phone,
-            email = request.email,
-            role = request.role
+            username = request.user.username,
+            name = request.user.name,
+            lastname = request.user.lastname,
+            phone = request.user.phone,
+            email = request.user.email,
+            role = request.user.role,
+            token = request.token
         )
 
         responseObserver.onNext(result.toGenericResponse())
