@@ -97,11 +97,24 @@ open class UserGrpcService @Autowired constructor(
         responseObserver.onCompleted()
     }
 
+    @Transactional
+    override fun disableUser(
+        request: DisableUserRequest,
+        responseObserver: StreamObserver<GenericResponse>
+    ) {
+        val result = userController.disableUser(
+            userId = request.id,
+            token = request.token
+        )
+        responseObserver.onNext(result.toGenericResponse())
+        responseObserver.onCompleted()
+    }
+
     private fun MyResult<Unit>.toGenericResponse(): GenericResponse {
         return when (this) {
             is MyResult.Success -> GenericResponse.newBuilder()
                 .setSuccess(true)
-                .setMessage("User created successfully")
+                .setMessage("Response: successfully")
                 .build()
             is MyResult.Failure -> GenericResponse.newBuilder()
                 .setSuccess(false)

@@ -8,4 +8,5 @@ interface NetworkDatabase {
     fun findUserByEmail(email: String?): UserEntity?
     fun findAllUsers(): List<UserEntity>
     fun updateUser(user: UserEntity): UserEntity
+    fun findUserById(id: String): UserEntity?
 }

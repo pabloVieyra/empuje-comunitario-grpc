@@ -3,6 +3,7 @@ package com.grpc.empuje_comunitario.controller.user
 import com.grpc.empuje_comunitario.domain.user.User
 import com.grpc.empuje_comunitario.domain.usecases.CreateUserUseCase
 import com.grpc.empuje_comunitario.domain.MyResult
+import com.grpc.empuje_comunitario.domain.usecases.DisableUserUseCase
 import com.grpc.empuje_comunitario.domain.usecases.ListUsersUseCase
 import com.grpc.empuje_comunitario.domain.usecases.UpdateUserUseCase
 import com.grpc.empuje_comunitario.domain.user.Role
@@ -17,6 +18,7 @@ class UserController @Autowired constructor(
     private val createUserUseCase: CreateUserUseCase,
     private val listUsersUseCase: ListUsersUseCase,
     private val updateUserUseCase: UpdateUserUseCase,
+    private val disableUserUseCase: DisableUserUseCase,
     private val jwtTokenGenerator: JwtTokenGenerator
 ) {
     fun createUser(
@@ -84,6 +86,18 @@ class UserController @Autowired constructor(
         }
     }
 
+    fun disableUser(
+        userId: String,
+        token: String
+    ): MyResult<Unit> {
+        return try {
+            validatePresidentToken(token)
+            disableUserUseCase.invoke(userId)
+        } catch (e: Exception) {
+            MyResult.Failure(e)
+        }
+    }
+
     private fun validatePresidentToken(token: String) {
         val user = jwtTokenGenerator.validateAndGetSubjectAndRole(token)
         if (!user.first) throw IllegalArgumentException("Token inválido o expirado")
@@ -91,8 +105,4 @@ class UserController @Autowired constructor(
             throw IllegalAccessException("No autorizado para listar usuarios")
         }
     }
-
-
-
-
 }

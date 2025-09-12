@@ -74,4 +74,13 @@ open class PostgreSQLUserRepository : NetworkDatabase {
             throw e
         }
     }
+
+    override fun findUserById(id: String): UserEntity? {
+        return try {
+            entityManager.find(UserEntity::class.java, id)
+        } catch (e: Exception) {
+            logger.error("Database error while finding user by id: ${e.message}")
+            throw e
+        }
+    }
 }

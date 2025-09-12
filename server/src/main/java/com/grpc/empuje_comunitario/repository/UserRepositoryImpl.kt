@@ -38,4 +38,17 @@ open class UserRepositoryImpl(
             return MyResult.Failure(e)
         }
     }
+
+    override fun findUserById(id: String): MyResult<User> {
+        try {
+            val userEntity = networkDatabase.findUserById(id)
+            return if (userEntity != null) {
+                MyResult.Success(userEntity.toUser())
+            } else {
+                MyResult.Failure(Exception("User not found"))
+            }
+        }catch (e: Exception) {
+            return MyResult.Failure(e)
+        }
+    }
 }

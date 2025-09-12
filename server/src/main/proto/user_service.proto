@@ -9,7 +9,7 @@ syntax = "proto3";
  service UserService {
    rpc CreateUser (CreateUserRequest) returns (GenericResponse);
    rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse);
-   rpc DisabledUser (DisabledUserRequest) returns (GenericResponse);
+   rpc DisableUser (DisableUserRequest) returns (GenericResponse);
    rpc ListUsers (ListUsersRequest) returns (ListUsersResponse);
  }
 
@@ -45,8 +45,9 @@ syntax = "proto3";
    UserProto user = 2;
  }
 
- message DisabledUserRequest {
-   string id = 1;
+ message DisableUserRequest {
+   string token = 1;
+   string id = 2;
  }
 
  message ListUsersRequest {

@@ -6,4 +6,5 @@ interface UserRepository {
     fun createWithPassword(user: User, password: String): MyResult<Unit>
     fun findAll(): MyResult<List<User>>
     fun updateUser(user: User): MyResult<User>
+    fun findUserById(id: String): MyResult<User>
 }
