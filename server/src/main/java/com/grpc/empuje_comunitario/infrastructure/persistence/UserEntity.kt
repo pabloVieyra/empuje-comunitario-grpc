@@ -14,29 +14,28 @@ data class UserEntity(
     val id: String = "",
 
     @Column(unique = true, nullable = false)
-    val username: String = "",
+    var username: String = "",
 
     @Column(nullable = false)
-    val name: String = "",
+    var name: String = "",
 
     @Column(nullable = false)
-    val lastname: String = "",
+    var lastname: String = "",
 
-    val phone: String? = null,
+    var phone: String? = null,
 
     @Column(unique = true, nullable = false)
-    val email: String = "",
+    var email: String = "",
 
     @Column(nullable = false)
     val password: String = "",
 
     @Column(nullable = false)
-    val role: String = "",
+    var role: String = "",
 
     @Column(nullable = false)
-    val active: Boolean = false
+    var active: Boolean = false
 ) {
-    // No-arg constructor for JPA
     constructor() : this("", "", "", "", null, "", "", "", false)
 }
 

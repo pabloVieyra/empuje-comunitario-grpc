@@ -75,6 +75,5 @@ fun UserEntity.toUser(): User {
         email = this.email,
         role = this.role.toRole(),
         active = this.active,
-
     )
 }

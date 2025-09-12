@@ -49,4 +49,29 @@ open class PostgreSQLUserRepository : NetworkDatabase {
             throw e
         }
     }
+
+    override fun updateUser(user: UserEntity): UserEntity {
+        return try {
+            val existingUser = entityManager.find(UserEntity::class.java, user.id)
+            if (existingUser != null) {
+                existingUser.apply {
+                    this.username = user.username
+                    this.name = user.name
+                    this.lastname = user.lastname
+                    this.phone = user.phone
+                    this.email = user.email
+                    this.role = user.role
+                    this.active = user.active
+                }
+                entityManager.merge(existingUser)
+                entityManager.flush()
+                existingUser
+            } else {
+                throw IllegalArgumentException("User not found with id: ${user.id}")
+            }
+        } catch (e: Exception) {
+            logger.error("Database error while updating user: ${e.message}")
+            throw e
+        }
+    }
 }

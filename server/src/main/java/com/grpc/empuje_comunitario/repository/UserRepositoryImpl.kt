@@ -29,4 +29,13 @@ open class UserRepositoryImpl(
             return MyResult.Failure(e)
         }
     }
+
+    override fun updateUser(user: User): MyResult<User> {
+        try {
+            val updatedUser = networkDatabase.updateUser(user.toUserEntity(""))
+            return MyResult.Success(updatedUser.toUser())
+        }catch (e: Exception) {
+            return MyResult.Failure(e)
+        }
+    }
 }

@@ -7,4 +7,5 @@ interface NetworkDatabase {
     fun saveUser(user: UserEntity): Boolean
     fun findUserByEmail(email: String?): UserEntity?
     fun findAllUsers(): List<UserEntity>
+    fun updateUser(user: UserEntity): UserEntity
 }

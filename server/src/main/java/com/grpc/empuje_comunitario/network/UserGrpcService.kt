@@ -60,6 +60,42 @@ open class UserGrpcService @Autowired constructor(
         responseObserver.onCompleted()
     }
 
+    @Transactional
+    override fun updateUser(
+        request: UpdateUserRequest,
+        responseObserver: StreamObserver<UpdateUserResponse>
+    ) {
+        val result  = userController.updateUser(
+            id = request.user.id,
+            username = request.user.username,
+            name = request.user.name,
+            lastname = request.user.lastname,
+            phone = request.user.phone,
+            email = request.user.email,
+            role = request.user.role,
+            active = request.user.active,
+            token = request.token
+        )
+        when (result) {
+            is MyResult.Success -> {
+                val response = UpdateUserResponse.newBuilder()
+                    .setSuccess(true)
+                    .setMessage("Users fetched successfully")
+                    .setUser(result.data.toProto())
+                    .build()
+                responseObserver.onNext(response)
+            }
+            is MyResult.Failure -> {
+                val response = UpdateUserResponse.newBuilder()
+                    .setSuccess(false)
+                    .setMessage(mapErrorMessage(result.error))
+                    .build()
+                responseObserver.onNext(response)
+            }
+        }
+        responseObserver.onCompleted()
+    }
+
     private fun MyResult<Unit>.toGenericResponse(): GenericResponse {
         return when (this) {
             is MyResult.Success -> GenericResponse.newBuilder()
@@ -77,18 +113,19 @@ open class UserGrpcService @Autowired constructor(
         when {
             error is IllegalArgumentException -> "Validation error: ${error.message}"
             error.message?.contains("duplicate key") == true -> "User already exists"
-            else -> "Error creating user: ${error.message ?: "Unknown error"}"
+            else -> "Error : ${error.message ?: "Unknown error"}"
         }
 }
 
 private fun User.toProto(): UserProto? {
     return UserProto.newBuilder()
-        .setId(this.id.toString())
+        .setId(this.id.value)
         .setUsername(this.username)
         .setName(this.name)
         .setLastname(this.lastname)
         .setPhone(this.phone)
         .setEmail(this.email)
         .setRole(this.role.toString())
+        .setActive(this.active)
         .build()
 }
