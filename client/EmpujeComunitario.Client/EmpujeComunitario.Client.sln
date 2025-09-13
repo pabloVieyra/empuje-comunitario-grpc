@@ -5,6 +5,10 @@ VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpujeComunitario.Client.Api", "EmpujeComunitario.Client.Api\EmpujeComunitario.Client.Api.csproj", "{C29CB789-364E-4DE3-BA43-8158D8815442}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpujeComunitario.Client.Common", "EmpujeComunitario.Client.Common\EmpujeComunitario.Client.Common.csproj", "{49BC5EB1-EC1E-44C3-8BC5-93C87288ACDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpujeComunitario.Client.Services", "EmpujeComunitario.Client.Services\EmpujeComunitario.Client.Services.csproj", "{F6E62DC4-5D75-47B1-89BE-803E5BF7978A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{C29CB789-364E-4DE3-BA43-8158D8815442}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C29CB789-364E-4DE3-BA43-8158D8815442}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C29CB789-364E-4DE3-BA43-8158D8815442}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49BC5EB1-EC1E-44C3-8BC5-93C87288ACDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49BC5EB1-EC1E-44C3-8BC5-93C87288ACDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49BC5EB1-EC1E-44C3-8BC5-93C87288ACDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49BC5EB1-EC1E-44C3-8BC5-93C87288ACDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6E62DC4-5D75-47B1-89BE-803E5BF7978A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6E62DC4-5D75-47B1-89BE-803E5BF7978A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6E62DC4-5D75-47B1-89BE-803E5BF7978A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6E62DC4-5D75-47B1-89BE-803E5BF7978A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
