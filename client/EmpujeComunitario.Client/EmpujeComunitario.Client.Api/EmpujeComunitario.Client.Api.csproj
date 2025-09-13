@@ -3,29 +3,20 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <ImplicitUsings>disable</ImplicitUsings>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="user_service.proto" />
-  </ItemGroup>
-
-
-
-  <ItemGroup>
-    <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-	<PackageReference Include="Grpc.Net.Client" Version="2.71.0" />
-	<PackageReference Include="Grpc.Tools" Version="2.72.0">
-		<PrivateAssets>all</PrivateAssets>
-		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	</PackageReference>
+	  <PackageReference Include="AutoMapper" Version="12.0.1" />
+	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
   </ItemGroup>
 
-
-
+	
   <ItemGroup>
-    <Protobuf Include="user_service.proto" GrpcServices="Client" />
+    <ProjectReference Include="..\EmpujeComunitario.Client.Services\EmpujeComunitario.Client.Services.csproj" />
   </ItemGroup>
 
 </Project>
