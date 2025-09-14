@@ -20,7 +20,6 @@ namespace EmpujeComunitario.Client.Services.Implementation
             try
             {
                 LoginRequest request = _mapper.Map<LoginRequest>(loginRequest);
-
                 var result = await _authServiceClient.LoginAsync(request);
                 if (result.Success)
                 {
@@ -28,7 +27,7 @@ namespace EmpujeComunitario.Client.Services.Implementation
                 }
                 else
                 {
-                    return response.BadRequestWithData(result.Message);
+                    return response.BadRequestWithoutData(result.Message);
                 }
 
             }

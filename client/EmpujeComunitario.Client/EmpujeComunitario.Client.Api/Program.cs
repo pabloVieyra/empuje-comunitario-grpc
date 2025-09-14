@@ -1,3 +1,4 @@
+using EmpujeComunitario.Client.Api.Infrastructure;
 using EmpujeComunitario.Client.Services.Implementation;
 using EmpujeComunitario.Client.Services.Infrastructure;
 using EmpujeComunitario.Client.Services.Interface;
@@ -38,7 +39,7 @@ builder.Services.AddScoped<IAuthManagerServices, AuthManagerServices>();
 builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
 var app = builder.Build();
 // Configure the HTTP request pipeline.
-
+app.UseMiddleware<AuthorizationMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI();
 

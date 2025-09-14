@@ -8,16 +8,7 @@
 - Following **Clean Code** practices for readability and maintainability.
 - Designing software following **Clean / Hexagonal Architecture** principles.
 
-![img.png](src/main/resources/static/clean.png)
-
-## Example Clean in this Poject
-- Network ->  grpc
-- Controller -> convert grpc to domain
-- Domain -> use cases
-- Repository -> implementation of use cases
-- Infraestructure -> implementation of repository(jpa, mail, etc)
-
-
+![img.png](src/main/resources/static/CleanArchitecture.png)
 
 ## Starting the project
 

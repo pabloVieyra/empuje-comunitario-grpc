@@ -15,35 +15,65 @@ namespace EmpujeComunitario.Client.Api.Controllers
     public class UsuariosController : ControllerBase
     {
         private readonly IUserManagerServices _userManagerServices;
+        private const string errorId = "El Id de usuario es obligatorio.";
         public UsuariosController(IUserManagerServices userManagerServices)
         {
             _userManagerServices = userManagerServices;
         }
 
         [HttpPost(nameof(CreateUserAsync))]
-        public async Task<IActionResult> CreateUserAsync(CreateUserRequestDto request)
+        public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserRequestDto request)
         {
             if (!ModelState.IsValid)
             {
                 var errorResponse = BuildValidationErrorResponse<object>(ModelState);
                 return BadRequest(errorResponse);
             }
-            var response = await _userManagerServices.CreateUserAsync(request);
+            var authorization = HttpContext.Items["Authorization"]?.ToString();
+
+            var response = await _userManagerServices.CreateUserAsync(request, authorization);
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpPost(nameof(ListUsersAsync))]
-        //[SwaggerOperation(Summary = "Lista usuarios según filtros")]
-        //[SwaggerResponse(200, "Lista de usuarios obtenida correctamente", typeof(ListUsersResponse))]
-        //[SwaggerResponse(400, "Errores de validación")]
-        public async Task<IActionResult> ListUsersAsync(ListUsersRequestDto request)
+        [HttpGet(nameof(ListUsersAsync))]
+        public async Task<IActionResult> ListUsersAsync()
         {
             if (!ModelState.IsValid)
             {
                 var errorResponse = BuildValidationErrorResponse<object>(ModelState);
                 return BadRequest(errorResponse);
             }
-            var response = await _userManagerServices.ListUsersAsync(request);
+            var authorization = HttpContext.Items["Authorization"]?.ToString();
+            var response = await _userManagerServices.ListUsersAsync(authorization);
+            return StatusCode(response.StatusCode, response);
+        }
+
+
+        [HttpPut(nameof(UpdateUserAsync))]
+        public async Task<IActionResult> UpdateUserAsync(UpdateUserRequestDto updateUserRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errorResponse = BuildValidationErrorResponse<object>(ModelState);
+                return BadRequest(errorResponse);
+            }
+            var authorization = HttpContext.Items["Authorization"]?.ToString();
+            var response = await _userManagerServices.UpdateUserAsync(updateUserRequest, authorization);
+            return StatusCode(response.StatusCode, response);
+        }
+
+        [HttpPatch("DisableUserAsync/{id}")]
+        public async Task<IActionResult> DisableUserAsync(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                var errorResponse = new BaseObjectResponse<object>()
+                    .BadRequestWithoutData(errorId);
+                errorResponse.Errors.Add(new ValidationErrorResponse { Field = "id", Message = errorId });
+                return BadRequest(errorResponse);
+            }
+            var authorization = HttpContext.Items["Authorization"]?.ToString();
+            var response = await _userManagerServices.DisableUserAsync(id, authorization);
             return StatusCode(response.StatusCode, response);
         }
 

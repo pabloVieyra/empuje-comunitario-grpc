@@ -22,9 +22,10 @@
                 this.Message = message;
             return this;
         }
-        public BaseObjectResponse<T> BadRequestWithData(string message = null)
+        public BaseObjectResponse<T> BadRequestWithoutData(string message = null)
         {
             this.StatusCode = 400;
+            this.Errors = new List<ValidationErrorResponse>();
             if (!string.IsNullOrEmpty(message))
                 this.Message = message;
             return this;
