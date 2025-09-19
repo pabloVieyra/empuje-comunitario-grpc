@@ -2,7 +2,7 @@ import { useState } from "react";
 import { loginRequest } from "@/services/authApi";
 import { authService } from "@/services/authService";
 
-type LoginValues = { userOrEmail: string; password: string };
+type LoginValues = { usernameOrEmail: string; password: string };
 
 export const useLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -13,7 +13,7 @@ export const useLogin = () => {
     setError(null);
 
     try {
-      const data = await loginRequest(values.userOrEmail, values.password);
+      const {data} = await loginRequest(values.usernameOrEmail, values.password);
       const token = data.token;
       if (token) {
         authService.setToken(token);

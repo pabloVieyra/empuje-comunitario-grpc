@@ -2,6 +2,7 @@ const TOKEN_KEY = "access_token";
 
 export const authService = {
   setToken(token: string) {
+    console.log(token)
     localStorage.setItem(TOKEN_KEY, token);
   },
   getToken(): string | null {
