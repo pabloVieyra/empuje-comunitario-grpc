@@ -17,6 +17,7 @@ export const useLogin = () => {
       const token = data.token;
       if (token) {
         authService.setToken(token);
+        authService.setRole(data.role);
         return true;
       } else {
         setError("Token inválido.");

@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: empuje-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - empuje-client
+      - empuje-server
+
+  empuje-client:
+    build:
+      context: ./client/EmpujeComunitario.Client
+      dockerfile: Dockerfile
+    container_name: empuje-client
+    ports:
+      - "80:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    depends_on:
+      - empuje-server
+
+  empuje-server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: empuje-server
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/empuje
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_MAIL_HOST: mailhog
+      SPRING_MAIL_PORT: 1025
+    depends_on:
+      - postgres
+      - mailhog
+
+  postgres:
+    image: postgres:latest
+    container_name: empuje-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: empuje
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: empuje-mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  postgres-data:

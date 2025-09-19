@@ -1,8 +1,8 @@
 const TOKEN_KEY = "access_token";
+const ROLE_KEY = "role";
 
 export const authService = {
   setToken(token: string) {
-    console.log(token)
     localStorage.setItem(TOKEN_KEY, token);
   },
   getToken(): string | null {
@@ -10,5 +10,14 @@ export const authService = {
   },
   clearToken() {
     localStorage.removeItem(TOKEN_KEY);
+  },
+  setRole(role: string) {
+    localStorage.setItem(ROLE_KEY, role);
+  },
+  getRole(): string | null {
+    return localStorage.getItem(ROLE_KEY);
+  },
+  clearRole() {
+    localStorage.removeItem(ROLE_KEY);
   },
 };
