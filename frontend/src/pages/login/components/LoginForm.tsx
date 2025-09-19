@@ -8,10 +8,14 @@ import {
 } from "../styles";
 import { Input } from "@chakra-ui/react/input";
 import { useLogin } from "../useLogin";
+import { useNavigate } from "react-router";
+
 
 export const LoginForm: React.FC = () => {
-  const [values, setValues] = useState({ userOrEmail: "", password: "" });
+  const [values, setValues] = useState({ usernameOrEmail: "", password: "" });
   const { loading, error, login, setError } = useLogin();
+  const navigate = useNavigate();
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValues((v) => ({ ...v, [e.target.name]: e.target.value }));
@@ -20,26 +24,25 @@ export const LoginForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!values.userOrEmail || !values.password) {
+    if (!values.usernameOrEmail || !values.password) {
       setError("Completa ambos campos para ingresar.");
       return;
     }
     const success = await login(values);
     if (success) {
-      // Redirigir al home, ejemplo con react-router-dom v6
-      window.location.href = "/";
+        navigate("/");
     }
   };
 
   return (
     <Form onSubmit={handleSubmit} autoComplete="off">
       <InputWrapper>
-        <Label htmlFor="userOrEmail">Usuario o Email</Label>
+        <Label htmlFor="usernameOrEmail">Usuario o Email</Label>
         <Input
           color={"black"}
-          id="userOrEmail"
-          name="userOrEmail"
-          value={values.userOrEmail}
+          id="usernameOrEmail"
+          name="usernameOrEmail"
+          value={values.usernameOrEmail}
           onChange={handleChange}
           autoFocus
         />

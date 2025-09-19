@@ -3,6 +3,7 @@ package com.grpc.empuje_comunitario.domain.usecases
 import com.grpc.empuje_comunitario.domain.MyResult
 import com.grpc.empuje_comunitario.domain.AuthRepository
 import com.grpc.empuje_comunitario.domain.TokenGenerator
+import com.grpc.empuje_comunitario.domain.user.asString
 import org.springframework.stereotype.Component
 
 @Component
@@ -10,7 +11,7 @@ class LoginUserUseCase(
     private val authRepository: AuthRepository,
     private val tokenGenerator: TokenGenerator
 ) {
-     fun invoke(email: String, password: String): String {
+     fun invoke(email: String, password: String): Pair<String, String> {
         //TODO: pendiente hacerlo tambien por username
         val userResult = authRepository.findUserByEmail(email)
         if (userResult !is MyResult.Success) {
@@ -27,6 +28,6 @@ class LoginUserUseCase(
         if (token.isEmpty()) {
             throw Exception("[TOKEN] Failed to generate token.")
         }
-        return token
+        return Pair(token, user.role.asString())
     }
 }

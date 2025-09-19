@@ -24,8 +24,10 @@ open class AuthGrpcService @Autowired constructor(
         val response = when (result) {
             is MyResult.Success -> LoginResponse.newBuilder()
                 .setSuccess(true)
-                .setToken(result.data)
-                .build()
+                .setToken(result.data.first)
+                .setRole(result.data.second)
+                .setMessage("Authentication successful").build()
+
             is MyResult.Failure -> LoginResponse.newBuilder()
                 .setSuccess(false)
                 .setMessage(result.error.message ?: "Error de autenticación")

@@ -16,12 +16,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(options =>
 {
-    // Esta línea es útil pero no soluciona el problema actual
+    // Esta lï¿½nea es ï¿½til pero no soluciona el problema actual
     options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
 })
 .ConfigureApiBehaviorOptions(options =>
 {
-    // Esta línea es la que resuelve tu problema.
+    // Esta lï¿½nea es la que resuelve tu problema.
     options.SuppressModelStateInvalidFilter = true;
 });
 
@@ -37,7 +37,19 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserManagerServices, UserManagerServices>();
 builder.Services.AddScoped<IAuthManagerServices, AuthManagerServices>();
 builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy => policy.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+});
+
+// Construye la app despuÃ©s de agregar todos los servicios
 var app = builder.Build();
+
+app.UseCors("AllowFrontend");
+
 // Configure the HTTP request pipeline.
 app.UseMiddleware<AuthorizationMiddleware>();
 app.UseSwagger();

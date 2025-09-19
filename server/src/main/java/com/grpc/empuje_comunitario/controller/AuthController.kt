@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component
 class AuthController(
     private val loginUserUseCase: LoginUserUseCase
 ) {
-    fun login(email: String, password: String): MyResult<String> {
+    fun login(email: String, password: String): MyResult<Pair<String, String>> {
         return try {
-            val token = loginUserUseCase.invoke(email, password)
-            MyResult.Success(token)
+            val response = loginUserUseCase.invoke(email, password)
+            MyResult.Success(response)
         } catch (e: Exception) {
             MyResult.Failure(e)
         }
