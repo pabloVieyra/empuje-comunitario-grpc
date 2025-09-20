@@ -2,9 +2,9 @@ import { createBrowserRouter } from "react-router";
 
 import { PublicLayout, ProtectedLayout, PresidenteLayout } from "./layouts/Layouts";
 import Home from "./pages/Home";
-import UserList from "./pages/users/UserList";
 import Login from "./pages/login/Login";
 import NotFound from "./pages/NotFound";
+import { UserList } from "./pages/users/UserList";
 
 
 export const router = createBrowserRouter([
