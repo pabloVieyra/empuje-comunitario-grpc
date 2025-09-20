@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ModalBg, ModalCard, ModalTitle, ModalFooter, Btn, ErrorMsg } from "../styles";
 import type { User, UserRole } from "@/domain/User";
 
-const roles: UserRole[] = ["ADMIN", "PRESIDENTE", "USER"];
+const roles: UserRole[] = ["ADMIN", "PRESIDENT", "USER"];
 
 export const UserModal: React.FC<{
   user?: User;
@@ -20,13 +20,17 @@ export const UserModal: React.FC<{
     active: user?.active ?? true,
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = e.target;
-    setForm(f => ({
-      ...f,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+
+
+const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const { name, value } = e.target;
+  const checked = e.target instanceof HTMLInputElement ? e.target.checked : undefined;
+  
+  setForm(f => ({
+    ...f,
+      [name]: e.target.type === "checkbox" ? checked : value,
+  }));
+};
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

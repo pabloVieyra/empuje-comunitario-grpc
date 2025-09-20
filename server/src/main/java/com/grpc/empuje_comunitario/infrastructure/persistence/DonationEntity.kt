@@ -1,8 +1,12 @@
 package com.grpc.empuje_comunitario.infrastructure.persistence
 
+import com.grpc.empuje_comunitario.domain.donation.Donation
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import java.time.LocalDateTime
 
@@ -28,10 +32,29 @@ data class DonationEntity(
     @Column(nullable = false)
     val creationDate: LocalDateTime = LocalDateTime.now(),
 
-    @Column(nullable = false)
-    val creationUser: String = "",
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "creation_user_id", nullable = false)
+    var creationUser: UserEntity,
 
     var modificationDate: LocalDateTime? = null,
 
-    var modificationUser: String? = null
+    var modificationUser: UserEntity?
+
+
 )
+{
+
+}
+fun DonationEntity.toDonation(): Donation {
+    return Donation(
+        idDonation = this.id,
+        category = this.category,
+        description = this.description,
+        quantity = this.quantity,
+        isDeleted = this.isDeleted,
+        creationDate = this.creationDate,
+        creationUser = this.creationUser.id,
+        modificationDate = this.modificationDate,
+        modificationUser = this.modificationUser?.id
+    )
+}
