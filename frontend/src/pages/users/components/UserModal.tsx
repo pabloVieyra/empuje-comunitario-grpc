@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { ModalBg, ModalCard, ModalTitle, ModalFooter, Btn, ErrorMsg } from "../styles";
+import { ModalBg, ModalCard, ModalTitle, ModalFooter, Btn, ErrorMsg, InputWrapper, Label } from "../styles";
 import type { User, UserRole } from "@/domain/User";
+import { Input } from "@chakra-ui/react";
 
-const roles: UserRole[] = ["ADMIN", "PRESIDENTE", "USER"];
+const roles: UserRole[] = ["ADMIN", "PRESIDENT", "VOCAL", "COORDINATOR", "VOLUNTEER"];
 
 export const UserModal: React.FC<{
   user?: User;
@@ -39,68 +40,95 @@ export const UserModal: React.FC<{
       <ModalCard>
         <ModalTitle>{user ? "Editar Usuario" : "Nuevo Usuario"}</ModalTitle>
         <form onSubmit={handleSubmit} autoComplete="off">
-          <label>Usuario *</label>
-          <input
-            name="username"
-            value={form.username}
-            onChange={handleChange}
-            required
-            disabled={!!user}
-            style={{marginBottom: 12, width: '100%', padding: '10px'}}
-          />
-          <label>Nombre *</label>
-          <input
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            required
-            style={{marginBottom: 12, width: '100%', padding: '10px'}}
-          />
-          <label>Apellido *</label>
-          <input
-            name="lastName"
-            value={form.lastName}
-            onChange={handleChange}
-            required
-            style={{marginBottom: 12, width: '100%', padding: '10px'}}
-          />
-          <label>Teléfono</label>
-          <input
-            name="phone"
-            value={form.phone}
-            onChange={handleChange}
-            style={{marginBottom: 12, width: '100%', padding: '10px'}}
-          />
-          <label>Email *</label>
-          <input
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            required
-            disabled={!!user}
-            type="email"
-            style={{marginBottom: 12, width: '100%', padding: '10px'}}
-          />
-          <label>Rol</label>
-          <select
-            name="role"
-            value={form.role}
-            onChange={handleChange}
-            style={{marginBottom: 12, width: '100%', padding: '10px'}}
-          >
-            {roles.map(r => <option key={r} value={r}>{r}</option>)}
-          </select>
+          <InputWrapper>
+            <Label htmlFor="username">Usuario *</Label>
+            <Input
+              color={"black"}
+              id="username"
+              name="username"
+              value={form.username}
+              onChange={handleChange}
+              required
+              disabled={!!user}
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <Label htmlFor="name">Nombre *</Label>
+            <Input
+              color={"black"}
+              id="name"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              required
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <Label htmlFor="lastName">Apellido *</Label>
+            <Input
+              color={"black"}
+              id="lastName"
+              name="lastName"
+              value={form.lastName}
+              onChange={handleChange}
+              required
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <Label htmlFor="phone">Teléfono</Label>
+            <Input
+              color={"black"}
+              id="phone"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <Label htmlFor="email">Email *</Label>
+            <Input
+              color={"black"}
+              id="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              required
+              disabled={!!user}
+              type="email"
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <Label htmlFor="role">Rol</Label>
+            <select
+              id="role"
+              name="role"
+              value={form.role}
+              onChange={handleChange}
+              style={{
+                width: '100%',
+                padding: '12px 14px',
+                borderRadius: '10px',
+                border: '1.5px solid #e4e8f2',
+                background: '#f9fbff',
+                fontSize: '1rem',
+                marginTop: '6px',
+                color: 'black'
+              }}
+            >
+              {roles.map(r => <option key={r} value={r}>{r}</option>)}
+            </select>
+          </InputWrapper>
           {user && (
-            <label style={{display: 'flex', alignItems: 'center', marginBottom: 12}}>
+            <InputWrapper style={{flexDirection: 'row', alignItems: 'center', marginTop: '8px'}}>
               <input
                 type="checkbox"
-                name="activo"
+                name="active"
                 checked={form.active}
                 onChange={handleChange}
-                style={{marginRight: 8}}
+                style={{marginRight: 8, color: "black"}}
               />
-              Activo
-            </label>
+              <Label htmlFor="active" style={{marginBottom: 0}}>Activo</Label>
+            </InputWrapper>
           )}
           {error && <ErrorMsg>{error}</ErrorMsg>}
           <ModalFooter>

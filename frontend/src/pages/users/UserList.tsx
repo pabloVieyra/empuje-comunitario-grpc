@@ -34,7 +34,7 @@ export const UserList: React.FC = () => {
   return (
     <UsersPage>
       <Card>
-        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "column", marginBottom: 18}}>
           <h2 style={{
             fontWeight: 700,
             fontSize: "2.2rem",

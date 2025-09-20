@@ -1,25 +1,37 @@
 import styled from "styled-components";
 
+// Fondo general tipo login
 export const UsersPage = styled.div`
   min-height: 100vh;
-  background: linear-gradient(120deg, #f4f6fb 60%, #1a1c25 100%);
-  padding: 40px;
+  background: #171822;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+`;
+
+export const CenterBox = styled.div`
+  background: linear-gradient(110deg, #f7f8fc 60%, #2456e9 100%);
+  border-radius: 36px;
+  box-shadow: 0 8px 48px #1a1c2512, 0 1.5px 18px #3252e710;
+  width: 92vw;
+  max-width: 1200px;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const Card = styled.div`
   background: #fff;
-  border-radius: 30px;
-  box-shadow: 0 8px 48px #1a1c2512, 0 1.5px 18px #3252e710;
-  padding: 38px 26px;
-  width: 100%;
-  max-width: 1100px;
-  margin-bottom: 32px;
+  border-radius: 28px;
+  box-shadow: 0 4px 32px #3252e715;
+  padding: 44px 38px;
+  min-width: 390px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 38px;
+  align-items: center;
 `;
 
 export const Table = styled.table`
@@ -39,7 +51,6 @@ export const Table = styled.table`
     background: #f6f8fc;
     font-weight: 700;
     font-size: 1.04rem;
-    letter-spacing: 0.01em;
     color: #23244b;
   }
   tr:last-child td {
@@ -48,24 +59,24 @@ export const Table = styled.table`
 `;
 
 export const Btn = styled.button`
-  background: linear-gradient(90deg, #3252e7 0%, #4f66fa 100%);
+  background: #2456e9;
   color: #fff;
   border: none;
   border-radius: 14px;
-  padding: 12px 26px;
-  margin: 0 8px 8px 0;
+  padding: 13px 0;
+  width: 100%;
   font-weight: 600;
   letter-spacing: 0.025em;
   cursor: pointer;
   font-size: 1.08rem;
-  box-shadow: 0 2px 16px #3252e730;
+  box-shadow: 0 2px 12px #3252e730;
+  margin-top: 10px;
   transition: 0.18s;
-  &:hover { filter: brightness(1.07); box-shadow: 0 4px 20px #3252e730; }
+  &:hover { filter: brightness(1.05); }
 `;
 
 export const ModalBg = styled.div`
   position: fixed; top:0; left:0; width:100vw; height:100vh;
-  background: rgba(50,82,231,0.09);
   display: flex; align-items: center; justify-content: center;
   z-index: 9999;
   backdrop-filter: blur(2px);
@@ -74,10 +85,10 @@ export const ModalBg = styled.div`
 export const ModalCard = styled.div`
   background: #fff;
   border-radius: 24px;
-  padding: 36px 28px;
-  min-width: 340px;
+  padding: 38px 32px;
+  min-width: 420px;
   max-width: 96vw;
-  box-shadow: 0 4px 48px #3252e74a;
+  box-shadow: 0 4px 48px #2456e94a;
   display: flex;
   flex-direction: column;
 `;
@@ -87,6 +98,7 @@ export const ModalTitle = styled.h3`
   margin-bottom: 22px;
   font-weight: 700;
   color: #23244b;
+  text-align: center;
 `;
 
 export const ModalFooter = styled.div`
@@ -100,19 +112,20 @@ export const ErrorMsg = styled.div`
   color: #ff2f2f;
   font-weight: 600;
   margin-top: 12px;
+  text-align: center;
 `;
 
 export const Input = styled.input`
   width: 100%;
-  padding: 11px 14px;
+  padding: 13px 14px;
   border-radius: 10px;
-  border: 1.6px solid #e4e8f2;
+  border: 1.5px solid #e4e8f2;
   background: #f9fbff;
   font-size: 1rem;
   margin-bottom: 18px;
   transition: border 0.16s;
   &:focus {
-    border-color: #3252e7;
+    border-color: #2456e9;
     outline: none;
     background: #f4f8ff;
   }
@@ -120,16 +133,31 @@ export const Input = styled.input`
 
 export const Select = styled.select`
   width: 100%;
-  padding: 11px 14px;
+  padding: 13px 14px;
   border-radius: 10px;
-  border: 1.6px solid #e4e8f2;
+  border: 1.5px solid #e4e8f2;
   background: #f9fbff;
   font-size: 1rem;
   margin-bottom: 18px;
   transition: border 0.16s;
   &:focus {
-    border-color: #3252e7;
+    border-color: #2456e9;
     outline: none;
     background: #f4f8ff;
   }
+`;
+
+export const InputWrapper = styled.div`
+  flex-direction: column;
+  display: flex;
+  position: relative;
+  margin-bottom: 8px;
+`;
+
+export const Label = styled.label`
+  font-size: 0.97rem;
+  font-weight: 500;
+  color: #222;
+  margin-bottom: 5px;
+  display: block;
 `;
