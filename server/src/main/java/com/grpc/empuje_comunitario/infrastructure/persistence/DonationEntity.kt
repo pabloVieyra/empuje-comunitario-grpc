@@ -37,7 +37,8 @@ data class DonationEntity(
     var creationUser: UserEntity,
 
     var modificationDate: LocalDateTime? = null,
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "modification_user_id")
     var modificationUser: UserEntity?
 
 

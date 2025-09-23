@@ -1,4 +1,4 @@
-/*package com.grpc.empuje_comunitario.infrastructure.persistence
+package com.grpc.empuje_comunitario.infrastructure.persistence
 
 import jakarta.persistence.*
 import java.io.Serializable
@@ -16,4 +16,3 @@ data class UserEventEntity(
     @JoinColumn(name = "event_id", nullable = false)
     val event: EventEntity
 ) : Serializable
-*/

@@ -9,7 +9,7 @@ class Donation(
     val category: String,
     val description: String,
     val quantity: Int,
-    val isDeleted: Boolean = false,
+    var isDeleted: Boolean,
     val creationDate: LocalDateTime = LocalDateTime.now(),
     val creationUser: String,
     val modificationDate: LocalDateTime? = null,

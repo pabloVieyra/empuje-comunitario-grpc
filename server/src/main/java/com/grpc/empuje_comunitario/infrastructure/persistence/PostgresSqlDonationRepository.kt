@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 @Service
 open class PostgresSqlDonationRepository: DonationNetworkDatabase {
 
-    private val logger: Logger = LoggerFactory.getLogger(PostgreSQLUserRepository::class.java)
+    private val logger: Logger = LoggerFactory.getLogger(PostgresSqlDonationRepository::class.java)
 
     @PersistenceContext
     private lateinit var entityManager: EntityManager

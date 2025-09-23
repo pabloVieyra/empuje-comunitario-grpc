@@ -1,5 +1,7 @@
-/*package com.grpc.empuje_comunitario.infrastructure.persistence
+package com.grpc.empuje_comunitario.infrastructure.persistence
 
+import com.grpc.empuje_comunitario.domain.donation.Donation
+import com.grpc.empuje_comunitario.domain.donation.Event
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -19,9 +21,28 @@ data class EventEntity(
     @Column(nullable = false)
     var eventDateTime: LocalDateTime,
 
+    @OneToOne
+    @JoinColumn(name = "modification_user_id")
+    var modificationUser: UserEntity? = null,
+
+    @Column(name = "modification_date")
+    var modificationDate: LocalDateTime? = null,
+
     @OneToMany(mappedBy = "event", cascade = [CascadeType.ALL], orphanRemoval = true)
     val eventDonations: List<EventDonationEntity> = listOf(),
 
     @OneToMany(mappedBy = "event", cascade = [CascadeType.ALL], orphanRemoval = true)
     val userEvents: List<UserEventEntity> = listOf()
-)*/
+){
+
+}
+fun EventEntity.toEvent(): Event {
+    return Event(
+        eventName = this.eventName,
+        id =  this.id,
+        description = this.description,
+        eventDateTime = this.eventDateTime,
+        modificationDate = this.modificationDate,
+        modificationUser =  modificationUser?.id
+    )
+}
