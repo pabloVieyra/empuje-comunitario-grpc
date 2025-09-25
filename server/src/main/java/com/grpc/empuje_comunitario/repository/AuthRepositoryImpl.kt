@@ -2,6 +2,7 @@ package com.grpc.empuje_comunitario.repository
 
 import com.grpc.empuje_comunitario.domain.MyResult
 import com.grpc.empuje_comunitario.domain.AuthRepository
+import com.grpc.empuje_comunitario.repository.TokenGenerator
 import com.grpc.empuje_comunitario.domain.user.User
 import com.grpc.empuje_comunitario.domain.user.toUser
 import org.springframework.stereotype.Repository
@@ -9,7 +10,8 @@ import org.springframework.stereotype.Repository
 @Repository
 open class AuthRepositoryImpl(
     private val networkDatabase: NetworkDatabase,
-    private val encrypter: Encrypter
+    private val encrypter: Encrypter,
+    private val tokenGenerator: TokenGenerator
 ) : AuthRepository {
     override fun findUserByEmail(email: String): MyResult<User> {
         return try {
@@ -34,5 +36,9 @@ open class AuthRepositoryImpl(
         } catch (e: Exception) {
             MyResult.Failure(e)
         }
+    }
+
+    override fun generateToken(user: User): String {
+        return tokenGenerator.generateToken(user)
     }
 }

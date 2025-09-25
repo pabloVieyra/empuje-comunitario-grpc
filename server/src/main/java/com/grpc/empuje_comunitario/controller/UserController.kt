@@ -13,6 +13,7 @@ import com.grpc.empuje_comunitario.infrastructure.security.JwtTokenGenerator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
+//Falta interface en Domain
 @Component
 class UserController @Autowired constructor(
     private val createUserUseCase: CreateUserUseCase,

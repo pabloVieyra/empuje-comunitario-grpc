@@ -2,14 +2,13 @@ package com.grpc.empuje_comunitario.domain.usecases
 
 import com.grpc.empuje_comunitario.domain.MyResult
 import com.grpc.empuje_comunitario.domain.AuthRepository
-import com.grpc.empuje_comunitario.domain.TokenGenerator
+import com.grpc.empuje_comunitario.repository.TokenGenerator
 import com.grpc.empuje_comunitario.domain.user.asString
 import org.springframework.stereotype.Component
 
 @Component
 class LoginUserUseCase(
     private val authRepository: AuthRepository,
-    private val tokenGenerator: TokenGenerator
 ) {
      fun invoke(email: String, password: String): Pair<String, String> {
         //TODO: pendiente hacerlo tambien por username
@@ -24,7 +23,8 @@ class LoginUserUseCase(
             throw Exception("[AUTH] Incorrect credentials.")
         }
 
-        val token = tokenGenerator.generateToken(user)
+         val token = authRepository.generateToken(user)
+        //val token = tokenGenerator.generateToken(user)
         if (token.isEmpty()) {
             throw Exception("[TOKEN] Failed to generate token.")
         }

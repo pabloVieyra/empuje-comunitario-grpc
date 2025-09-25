@@ -1,6 +1,6 @@
 package com.grpc.empuje_comunitario.infrastructure.security
 
-import com.grpc.empuje_comunitario.domain.TokenGenerator
+import com.grpc.empuje_comunitario.repository.TokenGenerator
 import com.grpc.empuje_comunitario.domain.user.User
 import com.grpc.empuje_comunitario.domain.user.asString
 import io.jsonwebtoken.Jwts
