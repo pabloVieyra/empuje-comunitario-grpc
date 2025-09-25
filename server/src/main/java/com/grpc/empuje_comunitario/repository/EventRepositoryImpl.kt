@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository
 import com.grpc.empuje_comunitario.domain.MyResult
 import com.grpc.empuje_comunitario.domain.donation.Event
 import com.grpc.empuje_comunitario.domain.donation.toEventEntity
+import com.grpc.empuje_comunitario.domain.user.Role
+import com.grpc.empuje_comunitario.domain.user.asString
+import com.grpc.empuje_comunitario.domain.user.toRole
 import com.grpc.empuje_comunitario.infrastructure.persistence.*
 import java.time.LocalDateTime
 
@@ -95,29 +98,49 @@ open class EventRepositoryImpl(
         MyResult.Failure(e)
     }
 
-    override fun removeUser(eventId: Int, userId: String, actorId: String): MyResult<Unit> = try {
-        val event = eventNetworkDatabase.findById(eventId)
-            ?: return MyResult.Failure(Exception("Event not found"))
-        val user = userNetworkDatabase.findUserById(userId)
-            ?: return MyResult.Failure(Exception("User not found"))
-        val actor = userNetworkDatabase.findUserById(actorId)
-            ?: return MyResult.Failure(Exception("Actor not found"))
+    override fun removeUser(eventId: Int, userId: String, actorId: String): MyResult<Unit> {
+        return try {
+            val event = eventNetworkDatabase.findById(eventId)
+                ?: return MyResult.Failure(Exception("Event not found"))
 
-        /*if (event.eventDateTime.isBefore(LocalDateTime.now()) && actor.role != Role.VOLUNTARIO) {
-            return MyResult.Failure(Exception("No se puede remover usuarios de eventos pasados"))
-        }*/
+            val user = userNetworkDatabase.findUserById(userId)
+                ?: return MyResult.Failure(Exception("User not found"))
 
-        /*if (actor.role == Role.VOLUNTARIO && actor.id != user.id) {
-            return MyResult.Failure(Exception("Voluntario solo puede quitarse a sí mismo"))
-        }*/
+            val actor = userNetworkDatabase.findUserById(actorId)
+                ?: return MyResult.Failure(Exception("Actor not found"))
 
-        val success = eventNetworkDatabase.removeUserFromEvent(event, user)
-        if (success) MyResult.Success(Unit)
-        else MyResult.Failure(Exception("Failed to remove user from event"))
+            if (event.eventDateTime.isBefore(java.time.LocalDateTime.now())) {
+                return MyResult.Failure(Exception("No se puede modificar la lista de miembros de un evento pasado"))
+            }
 
-    } catch (e: Exception) {
-        MyResult.Failure(e)
+            val actorRole = try {
+                actor.role.toRole()
+            } catch (e: Exception) {
+                return MyResult.Failure(Exception("Rol del actor inválido: ${actor.role}"))
+            }
+
+
+            when (actorRole) {
+                Role.PRESIDENT, Role.COORDINATOR -> {
+                }
+                Role.VOLUNTEER -> {
+                    if (actor.id != user.id) {
+                        return MyResult.Failure(Exception("Voluntario solo puede quitarse a sí mismo"))
+                    }
+                }
+                else -> {
+                    return MyResult.Failure(Exception("Rol no autorizado para quitar miembros"))
+                }
+            }
+            val success = eventNetworkDatabase.removeUserFromEvent(event, user)
+            if (success) MyResult.Success(Unit)
+            else MyResult.Failure(Exception("Fallo al quitar el usuario del evento"))
+
+        } catch (e: Exception) {
+            MyResult.Failure(e)
+        }
     }
+
 
     override fun registerDonation(eventId: Int, donationId: String, quantity: Int, actorId: String): MyResult<Unit> = try {
         val event = eventNetworkDatabase.findById(eventId)

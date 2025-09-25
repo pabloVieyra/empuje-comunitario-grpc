@@ -6,6 +6,9 @@ syntax = "proto3";
  option java_multiple_files = true;
  option java_outer_classname = "UserServiceProto";
 
+import "common.proto";
+
+
  service UserService {
    rpc CreateUser (CreateUserRequest) returns (GenericResponse);
    rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse);
@@ -52,11 +55,6 @@ syntax = "proto3";
 
  message ListUsersRequest {
    string token = 1;
- }
-
- message GenericResponse {
-   bool success = 1;
-   string message = 2;
  }
 
  message ListUsersResponse {

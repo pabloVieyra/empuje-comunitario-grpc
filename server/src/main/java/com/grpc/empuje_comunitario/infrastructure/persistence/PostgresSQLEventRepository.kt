@@ -1,6 +1,6 @@
 package com.grpc.empuje_comunitario.infrastructure.persistence
 import com.grpc.empuje_comunitario.repository.EventNetworkDatabase
-import com.sun.org.slf4j.internal.LoggerFactory
+import org.slf4j.LoggerFactory
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.springframework.stereotype.Service

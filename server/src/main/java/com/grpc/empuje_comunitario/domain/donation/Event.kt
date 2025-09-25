@@ -11,7 +11,19 @@ class Event(
     val modificationUser: String? ,
     val modificationDate: LocalDateTime? = null
 ){
-
+    companion object {
+        fun create(eventName: String, description: String, eventDateTime: LocalDateTime): Event {
+            require(eventDateTime.isAfter(LocalDateTime.now())) { "La fecha del evento debe ser futura" }
+            return Event(
+                id = 0, // Se genera en la base de datos
+                eventName = eventName,
+                description = description,
+                eventDateTime = eventDateTime,
+                modificationUser = null,
+                modificationDate = null
+            )
+        }
+    }
 }
 fun Event.toEventEntity(user: UserEntity): EventEntity {
     return EventEntity(

@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package grpc;
+
+option java_package = "com.grpc.empuje_comunitario.proto";
+option java_multiple_files = true;
+option java_outer_classname = "EventServiceProto";
+
+import "common.proto";
+
+
+service EventService {
+  rpc CreateEvent (CreateEventRequest) returns (GenericResponse);
+  rpc UpdateEvent (UpdateEventRequest) returns (UpdateEventResponse);
+  rpc DeleteEvent (DeleteEventRequest) returns (GenericResponse);
+  rpc ListEvents (ListEventsRequest) returns (ListEventsResponse);
+  rpc AddUserToEvent (AddUserToEventRequest) returns (GenericResponse);
+  rpc RemoveUserFromEvent (RemoveUserFromEventRequest) returns (GenericResponse);
+  rpc RegisterDonationToEvent (RegisterDonationRequest) returns (GenericResponse);
+}
+
+// Modelo de evento
+message EventProto {
+  int32 id = 1;
+  string eventName = 2;
+  string description = 3;
+  string eventDateTime = 4; // ISO string
+  string modificationUser = 5;
+  string modificationDate = 6;
+}
+
+// Requests
+message CreateEventRequest {
+  string token = 1;
+  string eventName = 2;
+  string description = 3;
+  string eventDateTime = 4;
+}
+
+message UpdateEventRequest {
+  string token = 1;
+  EventProto event = 2;
+}
+
+message DeleteEventRequest {
+  string token = 1;
+  int32 eventId = 2;
+  string actorId = 3;
+}
+
+message ListEventsRequest {
+  string token = 1;
+}
+
+message AddUserToEventRequest {
+  string token = 1;
+  int32 eventId = 2;
+  string userId = 3;
+  string actorId = 4;
+}
+
+message RemoveUserFromEventRequest {
+  string token = 1;
+  int32 eventId = 2;
+  string userId = 3;
+  string actorId = 4;
+}
+
+message RegisterDonationRequest {
+  string token = 1;
+  int32 eventId = 2;
+  string donationId = 3;
+  int32 quantity = 4;
+  string actorId = 5;
+}
+
+// Responses
+message ListEventsResponse {
+  bool success = 1;
+  string message = 2;
+  repeated EventProto events = 3;
+}
+
+message UpdateEventResponse {
+  bool success = 1;
+  string message = 2;
+  EventProto event = 3;
+}
