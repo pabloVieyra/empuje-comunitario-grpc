@@ -76,6 +76,33 @@ open class EventGrpcService @Autowired constructor(
     }
 
     @Transactional
+    override fun findEventById(
+        request: FindEventByIdRequest,
+        responseObserver: StreamObserver<FindEventByIdResponse>
+    ) {
+        val result = eventController.findEventById(request.eventId)
+
+        when (result) {
+            is MyResult.Success -> {
+                val response = FindEventByIdResponse.newBuilder()
+                    .setSuccess(true)
+                    .setMessage("Event fetched successfully")
+                    .setEvent(result.data.toProto())
+                    .build()
+                responseObserver.onNext(response)
+            }
+            is MyResult.Failure -> {
+                val response = FindEventByIdResponse.newBuilder()
+                    .setSuccess(false)
+                    .setMessage(mapErrorMessage(result.error))
+                    .build()
+                responseObserver.onNext(response)
+            }
+        }
+        responseObserver.onCompleted()
+    }
+
+    @Transactional
     override fun listEvents(
         request: ListEventsRequest,
         responseObserver: StreamObserver<ListEventsResponse>

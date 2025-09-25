@@ -11,6 +11,7 @@ import java.time.LocalDateTime
 class EventController @Autowired constructor(
     private val createEventUseCase: CreateEventUseCase,
     private val listEventUseCase: ListEventUseCase,
+    private val findEventByIdUseCase: FindEventByIdUseCase,
     private val addUserToEventUseCase: AddUserToEventUseCase,
     private val removeUserFromEventUseCase: RemoveUserFromEventUseCase,
     private val registerDonationUseCase: RegisterDonationToEventUseCase,
@@ -29,7 +30,12 @@ class EventController @Autowired constructor(
     } catch (e: Exception) {
         MyResult.Failure(e)
     }
-
+    fun findEventById(eventId: Int): MyResult<Event> = try {
+        val event = findEventByIdUseCase.invoke(eventId)
+        MyResult.Success(event)
+    } catch (e: Exception) {
+        MyResult.Failure(e)
+    }
     fun listEvents(): MyResult<List<Event>> = try {
         val events = listEventUseCase.invoke()
         MyResult.Success(events)

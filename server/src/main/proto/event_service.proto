@@ -13,6 +13,7 @@ service EventService {
   rpc CreateEvent (CreateEventRequest) returns (GenericResponse);
   rpc UpdateEvent (UpdateEventRequest) returns (UpdateEventResponse);
   rpc DeleteEvent (DeleteEventRequest) returns (GenericResponse);
+  rpc FindEventById (FindEventByIdRequest) returns (FindEventByIdResponse);
   rpc ListEvents (ListEventsRequest) returns (ListEventsResponse);
   rpc AddUserToEvent (AddUserToEventRequest) returns (GenericResponse);
   rpc RemoveUserFromEvent (RemoveUserFromEventRequest) returns (GenericResponse);
@@ -80,6 +81,17 @@ message ListEventsResponse {
   string message = 2;
   repeated EventProto events = 3;
 }
+message FindEventByIdRequest {
+  string token = 1;
+  int32 eventId = 2;
+}
+
+message FindEventByIdResponse {
+  bool success = 1;
+  string message = 2;
+  EventProto event = 3;
+}
+
 
 message UpdateEventResponse {
   bool success = 1;
