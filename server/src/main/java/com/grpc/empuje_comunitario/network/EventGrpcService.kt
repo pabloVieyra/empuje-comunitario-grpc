@@ -8,7 +8,7 @@ import io.grpc.stub.StreamObserver
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.grpc.server.service.GrpcService
 import org.springframework.transaction.annotation.Transactional
-/*
+
 @GrpcService
 open class EventGrpcService @Autowired constructor(
     private val eventController: EventController
@@ -22,9 +22,55 @@ open class EventGrpcService @Autowired constructor(
         val result = eventController.createEvent(
             eventName = request.eventName,
             description = request.description,
-            eventDateTime = request.eventDateTime
+            eventDateTime = request.eventDateTime,
+            createUser = request.token // asumimos que token representa al usuario creador
+        )
+        responseObserver.onNext(result.toGenericResponse())
+        responseObserver.onCompleted()
+    }
+
+    @Transactional
+    override fun updateEvent(
+        request: UpdateEventRequest,
+        responseObserver: StreamObserver<UpdateEventResponse>
+    ) {
+        val proto = request.event
+        val result = eventController.updateEvent(
+            eventId = proto.id,
+            eventName = proto.eventName,
+            description = proto.description,
+            eventDateTime = proto.eventDateTime
         )
 
+        when (result) {
+            is MyResult.Success -> {
+                val response = UpdateEventResponse.newBuilder()
+                    .setSuccess(true)
+                    .setMessage("Event updated successfully")
+                    .setEvent(proto)
+                    .build()
+                responseObserver.onNext(response)
+            }
+            is MyResult.Failure -> {
+                val response = UpdateEventResponse.newBuilder()
+                    .setSuccess(false)
+                    .setMessage(mapErrorMessage(result.error))
+                    .build()
+                responseObserver.onNext(response)
+            }
+        }
+        responseObserver.onCompleted()
+    }
+
+    @Transactional
+    override fun deleteEvent(
+        request: DeleteEventRequest,
+        responseObserver: StreamObserver<GenericResponse>
+    ) {
+        val result = eventController.deleteEvent(
+            eventId = request.eventId,
+            modificationUserId = request.actorId
+        )
         responseObserver.onNext(result.toGenericResponse())
         responseObserver.onCompleted()
     }
@@ -35,7 +81,6 @@ open class EventGrpcService @Autowired constructor(
         responseObserver: StreamObserver<ListEventsResponse>
     ) {
         val result = eventController.listEvents()
-
         when (result) {
             is MyResult.Success -> {
                 val response = ListEventsResponse.newBuilder()
@@ -57,36 +102,6 @@ open class EventGrpcService @Autowired constructor(
     }
 
     @Transactional
-    override fun updateEvent(
-        request: UpdateEventRequest,
-        responseObserver: StreamObserver<GenericResponse>
-    ) {
-        val result = eventController.updateEvent(
-            eventId = request.eventId,
-            eventName = request.eventName,
-            description = request.description,
-            eventDateTime = request.eventDateTime
-        )
-
-        responseObserver.onNext(result.toGenericResponse())
-        responseObserver.onCompleted()
-    }
-
-    @Transactional
-    override fun deleteEvent(
-        request: DeleteEventRequest,
-        responseObserver: StreamObserver<GenericResponse>
-    ) {
-        val result = eventController.deleteEvent(
-            eventId = request.eventId,
-            modificationUserId = request.actorId
-        )
-
-        responseObserver.onNext(result.toGenericResponse())
-        responseObserver.onCompleted()
-    }
-
-    @Transactional
     override fun addUserToEvent(
         request: AddUserToEventRequest,
         responseObserver: StreamObserver<GenericResponse>
@@ -96,7 +111,6 @@ open class EventGrpcService @Autowired constructor(
             userId = request.userId,
             actorId = request.actorId
         )
-
         responseObserver.onNext(result.toGenericResponse())
         responseObserver.onCompleted()
     }
@@ -111,14 +125,13 @@ open class EventGrpcService @Autowired constructor(
             userId = request.userId,
             actorId = request.actorId
         )
-
         responseObserver.onNext(result.toGenericResponse())
         responseObserver.onCompleted()
     }
 
     @Transactional
     override fun registerDonationToEvent(
-        request: RegisterDonationToEventRequest,
+        request: RegisterDonationRequest,
         responseObserver: StreamObserver<GenericResponse>
     ) {
         val result = eventController.registerDonationToEvent(
@@ -127,22 +140,19 @@ open class EventGrpcService @Autowired constructor(
             quantity = request.quantity,
             actorId = request.actorId
         )
-
         responseObserver.onNext(result.toGenericResponse())
         responseObserver.onCompleted()
     }
 
-    private fun MyResult<Unit>.toGenericResponse(): GenericResponse {
-        return when (this) {
-            is MyResult.Success -> GenericResponse.newBuilder()
-                .setSuccess(true)
-                .setMessage("Operation successful")
-                .build()
-            is MyResult.Failure -> GenericResponse.newBuilder()
-                .setSuccess(false)
-                .setMessage(mapErrorMessage(this.error))
-                .build()
-        }
+    private fun MyResult<Unit>.toGenericResponse(): GenericResponse = when (this) {
+        is MyResult.Success -> GenericResponse.newBuilder()
+            .setSuccess(true)
+            .setMessage("Success")
+            .build()
+        is MyResult.Failure -> GenericResponse.newBuilder()
+            .setSuccess(false)
+            .setMessage(mapErrorMessage(this.error))
+            .build()
     }
 
     private fun mapErrorMessage(error: Throwable): String =
@@ -152,12 +162,12 @@ open class EventGrpcService @Autowired constructor(
         }
 }
 
-private fun Event.toProto(): EventProto {
-    return EventProto.newBuilder()
-        .setId(this.id)
-        .setEventName(this.eventName)
-        .setDescription(this.description)
-        .setEventDateTime(this.eventDateTime.toString())
-        .build()
-}
-*/
+// Mapper de Event -> EventProto
+private fun Event.toProto(): EventProto = EventProto.newBuilder()
+    .setId(this.id)
+    .setEventName(this.eventName)
+    .setDescription(this.description)
+    .setEventDateTime(this.eventDateTime.toString())
+    .setModificationUser(this.modificationUser ?: "")
+    .setModificationDate(this.modificationDate?.toString() ?: "")
+    .build()
