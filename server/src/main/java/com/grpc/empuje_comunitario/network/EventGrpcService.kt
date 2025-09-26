@@ -23,7 +23,8 @@ open class EventGrpcService @Autowired constructor(
             eventName = request.eventName,
             description = request.description,
             eventDateTime = request.eventDateTime,
-            createUser = request.token // asumimos que token representa al usuario creador
+            createUser = request.actorId,
+            token = request.token
         )
         responseObserver.onNext(result.toGenericResponse())
         responseObserver.onCompleted()
@@ -39,7 +40,9 @@ open class EventGrpcService @Autowired constructor(
             eventId = proto.id,
             eventName = proto.eventName,
             description = proto.description,
-            eventDateTime = proto.eventDateTime
+            eventDateTime = proto.eventDateTime,
+            actorId = proto.modificationUser,
+            token = request.token,
         )
 
         when (result) {
@@ -69,7 +72,8 @@ open class EventGrpcService @Autowired constructor(
     ) {
         val result = eventController.deleteEvent(
             eventId = request.eventId,
-            modificationUserId = request.actorId
+            modificationUserId = request.actorId,
+            token = request.token
         )
         responseObserver.onNext(result.toGenericResponse())
         responseObserver.onCompleted()
@@ -80,7 +84,7 @@ open class EventGrpcService @Autowired constructor(
         request: FindEventByIdRequest,
         responseObserver: StreamObserver<FindEventByIdResponse>
     ) {
-        val result = eventController.findEventById(request.eventId)
+        val result = eventController.findEventById(request.eventId, token = request.token)
 
         when (result) {
             is MyResult.Success -> {
@@ -107,7 +111,7 @@ open class EventGrpcService @Autowired constructor(
         request: ListEventsRequest,
         responseObserver: StreamObserver<ListEventsResponse>
     ) {
-        val result = eventController.listEvents()
+        val result = eventController.listEvents(token = request.token)
         when (result) {
             is MyResult.Success -> {
                 val response = ListEventsResponse.newBuilder()
@@ -136,7 +140,8 @@ open class EventGrpcService @Autowired constructor(
         val result = eventController.addUserToEvent(
             eventId = request.eventId,
             userId = request.userId,
-            actorId = request.actorId
+            actorId = request.actorId,
+            token = request.token
         )
         responseObserver.onNext(result.toGenericResponse())
         responseObserver.onCompleted()
@@ -150,7 +155,8 @@ open class EventGrpcService @Autowired constructor(
         val result = eventController.removeUserFromEvent(
             eventId = request.eventId,
             userId = request.userId,
-            actorId = request.actorId
+            actorId = request.actorId,
+            token = request.token
         )
         responseObserver.onNext(result.toGenericResponse())
         responseObserver.onCompleted()
@@ -165,7 +171,8 @@ open class EventGrpcService @Autowired constructor(
             eventId = request.eventId,
             donationId = request.donationId,
             quantity = request.quantity,
-            actorId = request.actorId
+            actorId = request.actorId,
+            token = request.token
         )
         responseObserver.onNext(result.toGenericResponse())
         responseObserver.onCompleted()

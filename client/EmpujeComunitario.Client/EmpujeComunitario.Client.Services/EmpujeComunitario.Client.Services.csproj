@@ -24,5 +24,7 @@
 	<ItemGroup>
 		<Protobuf Include="auth_service.proto" GrpcServices="Client" />
 		<Protobuf Include="user_service.proto" GrpcServices="Client" />
+		<Protobuf Include="common.proto" GrpcServices="Client" />
+		<Protobuf Include="event_service.proto" GrpcServices="Client" />
 	</ItemGroup>
 </Project>
