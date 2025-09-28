@@ -4,6 +4,9 @@ import com.grpc.empuje_comunitario.infrastructure.persistence.DonationEntity
 import com.grpc.empuje_comunitario.infrastructure.persistence.UserEntity
 import java.time.LocalDateTime
 
+// Excepción de dominio personalizada
+class InvalidDonationQuantityException(message: String) : RuntimeException(message)
+
 class Donation(
     val idDonation: String,
     val category: String,
@@ -14,9 +17,13 @@ class Donation(
     val creationUser: String,
     val modificationDate: LocalDateTime? = null,
     val modificationUser: String? = null
-
-
 ) {
+    init {
+        if (quantity < 0) {
+            throw InvalidDonationQuantityException("No se puede crear una donación con cantidad negativa: $quantity")
+        }
+    }
+
     constructor() : this("", "", "", 0, false, LocalDateTime.now(), "", null, null)
 }
 

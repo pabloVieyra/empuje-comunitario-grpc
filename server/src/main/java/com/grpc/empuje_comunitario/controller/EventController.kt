@@ -96,9 +96,9 @@ class EventController @Autowired constructor(
     }
 
     private fun validatePresidentToken(token: String) {
-        val user = jwtTokenGenerator.validateAndGetSubjectAndRole(token)
-        if (!user.first) throw IllegalArgumentException("Token inválido o expirado")
-        if (user.second != Role.PRESIDENT.toString()) {
+        val result = jwtTokenGenerator.validateAndGetSubjectAndRole(token)
+        if (!result.valid) throw IllegalArgumentException("Token inválido o expirado")
+        if (result.role != Role.PRESIDENT.toString()) {
             throw IllegalAccessException("No autorizado para listar usuarios")
         }
     }
