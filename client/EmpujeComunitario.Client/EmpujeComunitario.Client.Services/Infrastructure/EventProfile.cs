@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EmpujeComunitario.Client.Common.Model.EventDtos;
 using Grpc;
+using System.Globalization;
 
 
 namespace EmpujeComunitario.Client.Services.Infrastructure
@@ -9,8 +10,11 @@ namespace EmpujeComunitario.Client.Services.Infrastructure
     {
         public EventProfile()
         {
-            CreateMap<CreateEventRequest, CreateEventDto>()
-                .ForMember(dest => dest.CreationUserId, opt => opt.MapFrom(src => src.ActorId)).ReverseMap();
+            CreateMap<CreateEventDto, CreateEventRequest>()
+                .ForMember(dest => dest.EventDateTime,
+                           opt => opt.MapFrom(src => src.EventDateTime.ToString("yyyy-MM-dd'T'HH:mm:ss.fff", CultureInfo.InvariantCulture)))
+                .ForMember(dest => dest.ActorId,
+                           opt => opt.MapFrom(src => src.CreationUserId));
             //.ForMember(dest => dest.EventDateTime, opt => opt.MapFrom(src => DateTime.Parse(src.EventDateTime)));
 
             CreateMap<UpdateEventRequest, EventDto>()

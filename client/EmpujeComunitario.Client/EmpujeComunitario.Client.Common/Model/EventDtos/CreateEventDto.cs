@@ -19,7 +19,7 @@ namespace EmpujeComunitario.Client.Common.Model.EventDtos
         public string Description { get; set; } 
 
         [Required(ErrorMessage = "La fecha y hora del evento es obligatoria")]
-        public string EventDateTime { get; set; }
+        public DateTime EventDateTime { get; set; }
         [Required(ErrorMessage = "El usuario de creación del evento es obligatorio")]
         public string CreationUserId { get; set; }
     }
