@@ -1,6 +1,5 @@
 ﻿using EmpujeComunitario.Client.Common.Model;
 using EmpujeComunitario.Client.Common.Model.EventDtos;
-using EmpujeComunitario.Client.Services.Implementation;
 using EmpujeComunitario.Client.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +13,7 @@ namespace EmpujeComunitario.Client.Api.Controllers
     {
         private readonly IEventManagerServices _eventManagerServices;
         private const string errorId = "El Id de usuario es obligatorio.";
-        public EventController(EventManagerServices eventManagerServices)
+        public EventController(IEventManagerServices eventManagerServices)
         {
             _eventManagerServices = eventManagerServices;
         }
