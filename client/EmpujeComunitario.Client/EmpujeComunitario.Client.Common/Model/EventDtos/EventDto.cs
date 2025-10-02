@@ -20,6 +20,5 @@ namespace EmpujeComunitario.Client.Common.Model.EventDtos
         public string EventDateTime { get; set; } = string.Empty;
 
         public string ModificationUser { get; set; } = string.Empty;
-        public string ModificationDate { get; set; } = string.Empty;
     }
 }

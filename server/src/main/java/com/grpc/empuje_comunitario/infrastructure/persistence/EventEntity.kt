@@ -34,7 +34,16 @@ data class EventEntity(
     @OneToMany(mappedBy = "event", cascade = [CascadeType.ALL], orphanRemoval = true)
     val userEvents: List<UserEventEntity> = listOf()
 ){
-
+    constructor() : this(
+        id = 0,
+        eventName = "",
+        description = "",
+        eventDateTime = LocalDateTime.MIN,
+        modificationUser = null,
+        modificationDate = null,
+        eventDonations = listOf(),
+        userEvents = listOf()
+    )
 }
 fun EventEntity.toEvent(): Event {
     return Event(

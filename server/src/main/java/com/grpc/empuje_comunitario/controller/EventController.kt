@@ -80,7 +80,7 @@ class EventController @Autowired constructor(
             description = description,
             eventDateTime = java.time.LocalDateTime.parse(eventDateTime),
             modificationUser = actorId,
-            modificationDate = null
+            modificationDate = LocalDateTime.now()
         )
         updateEventUseCase.invoke(event)
         MyResult.Success(Unit)

@@ -46,6 +46,7 @@ namespace EmpujeComunitario.Client.Services.Implementation
             {
                 UpdateEventRequest updateEventRequest= _mapper.Map<UpdateEventRequest>(updateEvent);
                 updateEventRequest.Token = auth;
+                //updateEventRequest.Event.ModificationDate = DateTime.UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss.fff");
                 var result = await _eventClient.UpdateEventAsync(updateEventRequest);
                 return result.Success
                     ? response.OkWithData(result)

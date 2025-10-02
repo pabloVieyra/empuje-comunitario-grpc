@@ -27,13 +27,13 @@ class Event(
     }
 }
 
-fun Event.toEventEntity(user: UserEntity): EventEntity {
+fun Event.toEventEntity(user: UserEntity?): EventEntity {
     return EventEntity(
         eventDateTime = this.eventDateTime,
         description = this.description,
         id = this.id,
         eventName = this.eventName,
         modificationUser = user,
-        modificationDate = this.modificationDate
+        modificationDate = LocalDateTime.now()
     )
 }

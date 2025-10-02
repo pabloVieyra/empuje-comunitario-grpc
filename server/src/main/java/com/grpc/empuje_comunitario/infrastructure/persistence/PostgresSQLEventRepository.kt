@@ -30,6 +30,8 @@ open class PostgresSqlEventRepository: EventNetworkDatabase {
             eventName = event.eventName
             description = event.description
             eventDateTime = event.eventDateTime
+            modificationUser = event.modificationUser
+            modificationDate = event.modificationDate
         }
 
         entityManager.merge(existing)
@@ -43,7 +45,7 @@ open class PostgresSqlEventRepository: EventNetworkDatabase {
     override fun findById(id: Int): EventEntity? = try {
         entityManager.find(EventEntity::class.java, id)
     } catch (e: Exception) {
-        logger.error("Error finding event by id: ${e.message}")
+        //logger.error("Error finding event by id: ${e.message}")
         throw e
     }
 

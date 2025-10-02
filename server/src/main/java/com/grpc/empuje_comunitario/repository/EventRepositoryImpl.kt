@@ -21,10 +21,8 @@ open class EventRepositoryImpl(
     override fun create(event: Event): MyResult<Unit> = try {
         require(event.eventDateTime.isAfter(LocalDateTime.now())) { "La fecha del evento debe ser futura" }
 
-        val modificationUser = event.modificationUser?.let { userNetworkDatabase.findUserById(it) }
-            ?: return MyResult.Failure(Exception("Modification user not found"))
 
-        val success = eventNetworkDatabase.saveEvent(event.toEventEntity(modificationUser))
+        val success = eventNetworkDatabase.saveEvent(event.toEventEntity(null))
         if (success) MyResult.Success(Unit)
         else MyResult.Failure(Exception("Failed to save event"))
 
@@ -44,6 +42,8 @@ open class EventRepositoryImpl(
             eventEntity.eventName = event.eventName
             eventEntity.description = event.description
             eventEntity.eventDateTime = event.eventDateTime
+            eventEntity.modificationUser = modificationUser
+            eventEntity.modificationDate = event.modificationDate
         }
 
         val updated = eventNetworkDatabase.updateEvent(eventEntity)

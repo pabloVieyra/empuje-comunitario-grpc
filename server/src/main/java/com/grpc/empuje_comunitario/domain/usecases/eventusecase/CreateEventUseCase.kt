@@ -14,7 +14,7 @@ class CreateEventUseCase(
 
         val eventResult = eventRepository.create(event)
         if (eventResult !is MyResult.Success) {
-            throw Exception("[PERSISTANT]Failed to persist the new user in the repository.")
+            throw Exception("[PERSISTANT]Failed to persist the new event in the repository.")
         }
     }
 }

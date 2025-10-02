@@ -19,7 +19,7 @@ namespace EmpujeComunitario.Client.Services.Infrastructure
 
             CreateMap<UpdateEventRequest, EventDto>()
             .ForMember(dest => dest.ModificationUser, opt => opt.MapFrom(src => src.Event.ModificationUser))
-            .ForMember(dest => dest.ModificationDate, opt => opt.MapFrom(_ => DateTime.UtcNow))
+            //.ForMember(dest => dest.ModificationDate, opt => opt.MapFrom(_ => DateTime.UtcNow))
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Event.Id))
             .ForMember(dest => dest.EventName, opt => opt.MapFrom(src => src.Event.EventName))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Event.Description))
