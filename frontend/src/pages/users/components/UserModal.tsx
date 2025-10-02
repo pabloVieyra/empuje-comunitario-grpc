@@ -3,6 +3,7 @@ import { ModalBg, ModalCard, ModalTitle, ModalFooter, Btn, ErrorMsg, InputWrappe
 import type { User, UserRole } from "@/domain/User";
 import { Input } from "@chakra-ui/react";
 
+
 const roles: UserRole[] = ["ADMIN", "PRESIDENT", "VOCAL", "COORDINATOR", "VOLUNTEER"];
 
 export const UserModal: React.FC<{
@@ -21,13 +22,17 @@ export const UserModal: React.FC<{
     active: user?.active ?? true,
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = e.target;
-    setForm(f => ({
-      ...f,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+
+
+const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const { name, value } = e.target;
+  const checked = e.target instanceof HTMLInputElement ? e.target.checked : undefined;
+  
+  setForm(f => ({
+    ...f,
+      [name]: e.target.type === "checkbox" ? checked : value,
+  }));
+};
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

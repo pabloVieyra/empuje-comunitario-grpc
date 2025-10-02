@@ -1,5 +1,6 @@
 package com.grpc.empuje_comunitario.infrastructure.security
 
+import com.grpc.empuje_comunitario.controller.TokenValidationResult
 import com.grpc.empuje_comunitario.domain.TokenGenerator
 import com.grpc.empuje_comunitario.domain.user.User
 import com.grpc.empuje_comunitario.domain.user.asString
@@ -25,6 +26,7 @@ open class JwtTokenGenerator : TokenGenerator {
 
         return Jwts.builder()
             .setSubject(user.id.toString())
+            .claim("id", user.id.value)
             .claim("role", user.role.asString())
             .setIssuedAt(now)
             .setExpiration(expiry)
@@ -32,19 +34,20 @@ open class JwtTokenGenerator : TokenGenerator {
             .compact()
     }
 
-fun validateAndGetSubjectAndRole(token: String?): Pair<Boolean, String?> {
-    return try {
-        val claims = Jwts.parserBuilder()
-            .setSigningKey(key)
-            .build()
-            .parseClaimsJws(token)
-            .body
-        val role = claims["role"] as? String
-        Pair(true, role)
-    } catch (ex: Exception) {
-        Pair(false, null)
+    fun validateAndGetSubjectAndRole(token: String?): TokenValidationResult {
+        return try {
+            val claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .body
+            val id = claims["id"] as? String ?: claims.subject
+            val role = claims["role"] as? String
+            TokenValidationResult(true, id, role)
+        } catch (ex: Exception) {
+            TokenValidationResult(false, null, null)
+        }
     }
-}
 
     companion object {
         private const val SECRET = "this-is-a-very-strong-secret-key-32-chars-minimum!"

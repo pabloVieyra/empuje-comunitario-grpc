@@ -33,10 +33,27 @@ builder.Services.AddGrpcClient<AuthService.AuthServiceClient>(o =>
 {
     o.Address = new Uri(builder.Configuration.GetValue<string>("ServerGrpc"));
 });
+
+builder.Services.AddGrpcClient<EventService.EventServiceClient>(o =>
+{
+    o.Address = new Uri(builder.Configuration.GetValue<string>("ServerGrpc"));
+});
+
+builder.Services.AddGrpcClient<DonationInventoryService.DonationInventoryServiceClient>(o =>
+{
+    o.Address = new Uri(builder.Configuration.GetValue<string>("ServerGrpc"));
+});
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserManagerServices, UserManagerServices>();
 builder.Services.AddScoped<IAuthManagerServices, AuthManagerServices>();
+builder.Services.AddScoped<IEventManagerServices, EventManagerServices>();
+builder.Services.AddScoped<IDonationManagerService, DonationManagerService>();
+
+
 builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(EventProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(DonationProfile).Assembly);
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
