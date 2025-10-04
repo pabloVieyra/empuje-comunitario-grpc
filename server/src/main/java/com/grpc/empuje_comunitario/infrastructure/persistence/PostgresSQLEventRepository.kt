@@ -77,16 +77,14 @@ open class PostgresSqlEventRepository: EventNetworkDatabase {
     }
 
     override fun removeUserFromEvent(event: EventEntity, user: UserEntity): Boolean = try {
-        val query = entityManager.createQuery(
-            "SELECT ue FROM UserEventEntity ue WHERE ue.user = :user AND ue.event = :event",
-            UserEventEntity::class.java
+        val deletedCount = entityManager.createQuery(
+            "DELETE FROM UserEventEntity ue WHERE ue.user.id = :userId AND ue.event.id = :eventId"
         )
-        query.setParameter("user", user)
-        query.setParameter("event", event)
-        val userEvent = query.singleResult
-        entityManager.remove(userEvent)
-        entityManager.flush()
-        true
+            .setParameter("userId", user.id)
+            .setParameter("eventId", event.id)
+            .executeUpdate()
+
+        deletedCount > 0
     } catch (e: Exception) {
         logger.error("Error removing user from event: ${e.message}")
         throw e
