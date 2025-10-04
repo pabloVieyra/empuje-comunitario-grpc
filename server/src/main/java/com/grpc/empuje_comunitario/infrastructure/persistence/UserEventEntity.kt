@@ -5,14 +5,20 @@ import java.io.Serializable
 
 @Entity
 @Table(name = "user_events")
-data class UserEventEntity(
+class UserEventEntity() : Serializable {
     @Id
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    val user: UserEntity,
+    lateinit var user: UserEntity
 
     @Id
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
-    val event: EventEntity
-) : Serializable
+    lateinit var event: EventEntity
+
+
+    constructor(user: UserEntity, event: EventEntity) : this() {
+        this.user = user
+        this.event = event
+    }
+}
