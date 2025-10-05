@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace EmpujeComunitario.Client.Api.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class EventController : ControllerBase
     {
         private readonly IEventManagerServices _eventManagerServices;

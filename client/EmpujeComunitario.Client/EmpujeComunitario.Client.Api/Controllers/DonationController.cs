@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace EmpujeComunitario.Client.Api.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class DonationController : ControllerBase
     {
         private readonly IDonationManagerService _donationManagerService;
