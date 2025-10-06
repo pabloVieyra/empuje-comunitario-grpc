@@ -59,6 +59,7 @@ const Home: React.FC = () => (
       <Card>
         <Title>Panel de Gestión</Title>
         <NavBtn to="/usuarios">Ir a ABM de Usuarios</NavBtn>
+        <NavBtn to="/donaciones">ABM de Donaciones</NavBtn>
       </Card>
     </CenterBox>
   </HomeBg>
