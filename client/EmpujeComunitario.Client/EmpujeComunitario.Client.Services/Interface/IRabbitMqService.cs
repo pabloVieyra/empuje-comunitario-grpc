@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EmpujeComunitario.Client.Common.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace EmpujeComunitario.Client.Services.Interface
 {
     public interface IRabbitMqService
     {
-        void Publish(string queueName, string message);
+        BaseObjectResponse<string> Publish(string routingKey, string message);
     }
 }
