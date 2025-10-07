@@ -7,8 +7,7 @@ import java.time.LocalDateTime
 @Table(name = "external_requests")
 class ExternalRequestEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int = 0,
+    val id: String = "",
 
     @Column(name = "requester_org_id", nullable = false)
     val requesterOrgId: String = "",

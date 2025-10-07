@@ -7,8 +7,7 @@ import java.time.LocalDateTime
 @Table(name = "external_events")
 class ExternalEventEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int = 0,
+    val id: String = "",
 
     @Column(name = "organizer_org_id", nullable = false)
     val organizerOrgId: String = "",

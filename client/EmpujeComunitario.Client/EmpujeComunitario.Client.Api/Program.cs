@@ -1,4 +1,5 @@
 using EmpujeComunitario.Client.Api.Infrastructure;
+using EmpujeComunitario.Client.Common.Settings;
 using EmpujeComunitario.Client.Services.Implementation;
 using EmpujeComunitario.Client.Services.Infrastructure;
 using EmpujeComunitario.Client.Services.Interface;
@@ -43,11 +44,15 @@ builder.Services.AddGrpcClient<DonationInventoryService.DonationInventoryService
 {
     o.Address = new Uri(builder.Configuration.GetValue<string>("ServerGrpc"));
 });
+
+builder.Services.Configure<RabbitMq>(
+    builder.Configuration.GetSection(nameof(RabbitMq)));
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserManagerServices, UserManagerServices>();
 builder.Services.AddScoped<IAuthManagerServices, AuthManagerServices>();
 builder.Services.AddScoped<IEventManagerServices, EventManagerServices>();
 builder.Services.AddScoped<IDonationManagerService, DonationManagerService>();
+builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
 
 
 builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);

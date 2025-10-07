@@ -6,8 +6,7 @@ import jakarta.persistence.*
 @Table(name = "external_request_details")
 class ExternalRequestDetailEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int = 0,
+    val id: String = "",
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "external_request_id", nullable = false)
