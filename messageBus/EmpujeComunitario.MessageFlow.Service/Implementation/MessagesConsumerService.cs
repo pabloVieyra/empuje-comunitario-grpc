@@ -1,0 +1,160 @@
+﻿using AutoMapper;
+using EmpujeComunitario.MessageFlow.Common.Constants;
+using EmpujeComunitario.MessageFlow.Common.Model.MessagesRabbitMQ;
+using EmpujeComunitario.MessageFlow.Common.Settings;
+using EmpujeComunitario.MessageFlow.DataAccess.Entities;
+using EmpujeComunitario.MessageFlow.DataAccess.Interface;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EmpujeComunitario.MessageFlow.Service.Implementation
+{
+    public class MessagesConsumerService : BackgroundService
+    {
+        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IConnection _connection;
+        private readonly IModel _channel;
+        private readonly IMapper _mapper;
+        private readonly RabbitMqSettings _rabbitMq;
+        private readonly string _organizationId = "ONG1";
+        private const string ONG_EXCHANGE_NAME = "ong_network.exchange";
+
+        public MessagesConsumerService(IServiceScopeFactory scopeFactory, IOptions<RabbitMqSettings> options, IMapper mapper)
+        {
+            _rabbitMq = options.Value;
+            _scopeFactory = scopeFactory;
+            _mapper = mapper;
+            // Configuración de RabbitMQ
+            var factory = new ConnectionFactory()
+            {
+                HostName = _rabbitMq.HostName,
+                UserName = _rabbitMq.UserName,
+                Password = _rabbitMq.Password,
+                Port = Convert.ToInt32(_rabbitMq.Port)
+            };
+
+            _connection = factory.CreateConnection();
+            _channel = _connection.CreateModel();
+
+
+        }
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            CrearConsumer(ONG_EXCHANGE_NAME, $"queue.request-donation.{_organizationId}", Exchanges.ExchangeRequestDonation, typeof(RequestDonationModel));
+            CrearConsumer(ONG_EXCHANGE_NAME, $"queue.offer-donation.{_organizationId}", Exchanges.ExchangeOffersDonations, typeof(OfferDonationModel));
+            CrearConsumer(ONG_EXCHANGE_NAME, $"queue.events-solidary.{_organizationId}", Exchanges.ExchangeEventsSolidary, typeof(SolidaryEventModel));
+            CrearConsumer(ONG_EXCHANGE_NAME, $"queue.events-volunteer.{_organizationId}", Exchanges.ExchangeEventsVolunteer, typeof(VolunteerAdhesionModel));
+            CrearConsumer(ONG_EXCHANGE_NAME, $"queue.transfers-confirm.{_organizationId}", Exchanges.ExchangeTransfersConfirm, typeof(TransferDonationModel));
+            CrearConsumer(ONG_EXCHANGE_NAME, $"queue.request-cancel.{_organizationId}", Exchanges.ExchangeRequestsCancel, typeof(CancelRequestModel));
+            CrearConsumer(ONG_EXCHANGE_NAME, $"queue.events-cancel.{_organizationId}", Exchanges.ExchangeEventsCancel, typeof(CancelEventModel));
+
+            return Task.CompletedTask;
+        }
+        private void CrearConsumer(string exchange, string queueName, string bindingKey, Type messageType)
+        {
+            // Declaramos el exchange tipo Topic
+            _channel.ExchangeDeclare(exchange, ExchangeType.Topic, durable: true);
+
+            // Declaramos la cola
+            _channel.QueueDeclare(queueName, durable: false, exclusive: false, autoDelete: false);
+
+            // Bind de la cola al exchange con la routingKey
+            _channel.QueueBind(queueName, exchange, bindingKey);
+
+            var consumer = new EventingBasicConsumer(_channel);
+
+            consumer.Received += (model, ea) =>
+            {
+                Task.Run(async () =>
+                {
+
+
+                    var json = Encoding.UTF8.GetString(ea.Body.ToArray());
+
+                    using var scope = _scopeFactory.CreateScope();
+
+                    try
+                    {
+                        // Switch usando tus constantes
+                        switch (ea.RoutingKey)
+                        {
+                            case var rk when rk == Exchanges.ExchangeRequestDonation:
+                                var solicitud = JsonConvert.DeserializeObject<RequestDonationModel>(json);
+                                var donationRepository = scope.ServiceProvider.GetRequiredService<IDonationRequestRepository>();
+                                var entitySolicitud = _mapper.Map<DonationRequest>(solicitud);
+                                await donationRepository.AddDonationRequestAsync(entitySolicitud);
+                                break;
+
+                            case var rk when rk == Exchanges.ExchangeOffersDonations:
+                                var oferta = JsonConvert.DeserializeObject<OfferDonationModel>(json);
+                                var offerRepository = scope.ServiceProvider.GetRequiredService<IOfferRepository>();
+                                var entityOferta = _mapper.Map<DonationOffer>(oferta);
+                                await offerRepository.AddOfferDonationAsync(entityOferta);
+                                break;
+
+                            case var rk when rk == Exchanges.ExchangeEventsSolidary:
+                                var evento = JsonConvert.DeserializeObject<SolidaryEventModel>(json);
+                                var eventRepository = scope.ServiceProvider.GetRequiredService<IEventRepository>();
+                                var entityEvento = _mapper.Map<SolidaryEvent>(evento);
+                                await eventRepository.AddSolidaryEventAsync(entityEvento);
+                                break;
+
+                            case var rk when rk == Exchanges.ExchangeEventsVolunteer:
+                                var adhesion = JsonConvert.DeserializeObject<VolunteerAdhesionModel>(json);
+                                var volunteerRepository = scope.ServiceProvider.GetRequiredService<IVolunteerRepository>();
+                                var entityAdhesion = _mapper.Map<VolunteerAdhesion>(adhesion);
+                                await volunteerRepository.AddVolunteerAdhesionAsync(entityAdhesion);
+                                break;
+
+                            case var rk when rk == Exchanges.ExchangeTransfersConfirm:
+                                var transferencia = JsonConvert.DeserializeObject<TransferDonationModel>(json);
+                                var transferRepository = scope.ServiceProvider.GetRequiredService<ITransferRepository>();
+                                var entityTransferencia = _mapper.Map<DonationTransfer>(transferencia);
+                                await transferRepository.ConfirmTransferAsync(entityTransferencia);
+                                break;
+
+                            case var rk when rk == Exchanges.ExchangeRequestsCancel:
+                                var cancelRequest = JsonConvert.DeserializeObject<CancelRequestModel>(json);
+                                var donationRepo = scope.ServiceProvider.GetRequiredService<IDonationRequestRepository>();
+                                await donationRepo.CancelDonationRequestAsync(cancelRequest.RequestId);
+                                break;
+
+                            case var rk when rk == Exchanges.ExchangeEventsCancel:
+                                var cancelEvent = JsonConvert.DeserializeObject<CancelEventModel>(json);
+                                var eventRepo = scope.ServiceProvider.GetRequiredService<IEventRepository>();
+                                await eventRepo.CancelEventAsync(cancelEvent.EventId);
+                                break;
+
+                            default:
+                                Console.WriteLine($"⚠️ RoutingKey desconocida: {ea.RoutingKey}");
+                                break;
+                        }
+
+                        Console.WriteLine($"📥 Mensaje procesado desde {ea.Exchange} con routingKey {ea.RoutingKey}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"⚠️ Error procesando mensaje: {ex.Message}");
+                    }
+                });
+            }; 
+            _channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
+        }
+        public override void Dispose()
+        {
+            _channel?.Close();
+            _connection?.Close();
+            base.Dispose();
+        }
+
+    }
+}
