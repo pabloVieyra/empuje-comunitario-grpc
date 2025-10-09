@@ -4,7 +4,7 @@ using EmpujeComunitario.MessageFlow.Common.Model.MessagesRabbitMQ;
 using EmpujeComunitario.MessageFlow.Common.Settings;
 using EmpujeComunitario.MessageFlow.DataAccess.Entities;
 using EmpujeComunitario.MessageFlow.DataAccess.Interface;
-using EmpujeComunitario.MessageFlow.Service.Infrastructure;
+using EmpujeComunitario.MessageFlow.Service.Interface;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;

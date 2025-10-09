@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmpujeComunitario.MessageFlow.Service.Infrastructure
+namespace EmpujeComunitario.MessageFlow.Service.Interface
 {
     public interface ITransferDonationService
     {
