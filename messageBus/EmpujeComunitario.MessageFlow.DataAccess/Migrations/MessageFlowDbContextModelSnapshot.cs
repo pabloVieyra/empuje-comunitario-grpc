@@ -22,46 +22,39 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("EmpujeComunitario.MessageFlow.DataAccess.Entities.CancelledEvent", b =>
+            modelBuilder.Entity("EmpujeComunitario.MessageFlow.DataAccess.Entities.CancelledDonation", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("OrgId")
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CancelledAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("OrgId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CancelledEvents");
-                });
-
-            modelBuilder.Entity("EmpujeComunitario.MessageFlow.DataAccess.Entities.CancelledRequest", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CancelledAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("OrgId")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<Guid>("RequestId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime>("CancelledAt")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.ToTable("CancelledRequests");
+                    b.HasKey("OrgId", "RequestId");
+
+                    b.ToTable("CancelledDonation");
+                });
+
+            modelBuilder.Entity("EmpujeComunitario.MessageFlow.DataAccess.Entities.CancelledEvent", b =>
+                {
+                    b.Property<string>("OrgId")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CancelledAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("OrgId", "EventId");
+
+                    b.ToTable("CancelledEvents");
                 });
 
             modelBuilder.Entity("EmpujeComunitario.MessageFlow.DataAccess.Entities.DonationItem", b =>
@@ -134,8 +127,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DonationOrganizationId");
-
                     b.ToTable("DonationOffers");
                 });
 
@@ -151,9 +142,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
                     b.Property<bool>("IsCancelled")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("OrganizationId")
-                        .HasColumnType("text");
-
                     b.Property<Guid>("RequestId")
                         .HasColumnType("uuid");
 
@@ -162,8 +150,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
 
                     b.ToTable("DonationRequests");
                 });
@@ -186,24 +172,9 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DonationOrgId");
-
                     b.HasIndex("RequestId");
 
                     b.ToTable("DonationTransfers");
-                });
-
-            modelBuilder.Entity("EmpujeComunitario.MessageFlow.DataAccess.Entities.Organization", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Organization");
                 });
 
             modelBuilder.Entity("EmpujeComunitario.MessageFlow.DataAccess.Entities.SolidaryEvent", b =>
@@ -235,8 +206,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrgId");
 
                     b.ToTable("SolidaryEvents");
                 });
@@ -315,52 +284,15 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
                     b.Navigation("Transfer");
                 });
 
-            modelBuilder.Entity("EmpujeComunitario.MessageFlow.DataAccess.Entities.DonationOffer", b =>
-                {
-                    b.HasOne("EmpujeComunitario.MessageFlow.DataAccess.Entities.Organization", "DonationOrganization")
-                        .WithMany("DonationOffers")
-                        .HasForeignKey("DonationOrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DonationOrganization");
-                });
-
-            modelBuilder.Entity("EmpujeComunitario.MessageFlow.DataAccess.Entities.DonationRequest", b =>
-                {
-                    b.HasOne("EmpujeComunitario.MessageFlow.DataAccess.Entities.Organization", null)
-                        .WithMany("DonationRequests")
-                        .HasForeignKey("OrganizationId");
-                });
-
             modelBuilder.Entity("EmpujeComunitario.MessageFlow.DataAccess.Entities.DonationTransfer", b =>
                 {
-                    b.HasOne("EmpujeComunitario.MessageFlow.DataAccess.Entities.Organization", "DonationOrg")
-                        .WithMany()
-                        .HasForeignKey("DonationOrgId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("EmpujeComunitario.MessageFlow.DataAccess.Entities.DonationRequest", "Request")
                         .WithMany()
                         .HasForeignKey("RequestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DonationOrg");
-
                     b.Navigation("Request");
-                });
-
-            modelBuilder.Entity("EmpujeComunitario.MessageFlow.DataAccess.Entities.SolidaryEvent", b =>
-                {
-                    b.HasOne("EmpujeComunitario.MessageFlow.DataAccess.Entities.Organization", "Org")
-                        .WithMany("SolidaryEvents")
-                        .HasForeignKey("OrgId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Org");
                 });
 
             modelBuilder.Entity("EmpujeComunitario.MessageFlow.DataAccess.Entities.VolunteerAdhesion", b =>
@@ -387,15 +319,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
             modelBuilder.Entity("EmpujeComunitario.MessageFlow.DataAccess.Entities.DonationTransfer", b =>
                 {
                     b.Navigation("Donations");
-                });
-
-            modelBuilder.Entity("EmpujeComunitario.MessageFlow.DataAccess.Entities.Organization", b =>
-                {
-                    b.Navigation("DonationOffers");
-
-                    b.Navigation("DonationRequests");
-
-                    b.Navigation("SolidaryEvents");
                 });
 
             modelBuilder.Entity("EmpujeComunitario.MessageFlow.DataAccess.Entities.SolidaryEvent", b =>

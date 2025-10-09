@@ -8,13 +8,25 @@ namespace EmpujeComunitario.MessageFlow.Common.Constants
 {
     public static class Exchanges
     {
-        public static string ExchangeRequestDonation = "donation.request.created";
-        public static string ExchangeOffersDonations = "donation.offer.created";
-        public static string ExchangeEventsSolidary = "event.solidary.created";
-        public static string ExchangeEventsVolunteer = "event.volunteer.adhered";
-        public static string ExchangeTransfersConfirm = "donation.transfer.confirmed";
-        public static string ExchangeRequestsCancel = "donation.request.cancelled";
-        public static string ExchangeEventsCancel = "event.solidary.cancelled";
+        public const string ONG_EXCHANGE_NAME = "ong_network.exchange";
+
+        // Donaciones
+        //punto1
+        public const string RoutingKeyRequestDonation = "donation.request";           
+        //punto2
+        public const string RoutingKeyTransferDonation = "donation.transfer.{0}";         
+        //punto 3
+        public const string RoutingKeyOfferDonation = "donation.offer";               
+        //punto 4
+        public const string RoutingKeyRequestCancel = "donation.cancel";
+        // Eventos solidarios
+        //punto 5
+        public const string RoutingKeyEventSolidary = "event.solidary";
+        //punto 
+        public const string RoutingKeyEventCancel = "event.cancel";
+        //punto 7
+        public const string RoutingKeyEventVolunteer = "event.volunteer.{0}";
+
 
     }
 }

@@ -13,43 +13,30 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "CancelledDonation",
+                columns: table => new
+                {
+                    RequestId = table.Column<Guid>(type: "uuid", nullable: false),
+                    OrgId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CancelledAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CancelledDonation", x => new { x.OrgId, x.RequestId });
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CancelledEvents",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     EventId = table.Column<Guid>(type: "uuid", nullable: false),
                     OrgId = table.Column<string>(type: "text", nullable: false),
-                    CancelledAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CancelledEvents", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CancelledRequests",
-                columns: table => new
-                {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    RequestId = table.Column<Guid>(type: "uuid", nullable: false),
-                    OrgId = table.Column<string>(type: "text", nullable: false),
                     CancelledAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CancelledRequests", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Organization",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Organization", x => x.Id);
+                    table.PrimaryKey("PK_CancelledEvents", x => new { x.OrgId, x.EventId });
                 });
 
             migrationBuilder.CreateTable(
@@ -64,12 +51,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DonationOffers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DonationOffers_Organization_DonationOrganizationId",
-                        column: x => x.DonationOrganizationId,
-                        principalTable: "Organization",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -80,17 +61,11 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
                     RequestId = table.Column<Guid>(type: "uuid", nullable: false),
                     RequesterOrgId = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    IsCancelled = table.Column<bool>(type: "boolean", nullable: false),
-                    OrganizationId = table.Column<string>(type: "text", nullable: true)
+                    IsCancelled = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DonationRequests", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DonationRequests_Organization_OrganizationId",
-                        column: x => x.OrganizationId,
-                        principalTable: "Organization",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -109,12 +84,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SolidaryEvents", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SolidaryEvents_Organization_OrgId",
-                        column: x => x.OrgId,
-                        principalTable: "Organization",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -133,12 +102,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
                         name: "FK_DonationTransfers_DonationRequests_RequestId",
                         column: x => x.RequestId,
                         principalTable: "DonationRequests",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DonationTransfers_Organization_DonationOrgId",
-                        column: x => x.DonationOrgId,
-                        principalTable: "Organization",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -253,29 +216,9 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
                 column: "TransferId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DonationOffers_DonationOrganizationId",
-                table: "DonationOffers",
-                column: "DonationOrganizationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DonationRequests_OrganizationId",
-                table: "DonationRequests",
-                column: "OrganizationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DonationTransfers_DonationOrgId",
-                table: "DonationTransfers",
-                column: "DonationOrgId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DonationTransfers_RequestId",
                 table: "DonationTransfers",
                 column: "RequestId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SolidaryEvents_OrgId",
-                table: "SolidaryEvents",
-                column: "OrgId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VolunteerAdhesions_EventId",
@@ -287,10 +230,10 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CancelledEvents");
+                name: "CancelledDonation");
 
             migrationBuilder.DropTable(
-                name: "CancelledRequests");
+                name: "CancelledEvents");
 
             migrationBuilder.DropTable(
                 name: "DonationItems");
@@ -309,9 +252,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "DonationRequests");
-
-            migrationBuilder.DropTable(
-                name: "Organization");
         }
     }
 }

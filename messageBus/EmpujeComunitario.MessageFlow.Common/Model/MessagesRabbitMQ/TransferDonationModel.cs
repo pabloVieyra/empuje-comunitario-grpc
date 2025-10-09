@@ -10,6 +10,6 @@ namespace EmpujeComunitario.MessageFlow.Common.Model.MessagesRabbitMQ
     {
         public Guid RequestId { get; set; }
         public Guid DonationOrgId { get; set; }
-        public List<DonationItemModel> Donations = new List<DonationItemModel>();
+        public List<DonationItemModel> Donations { get; set; } = new List<DonationItemModel>();
     }
 }

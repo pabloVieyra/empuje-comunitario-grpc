@@ -17,8 +17,8 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
         {
             _rabbitMqService = rabbitMqService;
         }
-
-        [HttpPost(nameof(RequestDonation))]
+        //punto 1
+        [HttpPost("solicitud-donaciones")]
         public async Task<IActionResult> RequestDonation([FromBody] RequestDonationModel request)
         {
             if (!ModelState.IsValid)
@@ -28,11 +28,27 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
             }
             //var authorization = HttpContext.Items["Authorization"]?.ToString();
 
-            var response = _rabbitMqService.Publish(Exchanges.ExchangeRequestDonation, JsonConvert.SerializeObject(request));
+            var response = _rabbitMqService.Publish(Exchanges.RoutingKeyRequestDonation, JsonConvert.SerializeObject(request));
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpPost(nameof(OffersDonations))]
+        //punto 2
+        [HttpPost("/transferencia-donaciones/{IdOrganizacionSolicitante}")]
+        [ProducesResponseType(typeof(TransferDonationModel), 200)]
+        public async Task<IActionResult> TransfersDonation([FromBody] TransferDonationModel request, [FromRoute]string IdOrganizacionSolicitante)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errorResponse = BuildValidationErrorResponse<object>(ModelState);
+                return BadRequest(errorResponse);
+            }
+            var authorization = HttpContext.Items["Authorization"]?.ToString();
+
+            var response = _rabbitMqService.Publish(string.Format(Exchanges.RoutingKeyTransferDonation, IdOrganizacionSolicitante), JsonConvert.SerializeObject(request));
+            return StatusCode(response.StatusCode, response);
+        }
+        //punto 3
+        [HttpPost("oferta-donaciones")]
         public async Task<IActionResult> OffersDonations([FromBody] OfferDonationModel request)
         {
             if (!ModelState.IsValid)
@@ -42,49 +58,12 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
             }
             var authorization = HttpContext.Items["Authorization"]?.ToString();
 
-            var response = _rabbitMqService.Publish(Exchanges.ExchangeOffersDonations, JsonConvert.SerializeObject(request));
+            var response = _rabbitMqService.Publish(Exchanges.RoutingKeyOfferDonation, JsonConvert.SerializeObject(request));
             return StatusCode(response.StatusCode, response);
         }
-        [HttpPost(nameof(EventsSolidary))]
-        public async Task<IActionResult> EventsSolidary([FromBody] SolidaryEventModel request)
-        {
-            if (!ModelState.IsValid)
-            {
-                var errorResponse = BuildValidationErrorResponse<object>(ModelState);
-                return BadRequest(errorResponse);
-            }
-            var authorization = HttpContext.Items["Authorization"]?.ToString();
 
-            var response = _rabbitMqService.Publish(Exchanges.ExchangeEventsSolidary, JsonConvert.SerializeObject(request));
-            return StatusCode(response.StatusCode, response);
-        }
-        [HttpPost(nameof(EventsVolunteer))]
-        public async Task<IActionResult> EventsVolunteer([FromBody] VolunteerAdhesionModel request)
-        {
-            if (!ModelState.IsValid)
-            {
-                var errorResponse = BuildValidationErrorResponse<object>(ModelState);
-                return BadRequest(errorResponse);
-            }
-            var authorization = HttpContext.Items["Authorization"]?.ToString();
-
-            var response = _rabbitMqService.Publish(Exchanges.ExchangeEventsVolunteer, JsonConvert.SerializeObject(request));
-            return StatusCode(response.StatusCode, response);
-        }
-        [HttpPost(nameof(TransfersConfirm))]
-        public async Task<IActionResult> TransfersConfirm([FromBody] TransferDonationModel request)
-        {
-            if (!ModelState.IsValid)
-            {
-                var errorResponse = BuildValidationErrorResponse<object>(ModelState);
-                return BadRequest(errorResponse);
-            }
-            var authorization = HttpContext.Items["Authorization"]?.ToString();
-
-            var response = _rabbitMqService.Publish(Exchanges.ExchangeTransfersConfirm, JsonConvert.SerializeObject(request));
-            return StatusCode(response.StatusCode, response);
-        }
-        [HttpPost(nameof(RequestsCancel))]
+        //punto 4
+        [HttpPost("baja-solicitud-donaciones")]
         public async Task<IActionResult> RequestsCancel([FromBody] CancelRequestModel request)
         {
             if (!ModelState.IsValid)
@@ -94,10 +73,28 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
             }
             var authorization = HttpContext.Items["Authorization"]?.ToString();
 
-            var response = _rabbitMqService.Publish(Exchanges.ExchangeRequestsCancel, JsonConvert.SerializeObject(request));
+            var response = _rabbitMqService.Publish(Exchanges.RoutingKeyRequestCancel, JsonConvert.SerializeObject(request));
             return StatusCode(response.StatusCode, response);
         }
-        [HttpPost(nameof(EventsCancel))]
+
+
+        //punto 5 
+        [HttpPost("eventossolidarios")]
+        public async Task<IActionResult> EventsSolidary([FromBody] SolidaryEventModel request)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errorResponse = BuildValidationErrorResponse<object>(ModelState);
+                return BadRequest(errorResponse);
+            }
+            var authorization = HttpContext.Items["Authorization"]?.ToString();
+
+            var response = _rabbitMqService.Publish(Exchanges.RoutingKeyEventSolidary, JsonConvert.SerializeObject(request));
+            return StatusCode(response.StatusCode, response);
+        }
+
+        //punto 6 
+        [HttpPost("baja-evento-solidario")]
         public async Task<IActionResult> EventsCancel([FromBody] CancelEventModel request)
         {
             if (!ModelState.IsValid)
@@ -107,9 +104,27 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
             }
             var authorization = HttpContext.Items["Authorization"]?.ToString();
 
-            var response = _rabbitMqService.Publish(Exchanges.ExchangeEventsCancel, JsonConvert.SerializeObject(request));
+            var response = _rabbitMqService.Publish(Exchanges.RoutingKeyEventCancel, JsonConvert.SerializeObject(request));
             return StatusCode(response.StatusCode, response);
         }
+
+        //punto 7
+        [HttpPost("adhesion-evento/{idOrganizador}")]
+        public async Task<IActionResult> EventsVolunteer([FromBody] VolunteerAdhesionModel request,[FromRoute] string idOrganizador)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errorResponse = BuildValidationErrorResponse<object>(ModelState);
+                return BadRequest(errorResponse);
+            }
+            var authorization = HttpContext.Items["Authorization"]?.ToString();
+
+            var response = _rabbitMqService.Publish(string.Format(Exchanges.RoutingKeyEventVolunteer,idOrganizador), JsonConvert.SerializeObject(request));
+            return StatusCode(response.StatusCode, response);
+        }
+
+       
+       
 
         private BaseObjectResponse<T> BuildValidationErrorResponse<T>(ModelStateDictionary modelState)
         {

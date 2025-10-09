@@ -9,7 +9,7 @@ namespace EmpujeComunitario.MessageFlow.Common.Model.MessagesRabbitMQ
     public class OfferDonationModel
     {
         public Guid OfferId { get; set; }
-        public string DonationOrganizationId { get; set; }
+        public Guid DonationOrganizationId { get; set; }
         public List<DonationItemModel> Donations { get; set; } = new List<DonationItemModel>();
     }
 }

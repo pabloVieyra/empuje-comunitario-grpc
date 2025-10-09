@@ -11,7 +11,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Entities
         public Guid Id { get; set; } = Guid.NewGuid();
         public Guid OfferId { get; set; }
         public string DonationOrganizationId { get; set; }
-        public Organization DonationOrganization { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

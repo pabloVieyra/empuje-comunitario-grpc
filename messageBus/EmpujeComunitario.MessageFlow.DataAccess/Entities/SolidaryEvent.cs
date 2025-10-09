@@ -11,8 +11,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Entities
         public Guid Id { get; set; } = Guid.NewGuid();
         public Guid EventId { get; set; }
         public string OrgId { get; set; }
-        public Organization Org { get; set; }
-
         public string NameEvent { get; set; }
         public string Description { get; set; }
         public DateTime DateTimeEvent { get; set; }

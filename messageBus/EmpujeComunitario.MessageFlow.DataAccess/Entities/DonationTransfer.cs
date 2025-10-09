@@ -13,7 +13,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Entities
         public DonationRequest Request { get; set; }
 
         public string DonationOrgId { get; set; }
-        public Organization DonationOrg { get; set; }
 
         public DateTime TransferDate { get; set; } = DateTime.UtcNow;
 

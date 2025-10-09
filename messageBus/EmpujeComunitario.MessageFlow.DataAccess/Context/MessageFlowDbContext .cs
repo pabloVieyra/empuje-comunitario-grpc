@@ -19,7 +19,7 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Context
         public DbSet<DonationTransfer> DonationTransfers { get; set; }
         public DbSet<SolidaryEvent> SolidaryEvents { get; set; }
         public DbSet<VolunteerAdhesion> VolunteerAdhesions { get; set; }
-        public DbSet<CancelledRequest> CancelledRequests { get; set; }
+        public DbSet<CancelledDonation> CancelledDonation{ get; set; }
         public DbSet<CancelledEvent> CancelledEvents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -94,15 +94,15 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Context
             // ===== CancelledEvent =====
             modelBuilder.Entity<CancelledEvent>(entity =>
             {
-                entity.HasKey(c => c.Id); // Primary key necesaria
+                entity.HasKey(c => new { c.OrgId, c.EventId});
                 entity.Property(c => c.OrgId).IsRequired();
                 entity.Property(c => c.EventId).IsRequired();
             });
 
             // ===== CancelledRequest =====
-            modelBuilder.Entity<CancelledRequest>(entity =>
+            modelBuilder.Entity<CancelledDonation>(entity =>
             {
-                entity.HasKey(c => c.Id); // Primary key necesaria
+                entity.HasKey(c => new { c.OrgId, c.RequestId });
                 entity.Property(c => c.OrgId).IsRequired();
                 entity.Property(c => c.RequestId).IsRequired();
             });
