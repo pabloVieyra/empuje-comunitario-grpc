@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using EmpujeComunitario.Client.Common.Model;
 using EmpujeComunitario.Client.Common.Model.DonationDtos;
-using EmpujeComunitario.Client.Common.Model.EventDtos;
 using EmpujeComunitario.Client.Services.Interface;
+using EmpujeComunitario.MessageFlow.Common.Model;
 using Grpc;
 using static Grpc.DonationInventoryService;
 
@@ -12,7 +11,7 @@ namespace EmpujeComunitario.Client.Services.Implementation
     {
         private readonly DonationInventoryServiceClient _client;
         private readonly IMapper _mapper;
-        public DonationManagerService(DonationInventoryServiceClient donationClient, IMapper mapper) 
+        public DonationManagerService(DonationInventoryServiceClient donationClient, IMapper mapper)
         {
             _client = donationClient;
             _mapper = mapper;

@@ -1,4 +1,5 @@
 ﻿using EmpujeComunitario.Client.Common.Model;
+using EmpujeComunitario.MessageFlow.Common.Model;
 using Grpc;
 
 namespace EmpujeComunitario.Client.Services.Interface

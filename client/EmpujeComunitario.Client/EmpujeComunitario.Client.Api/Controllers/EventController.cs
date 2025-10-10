@@ -1,15 +1,14 @@
-﻿using EmpujeComunitario.Client.Common.Model;
-using EmpujeComunitario.Client.Common.Model.EventDtos;
+﻿using EmpujeComunitario.Client.Common.Model.EventDtos;
 using EmpujeComunitario.Client.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EmpujeComunitario.Client.Api.Controllers
 {
-    public class EventController : ControllerBase
+    [ApiController]
+    [Route("[controller]")]
+    public class EventController : BaseController
     {
         private readonly IEventManagerServices _eventManagerServices;
         private const string errorId = "El Id de usuario es obligatorio.";
@@ -105,30 +104,6 @@ namespace EmpujeComunitario.Client.Api.Controllers
             return StatusCode(response.StatusCode, response);
         }
 
-        private BaseObjectResponse<T> BuildValidationErrorResponse<T>(ModelStateDictionary modelState)
-        {
-            var validationErrors = new List<ValidationErrorResponse>();
-            foreach (var key in modelState.Keys)
-            {
-                var value = modelState[key];
-                foreach (var error in value.Errors)
-                {
-                    validationErrors.Add(new ValidationErrorResponse
-                    {
-                        Field = key,
-                        Message = error.ErrorMessage
-                    });
-                }
-            }
 
-            var response = new BaseObjectResponse<T>
-            {
-                StatusCode = 400,
-                Message = "Errores de validación",
-                Errors = validationErrors
-            };
-
-            return response;
-        }
     }
 }

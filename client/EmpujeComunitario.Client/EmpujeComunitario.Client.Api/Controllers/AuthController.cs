@@ -1,15 +1,13 @@
 ﻿using EmpujeComunitario.Client.Common.Model;
 using EmpujeComunitario.Client.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EmpujeComunitario.Client.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AuthController : ControllerBase
+    public class AuthController : BaseController
     {
         private readonly IAuthManagerServices _authManagerServices;
         public AuthController(IAuthManagerServices authManagerServices)
@@ -29,30 +27,5 @@ namespace EmpujeComunitario.Client.Api.Controllers
             return StatusCode(result.StatusCode, result);
         }
 
-        private BaseObjectResponse<T> BuildValidationErrorResponse<T>(ModelStateDictionary modelState)
-        {
-            var validationErrors = new List<ValidationErrorResponse>();
-            foreach (var key in modelState.Keys)
-            {
-                var value = modelState[key];
-                foreach (var error in value.Errors)
-                {
-                    validationErrors.Add(new ValidationErrorResponse
-                    {
-                        Field = key,
-                        Message = error.ErrorMessage
-                    });
-                }
-            }
-
-            var response = new BaseObjectResponse<T>
-            {
-                StatusCode = 400,
-                Message = "Errores de validación",
-                Errors = validationErrors
-            };
-
-            return response;
-        }
     }
 }

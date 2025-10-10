@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using EmpujeComunitario.Client.Common.Model;
 using EmpujeComunitario.Client.Services.Interface;
+using EmpujeComunitario.MessageFlow.Common.Model;
 using Grpc;
-using System.Globalization;
 
 
 namespace EmpujeComunitario.Client.Services.Implementation
@@ -81,7 +81,7 @@ namespace EmpujeComunitario.Client.Services.Implementation
             }
         }
 
-        public async Task<BaseObjectResponse<dynamic>> DisableUserAsync (string id, string token)
+        public async Task<BaseObjectResponse<dynamic>> DisableUserAsync(string id, string token)
         {
             BaseObjectResponse<dynamic> response = new BaseObjectResponse<dynamic>();
             try

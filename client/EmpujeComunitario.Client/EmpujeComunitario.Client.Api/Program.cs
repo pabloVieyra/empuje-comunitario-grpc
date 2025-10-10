@@ -1,14 +1,17 @@
 using EmpujeComunitario.Client.Api.Infrastructure;
+using EmpujeComunitario.Client.Common.Settings;
 using EmpujeComunitario.Client.Services.Implementation;
 using EmpujeComunitario.Client.Services.Infrastructure;
 using EmpujeComunitario.Client.Services.Interface;
-using Grpc;
+using EmpujeComunitario.MessageFlow.WebClient.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Grpc;
 using System.IO;
 using System.Reflection;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,12 +46,17 @@ builder.Services.AddGrpcClient<DonationInventoryService.DonationInventoryService
 {
     o.Address = new Uri(builder.Configuration.GetValue<string>("ServerGrpc"));
 });
+
+builder.Services.Configure<RabbitMq>(
+    builder.Configuration.GetSection(nameof(RabbitMq)));
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserManagerServices, UserManagerServices>();
 builder.Services.AddScoped<IAuthManagerServices, AuthManagerServices>();
 builder.Services.AddScoped<IEventManagerServices, EventManagerServices>();
 builder.Services.AddScoped<IDonationManagerService, DonationManagerService>();
-
+builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<IExternalDataService,  ExternalDataService>();
+builder.Services.AddConfigurationMessageFlow(builder.Configuration);
 
 builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(EventProfile).Assembly);

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EmpujeComunitario.Client.Common.Model;
 using EmpujeComunitario.Client.Services.Interface;
+using EmpujeComunitario.MessageFlow.Common.Model;
 using Grpc;
 
 namespace EmpujeComunitario.Client.Services.Implementation
@@ -9,7 +10,7 @@ namespace EmpujeComunitario.Client.Services.Implementation
     {
         private readonly AuthService.AuthServiceClient _authServiceClient;
         private readonly IMapper _mapper;
-        public AuthManagerServices(AuthService.AuthServiceClient authServiceClient, IMapper mapper) 
+        public AuthManagerServices(AuthService.AuthServiceClient authServiceClient, IMapper mapper)
         {
             _authServiceClient = authServiceClient;
             _mapper = mapper;

@@ -1,0 +1,55 @@
+# Visual Studio / Rider / VS Code
+.vs/
+.idea/
+.vscode/
+
+# Build resultados
+bin/
+obj/
+Debug/
+Release/
+x64/
+x86/
+
+# Paquetes NuGet
+*.nupkg
+packages/
+*.snupkg
+
+# Rider
+*.sln.iml
+
+# Archivos de usuario
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
+
+# Configuración de IIS Express
+/.vs/
+
+# Archivo de cobertura de pruebas
+*.coverage
+*.coveragexml
+
+# Residuos de publish / deploy
+*.publish.xml
+*.dbmdl
+*.bak
+*.Backup
+*.cache
+*.lock.json
+
+# Rider / ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# Residuos de paquetes temporales
+*.tmp
+*.temp
+
+# Archivo de configuración local
+appsettings.Local.json
