@@ -1,145 +1,91 @@
-﻿using EmpujeComunitario.Client.Common.Model;
-using EmpujeComunitario.Client.Common.Model.DonationDtos;
-using EmpujeComunitario.Client.Common.Model.MessagesRabbitMq;
-using EmpujeComunitario.Client.Services.Interface;
-using Microsoft.AspNetCore.Http;
+﻿using EmpujeComunitario.Client.Services.Interface;
+using EmpujeComunitario.MessageFlow.Common.Model.MessagesRabbitMQ;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Collections.Generic;
-using Newtonsoft;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace EmpujeComunitario.Client.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class MessagesController : ControllerBase
+    public class MessagesController : BaseController
     {
-        private readonly IRabbitMqService _rabbitMqService;
-        private const string errorId = "El Id de usuario es obligatorio.";
-        public MessagesController(IRabbitMqService rabbitMqService)
+        private readonly IMessageService _messageService;
+
+        public MessagesController(IMessageService messageService)
         {
-            _rabbitMqService = rabbitMqService;
+            _messageService = messageService;
         }
 
-        [HttpPost("request/donations")]
+        [HttpPost(nameof(RequestDonation))]
         public async Task<IActionResult> RequestDonation([FromBody] RequestDonationModel request)
         {
             if (!ModelState.IsValid)
-            {
-                var errorResponse = BuildValidationErrorResponse<object>(ModelState);
-                return BadRequest(errorResponse);
-            }
-            //var authorization = HttpContext.Items["Authorization"]?.ToString();
-            
-            var response = _rabbitMqService.Publish(Constants.ExchangeRequestDonation, JsonConvert.SerializeObject(request));
-            return StatusCode(response.StatusCode, response);
+                return BadRequest(BuildValidationErrorResponse<object>(ModelState));
+
+            var result = await _messageService.RequestDonationAsync(request);
+            return StatusCode(result.StatusCode, result);
         }
 
-        [HttpPost("offers/donations")]
+        [HttpPost(nameof(TransfersDonation))]
+        public async Task<IActionResult> TransfersDonation([FromBody] TransferDonationModel request, [FromQuery] string idOrganizacionSolicitante)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(BuildValidationErrorResponse<object>(ModelState));
+
+            var result = await _messageService.TransfersDonationAsync(request, idOrganizacionSolicitante);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPost(nameof(OffersDonations))]
         public async Task<IActionResult> OffersDonations([FromBody] OfferDonationModel request)
         {
             if (!ModelState.IsValid)
-            {
-                var errorResponse = BuildValidationErrorResponse<object>(ModelState);
-                return BadRequest(errorResponse);
-            }
-            var authorization = HttpContext.Items["Authorization"]?.ToString();
+                return BadRequest(BuildValidationErrorResponse<object>(ModelState));
 
-            var response = _rabbitMqService.Publish(Constants.ExchangeOffersDonations, JsonConvert.SerializeObject(request));
-            return StatusCode(response.StatusCode, response);
+            var result = await _messageService.OffersDonationsAsync(request);
+            return StatusCode(result.StatusCode, result);
         }
-        [HttpPost("events/solidary")]
-        public async Task<IActionResult> EventsSolidary([FromBody] SolidaryEventModel request)
-        {
-            if (!ModelState.IsValid)
-            {
-                var errorResponse = BuildValidationErrorResponse<object>(ModelState);
-                return BadRequest(errorResponse);
-            }
-            var authorization = HttpContext.Items["Authorization"]?.ToString();
 
-            var response = _rabbitMqService.Publish(Constants.ExchangeEventsSolidary, JsonConvert.SerializeObject(request));
-            return StatusCode(response.StatusCode, response);
-        }
-        [HttpPost("events/volunteer")]
-        public async Task<IActionResult> EventsVolunteer([FromBody] VolunteerAdhesionModel request)
-        {
-            if (!ModelState.IsValid)
-            {
-                var errorResponse = BuildValidationErrorResponse<object>(ModelState);
-                return BadRequest(errorResponse);
-            }
-            var authorization = HttpContext.Items["Authorization"]?.ToString();
-
-            var response = _rabbitMqService.Publish(Constants.ExchangeEventsVolunteer, JsonConvert.SerializeObject(request));
-            return StatusCode(response.StatusCode, response);
-        }
-        [HttpPost("transfers/confirm")]
-        public async Task<IActionResult> TransfersConfirm([FromBody] TransferDonationModel request)
-        {
-            if (!ModelState.IsValid)
-            {
-                var errorResponse = BuildValidationErrorResponse<object>(ModelState);
-                return BadRequest(errorResponse);
-            }
-            var authorization = HttpContext.Items["Authorization"]?.ToString();
-
-            var response = _rabbitMqService.Publish(Constants.ExchangeTransfersConfirm, JsonConvert.SerializeObject(request));
-            return StatusCode(response.StatusCode, response);
-        }
-        [HttpPost("requests/cancel")]
+        [HttpPost(nameof(RequestsCancel))]
         public async Task<IActionResult> RequestsCancel([FromBody] CancelRequestModel request)
         {
             if (!ModelState.IsValid)
-            {
-                var errorResponse = BuildValidationErrorResponse<object>(ModelState);
-                return BadRequest(errorResponse);
-            }
-            var authorization = HttpContext.Items["Authorization"]?.ToString();
+                return BadRequest(BuildValidationErrorResponse<object>(ModelState));
 
-            var response = _rabbitMqService.Publish(Constants.ExchangeRequestsCancel, JsonConvert.SerializeObject(request));
-            return StatusCode(response.StatusCode, response);
+            var result = await _messageService.RequestsCancelAsync(request);
+            return StatusCode(result.StatusCode, result);
         }
-        [HttpPost("events/cancel")]
+
+        [HttpPost(nameof(EventsSolidary))]
+        public async Task<IActionResult> EventsSolidary([FromBody] SolidaryEventModel request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(BuildValidationErrorResponse<object>(ModelState));
+
+            var result = await _messageService.EventsSolidaryAsync(request);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPost(nameof(EventsCancel))]
         public async Task<IActionResult> EventsCancel([FromBody] CancelEventModel request)
         {
             if (!ModelState.IsValid)
-            {
-                var errorResponse = BuildValidationErrorResponse<object>(ModelState);
-                return BadRequest(errorResponse);
-            }
-            var authorization = HttpContext.Items["Authorization"]?.ToString();
+                return BadRequest(BuildValidationErrorResponse<object>(ModelState));
 
-            var response = _rabbitMqService.Publish(Constants.ExchangeEventsCancel, JsonConvert.SerializeObject(request));
-            return StatusCode(response.StatusCode, response);
+            var result = await _messageService.EventsCancelAsync(request);
+            return StatusCode(result.StatusCode, result);
         }
 
-        private BaseObjectResponse<T> BuildValidationErrorResponse<T>(ModelStateDictionary modelState)
+        [HttpPost(nameof(EventsVolunteer))]
+        public async Task<IActionResult> EventsVolunteer([FromBody] VolunteerAdhesionModel request, [FromQuery] string idOrganizador)
         {
-            var validationErrors = new List<ValidationErrorResponse>();
-            foreach (var key in modelState.Keys)
-            {
-                var value = modelState[key];
-                foreach (var error in value.Errors)
-                {
-                    validationErrors.Add(new ValidationErrorResponse
-                    {
-                        Field = key,
-                        Message = error.ErrorMessage
-                    });
-                }
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(BuildValidationErrorResponse<object>(ModelState));
 
-            var response = new BaseObjectResponse<T>
-            {
-                StatusCode = 400,
-                Message = "Errores de validación",
-                Errors = validationErrors
-            };
-
-            return response;
+            var result = await _messageService.EventsVolunteerAsync(request, idOrganizador);
+            return StatusCode(result.StatusCode, result);
         }
+
+
     }
 }

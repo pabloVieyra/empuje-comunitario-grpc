@@ -19,7 +19,7 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
         }
         //punto 1
         [HttpPost("solicitud-donaciones")]
-        public async Task<IActionResult> RequestDonation([FromBody] RequestDonationModel request)
+        public IActionResult RequestDonation([FromBody] RequestDonationModel request)
         {
             if (!ModelState.IsValid)
             {
@@ -35,7 +35,7 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
         //punto 2
         [HttpPost("/transferencia-donaciones/{IdOrganizacionSolicitante}")]
         [ProducesResponseType(typeof(TransferDonationModel), 200)]
-        public async Task<IActionResult> TransfersDonation([FromBody] TransferDonationModel request, [FromRoute]string IdOrganizacionSolicitante)
+        public IActionResult TransfersDonation([FromBody] TransferDonationModel request, [FromRoute]string IdOrganizacionSolicitante)
         {
             if (!ModelState.IsValid)
             {
@@ -49,7 +49,7 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
         }
         //punto 3
         [HttpPost("oferta-donaciones")]
-        public async Task<IActionResult> OffersDonations([FromBody] OfferDonationModel request)
+        public IActionResult OffersDonations([FromBody] OfferDonationModel request)
         {
             if (!ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
 
         //punto 4
         [HttpPost("baja-solicitud-donaciones")]
-        public async Task<IActionResult> RequestsCancel([FromBody] CancelRequestModel request)
+        public IActionResult RequestsCancel([FromBody] CancelRequestModel request)
         {
             if (!ModelState.IsValid)
             {
@@ -80,7 +80,7 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
 
         //punto 5 
         [HttpPost("eventossolidarios")]
-        public async Task<IActionResult> EventsSolidary([FromBody] SolidaryEventModel request)
+        public IActionResult EventsSolidary([FromBody] SolidaryEventModel request)
         {
             if (!ModelState.IsValid)
             {
@@ -95,7 +95,7 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
 
         //punto 6 
         [HttpPost("baja-evento-solidario")]
-        public async Task<IActionResult> EventsCancel([FromBody] CancelEventModel request)
+        public IActionResult EventsCancel([FromBody] CancelEventModel request)
         {
             if (!ModelState.IsValid)
             {
@@ -110,7 +110,7 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
 
         //punto 7
         [HttpPost("adhesion-evento/{idOrganizador}")]
-        public async Task<IActionResult> EventsVolunteer([FromBody] VolunteerAdhesionModel request,[FromRoute] string idOrganizador)
+        public IActionResult EventsVolunteer([FromBody] VolunteerAdhesionModel request,[FromRoute] string idOrganizador)
         {
             if (!ModelState.IsValid)
             {

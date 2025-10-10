@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36414.22 d17.14
+VisualStudioVersion = 17.14.36414.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpujeComunitario.MessageFlow.Api", "EmpujeComunitario.MessageFlow.Api\EmpujeComunitario.MessageFlow.Api.csproj", "{DC04949A-2BC7-48E5-BA67-64B986045DDA}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpujeComunitario.MessageFlow.Service", "EmpujeComunitario.MessageFlow.Service\EmpujeComunitario.MessageFlow.Service.csproj", "{C9BB48A1-41F8-4858-8A21-1AD6DEFD32BD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpujeComunitario.MessageFlow.DataAccess", "EmpujeComunitario.MessageFlow.DataAccess\EmpujeComunitario.MessageFlow.DataAccess.csproj", "{F0FE5396-0367-4381-8609-A1ACA0719776}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpujeComunitario.MessageFlow.WebClient", "EmpujeComunitario.MessageFlow.WebClient\EmpujeComunitario.MessageFlow.WebClient.csproj", "{27CC6E80-B00F-4AA8-9806-72B7034E88B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{F0FE5396-0367-4381-8609-A1ACA0719776}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0FE5396-0367-4381-8609-A1ACA0719776}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0FE5396-0367-4381-8609-A1ACA0719776}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27CC6E80-B00F-4AA8-9806-72B7034E88B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27CC6E80-B00F-4AA8-9806-72B7034E88B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27CC6E80-B00F-4AA8-9806-72B7034E88B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27CC6E80-B00F-4AA8-9806-72B7034E88B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

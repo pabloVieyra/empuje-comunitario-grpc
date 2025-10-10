@@ -1,11 +1,6 @@
-﻿using EmpujeComunitario.Client.Common.Model;
-using EmpujeComunitario.Client.Common.Model.EventDtos;
+﻿using EmpujeComunitario.Client.Common.Model.EventDtos;
+using EmpujeComunitario.MessageFlow.Common.Model;
 using Grpc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpujeComunitario.Client.Services.Interface
 {

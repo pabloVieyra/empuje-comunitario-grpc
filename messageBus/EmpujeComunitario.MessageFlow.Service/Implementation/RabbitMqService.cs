@@ -59,6 +59,7 @@ namespace EmpujeComunitario.MessageFlow.Service.Implementation
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.ToString());
                 return response.BadRequestWithoutData(Unsuccessful);
             }
 

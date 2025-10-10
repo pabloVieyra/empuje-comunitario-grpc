@@ -49,17 +49,24 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Implementation
 
         public async Task CancelDonationRequestAsync(Guid requestId)
         {
-            var request = await _context.DonationRequests
-                .Include(r => r.Donations)
-                .FirstOrDefaultAsync(r => r.RequestId == requestId);
-
-            if (request != null)
+            try
             {
-                // Marcar como cancelada
-                request.IsCancelled = true;
+                var request = await _context.DonationRequests
+                    .Include(r => r.Donations)
+                    .FirstOrDefaultAsync(r => r.RequestId == requestId);
 
-                // Guardar cambios
-                await _context.SaveChangesAsync();
+                if (request != null)
+                {
+                    // Marcar como cancelada
+                    request.IsCancelled = true;
+
+                    // Guardar cambios
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
     }

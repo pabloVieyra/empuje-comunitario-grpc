@@ -10,8 +10,10 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Interface
     public interface IEventRepository
     {
         Task AddSolidaryEventAsync(SolidaryEvent evt);
-        Task<SolidaryEvent?> GetByIdAsync(Guid eventId);
-        Task<List<SolidaryEvent>> GetActiveExternalEventsAsync(string myOrgId);
+        Task CreateRequestCancelEvent(CancelledEvent eventCancel);
         Task CancelEventAsync(Guid eventId);
+        Task<CancelledEvent> FindRequestCancel(Guid id);
+        Task<List<SolidaryEvent>> GetAllEventAsync();
+
     }
 }

@@ -98,43 +98,38 @@ namespace EmpujeComunitario.MessageFlow.Service.Implementation
                             case var rk when rk == string.Format(Exchanges.RoutingKeyTransferDonation, Organization.Id):
 
                                 var transferencia = JsonConvert.DeserializeObject<TransferDonationModel>(json);
-                                var transferRepository = scope.ServiceProvider.GetRequiredService<ITransferRepository>();
-                                var entityTransferencia = _mapper.Map<DonationTransfer>(transferencia);
-                                await transferRepository.ConfirmTransferAsync(entityTransferencia);
+                                var transferDonationService = scope.ServiceProvider.GetRequiredService<ITransferDonationService>();
+                                await transferDonationService.ConfirmTransferAsync(transferencia);
                                 break;
                             //3
                             case var rk when rk == Exchanges.RoutingKeyOfferDonation:
-                                var oferta = JsonConvert.DeserializeObject<OfferDonationModel>(json);
-                                var offerRepository = scope.ServiceProvider.GetRequiredService<IOfferRepository>();
-                                var entityOferta = _mapper.Map<DonationOffer>(oferta);
-                                await offerRepository.AddOfferDonationAsync(entityOferta);
+                                var offer = JsonConvert.DeserializeObject<OfferDonationModel>(json);
+                                var offerDonationService = scope.ServiceProvider.GetRequiredService<IOfferDonationService>();
+                                await offerDonationService.CreateOffer(offer);
                                 break;
-
-                            //
+                            //4
                             case var rk when rk == Exchanges.RoutingKeyRequestCancel:
                                 var cancelRequest = JsonConvert.DeserializeObject<CancelRequestModel>(json);
-                                var donationRepo = scope.ServiceProvider.GetRequiredService<IDonationRequestRepository>();
-                                await donationRepo.CancelDonationRequestAsync(cancelRequest.RequestId);
+                                var cancellDonationService = scope.ServiceProvider.GetRequiredService<ICancellDonationService>();
+                                await cancellDonationService.RequestDonationCanceled(cancelRequest);
                                 break;
-
+                            //5
                             case var rk when rk == Exchanges.RoutingKeyEventSolidary:
-                                var evento = JsonConvert.DeserializeObject<SolidaryEventModel>(json);
-                                var eventRepository = scope.ServiceProvider.GetRequiredService<IEventRepository>();
-                                var entityEvento = _mapper.Map<SolidaryEvent>(evento);
-                                await eventRepository.AddSolidaryEventAsync(entityEvento);
+                                var eventSolidary = JsonConvert.DeserializeObject<SolidaryEventModel>(json);
+                                var eventSolidaryService = scope.ServiceProvider.GetRequiredService<IEventSolidaryService>();
+                                await eventSolidaryService.CreateEvent(eventSolidary);
                                 break;
-
+                            //6
                             case var rk when rk == Exchanges.RoutingKeyEventCancel:
                                 var cancelEvent = JsonConvert.DeserializeObject<CancelEventModel>(json);
-                                var eventRepo = scope.ServiceProvider.GetRequiredService<IEventRepository>();
-                                await eventRepo.CancelEventAsync(cancelEvent.EventId);
+                                var eventSolidaryCancelService = scope.ServiceProvider.GetRequiredService<IEventSolidaryService>();
+                                await eventSolidaryCancelService.CreateRequestCancellEvent(cancelEvent);
                                 break;
-
+                            //7
                             case var rk when rk == string.Format(Exchanges.RoutingKeyEventVolunteer,Organization.Id):
                                 var adhesion = JsonConvert.DeserializeObject<VolunteerAdhesionModel>(json);
-                                var volunteerRepository = scope.ServiceProvider.GetRequiredService<IVolunteerRepository>();
-                                var entityAdhesion = _mapper.Map<VolunteerAdhesion>(adhesion);
-                                await volunteerRepository.AddVolunteerAdhesionAsync(entityAdhesion);
+                                var volunteerAdhesionService = scope.ServiceProvider.GetRequiredService<IVolunteerAdhesionService>();
+                                await volunteerAdhesionService.CreateVolunteerAdhesion(adhesion);
                                 break;
 
                             default:

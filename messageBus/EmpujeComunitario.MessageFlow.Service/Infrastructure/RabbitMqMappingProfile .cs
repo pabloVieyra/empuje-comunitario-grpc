@@ -9,12 +9,13 @@ namespace EmpujeComunitario.MessageFlow.Service.Infrastructure
     {
         public RabbitMqMappingProfile()
         {
-            CreateMap<RequestDonationModel, DonationRequest>();
-            CreateMap<OfferDonationModel, DonationOffer>();
-            CreateMap<DonationItemModel, DonationItem>();
-            CreateMap<SolidaryEventModel, SolidaryEvent>();
-            CreateMap<VolunteerAdhesionModel, VolunteerAdhesion>();
-            CreateMap<TransferDonationModel, DonationTransfer>();
+            CreateMap<RequestDonationModel, DonationRequest>().ReverseMap();
+            CreateMap<OfferDonationModel, DonationOffer>().ReverseMap();
+            CreateMap<DonationItemModel, DonationItem>().ReverseMap();
+            CreateMap<CancelEventModel, CancelledEvent>().ReverseMap();
+            CreateMap<SolidaryEventModel, SolidaryEvent>().ReverseMap();
+            CreateMap<VolunteerAdhesionModel, VolunteerAdhesion>().ReverseMap();
+            CreateMap<TransferDonationModel, DonationTransfer>().ReverseMap();
         }
     }
 }

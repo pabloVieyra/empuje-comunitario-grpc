@@ -1,13 +1,8 @@
 ﻿using AutoMapper;
-using EmpujeComunitario.Client.Common.Model;
 using EmpujeComunitario.Client.Common.Model.EventDtos;
 using EmpujeComunitario.Client.Services.Interface;
+using EmpujeComunitario.MessageFlow.Common.Model;
 using Grpc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpujeComunitario.Client.Services.Implementation
 {
@@ -16,7 +11,7 @@ namespace EmpujeComunitario.Client.Services.Implementation
     {
         private readonly EventService.EventServiceClient _eventClient;
         private readonly IMapper _mapper;
-        public EventManagerServices (EventService.EventServiceClient eventClient, IMapper mapper)
+        public EventManagerServices(EventService.EventServiceClient eventClient, IMapper mapper)
         {
             _eventClient = eventClient;
             _mapper = mapper;
@@ -44,7 +39,7 @@ namespace EmpujeComunitario.Client.Services.Implementation
             BaseObjectResponse<UpdateEventResponse> response = new BaseObjectResponse<UpdateEventResponse>();
             try
             {
-                UpdateEventRequest updateEventRequest= _mapper.Map<UpdateEventRequest>(updateEvent);
+                UpdateEventRequest updateEventRequest = _mapper.Map<UpdateEventRequest>(updateEvent);
                 updateEventRequest.Token = auth;
                 //updateEventRequest.Event.ModificationDate = DateTime.UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss.fff");
                 var result = await _eventClient.UpdateEventAsync(updateEventRequest);

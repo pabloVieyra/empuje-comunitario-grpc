@@ -18,29 +18,41 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<RabbitMqSettings>(
     builder.Configuration.GetSection(nameof(RabbitMqSettings)));
-builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
-builder.Services.AddHostedService<MessagesConsumerService>();
-builder.Services.AddScoped<IDonationRequestRepository, DonationRequestRepository>();
-builder.Services.AddScoped<IOfferRepository, OfferRepository>();
-builder.Services.AddScoped<IEventRepository, EventRepository>();
-builder.Services.AddScoped<IVolunteerRepository, VolunteerRepository>();
-builder.Services.AddScoped<ITransferRepository, TransferRepository>();
+
+//context
 builder.Services.AddDbContext<MessageFlowDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddDbContext<EmpujeComunitarioContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+//repositories
+builder.Services.AddScoped<ICancelledDonationRepository , CancelledDonationRepository>();
+builder.Services.AddScoped<IDonationRequestRepository, DonationRequestRepository>();
+builder.Services.AddScoped<IDonationsRepository , DonationsRepository>();
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IOfferRepository, OfferRepository>();
+builder.Services.AddScoped<ITransferRepository, TransferRepository>();
+builder.Services.AddScoped<IVolunteerRepository, VolunteerRepository>();
+
+//service
+builder.Services.AddScoped<ICancellDonationService, CancellDonationService>();
+builder.Services.AddHostedService<MessagesConsumerService>();
+builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
+builder.Services.AddScoped<IRequestDonationService, RequestDonationService>();
+builder.Services.AddScoped<ITransferDonationService, TransferDonationService>();
+builder.Services.AddScoped<IOfferDonationService, OfferDonationService>();
+builder.Services.AddScoped<IEventSolidaryService , EventSolidaryService>();
+builder.Services.AddScoped<IExternalDataService, ExternalDataService>();
+
+
 builder.Services.AddAutoMapper(typeof(RabbitMqMappingProfile));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

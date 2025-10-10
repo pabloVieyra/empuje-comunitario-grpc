@@ -1,19 +1,14 @@
-﻿using EmpujeComunitario.Client.Common.Model;
-using EmpujeComunitario.Client.Common.Model.DonationDtos;
-using EmpujeComunitario.Client.Common.Model.EventDtos;
-using EmpujeComunitario.Client.Services.Implementation;
+﻿using EmpujeComunitario.Client.Common.Model.DonationDtos;
 using EmpujeComunitario.Client.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EmpujeComunitario.Client.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class DonationController : ControllerBase
+    public class DonationController : BaseController
     {
         private readonly IDonationManagerService _donationManagerService;
         private const string errorId = "El Id de usuario es obligatorio.";
@@ -35,7 +30,7 @@ namespace EmpujeComunitario.Client.Api.Controllers
             var response = await _donationManagerService.CreateDonationInventoryAsync(request, authorization);
             return StatusCode(response.StatusCode, response);
         }
-        
+
         [HttpPatch(nameof(UpdateDonationInventoryAsync))]
         public async Task<IActionResult> UpdateDonationInventoryAsync([FromBody] DonationInventoryUpdateDto request)
         {
@@ -78,32 +73,6 @@ namespace EmpujeComunitario.Client.Api.Controllers
 
             var response = await _donationManagerService.ListDonationInventoryAsync(authorization);
             return StatusCode(response.StatusCode, response);
-        }
-
-        private BaseObjectResponse<T> BuildValidationErrorResponse<T>(ModelStateDictionary modelState)
-        {
-            var validationErrors = new List<ValidationErrorResponse>();
-            foreach (var key in modelState.Keys)
-            {
-                var value = modelState[key];
-                foreach (var error in value.Errors)
-                {
-                    validationErrors.Add(new ValidationErrorResponse
-                    {
-                        Field = key,
-                        Message = error.ErrorMessage
-                    });
-                }
-            }
-
-            var response = new BaseObjectResponse<T>
-            {
-                StatusCode = 400,
-                Message = "Errores de validación",
-                Errors = validationErrors
-            };
-
-            return response;
         }
     }
 }
