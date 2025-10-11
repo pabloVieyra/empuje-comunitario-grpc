@@ -50,7 +50,7 @@ open class PostgresSqlEventRepository: EventNetworkDatabase {
     }
 
     override fun findAll(): List<EventEntity> = try {
-        val query = entityManager.createQuery("SELECT e FROM EventEntity e", EventEntity::class.java)
+        val query = entityManager.createQuery("SELECT distinct e FROM EventEntity e left join fetch e.userEvents ue left join fetch ue.user", EventEntity::class.java)
         query.resultList
     } catch (e: Exception) {
         logger.error("Error fetching events: ${e.message}")

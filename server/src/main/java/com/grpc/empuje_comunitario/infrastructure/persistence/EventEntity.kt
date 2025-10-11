@@ -2,6 +2,7 @@ package com.grpc.empuje_comunitario.infrastructure.persistence
 
 import com.grpc.empuje_comunitario.domain.donation.Donation
 import com.grpc.empuje_comunitario.domain.donation.Event
+import com.grpc.empuje_comunitario.domain.user.toUser
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -52,6 +53,9 @@ fun EventEntity.toEvent(): Event {
         description = this.description,
         eventDateTime = this.eventDateTime,
         modificationDate = this.modificationDate,
-        modificationUser =  modificationUser?.id
+        modificationUser =  modificationUser?.id,
+        users = this.userEvents
+            .mapNotNull { it.user } // obtengo los UserEntity
+            .map { it.toUser() }
     )
 }

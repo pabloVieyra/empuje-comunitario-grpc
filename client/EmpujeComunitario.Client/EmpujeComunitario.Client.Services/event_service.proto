@@ -28,6 +28,7 @@ message EventProto {
   string eventDateTime = 4; // ISO string
   string modificationUser = 5;
   string modificationDate = 6;
+  repeated EventUserProto users = 7;
 }
 
 // Requests
@@ -91,6 +92,12 @@ message FindEventByIdResponse {
   bool success = 1;
   string message = 2;
   EventProto event = 3;
+}
+
+message EventUserProto {
+  string id = 1;
+  string name = 2;
+  string email = 3;
 }
 
 
