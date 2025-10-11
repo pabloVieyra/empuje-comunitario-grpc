@@ -44,5 +44,9 @@ namespace EmpujeComunitario.Client.Services.Implementation
 
         public Task<BaseObjectResponse<List<OfferDonationModel>>> GetAllOfferDonation() =>
             SafeCall(() => _externalDataClient.GetAllOfferDonation());
+
+        public Task<BaseObjectResponse<List<RequestDonationModel>>> GetAllRequestsDonation() =>
+            SafeCall(() => _externalDataClient.GetAllRequestsDonation());
+
     }
 }

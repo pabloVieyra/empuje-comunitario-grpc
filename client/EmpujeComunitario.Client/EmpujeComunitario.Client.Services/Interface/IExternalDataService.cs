@@ -10,5 +10,7 @@ namespace EmpujeComunitario.Client.Services.Infrastructure
         Task<BaseObjectResponse<List<VolunteerAdhesionModel>>> GetAllVolunteerByEvent(string eventId);
 
         Task<BaseObjectResponse<List<OfferDonationModel>>> GetAllOfferDonation();
+
+        Task<BaseObjectResponse<List<RequestDonationModel>>> GetAllRequestsDonation();
     }
 }

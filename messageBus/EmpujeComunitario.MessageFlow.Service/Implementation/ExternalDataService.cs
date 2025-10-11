@@ -17,18 +17,20 @@ namespace EmpujeComunitario.MessageFlow.Service.Implementation
         private readonly IEventRepository _eventRepository;
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly IOfferRepository _offerRepository;
+        private readonly IDonationRequestRepository _donationRequestRepository;
         private readonly IMapper _mapper;
         public ExternalDataService(IEventRepository eventRepository,
             IVolunteerRepository volunteerRepository,
             IOfferRepository offerRepository,
+            IDonationRequestRepository donationRequestRepository,
             IMapper mapper) 
         {
+            _donationRequestRepository = donationRequestRepository;
             _eventRepository = eventRepository;
             _volunteerRepository = volunteerRepository;
             _offerRepository = offerRepository;
             _mapper = mapper;
         }
-
         public async Task<BaseObjectResponse<List<SolidaryEventModel>>> GetAllEvents()
         {
             var response = new BaseObjectResponse<List<SolidaryEventModel>>();
@@ -77,6 +79,23 @@ namespace EmpujeComunitario.MessageFlow.Service.Implementation
                 return response.BadRequestWithoutData(e.Message); 
             }
             
+        }
+
+        public async Task<BaseObjectResponse<List<RequestDonationModel>>> GetAllRequestsDonation()
+        {
+            var response = new BaseObjectResponse<List<RequestDonationModel>>();
+            try
+            {
+                var result = await _donationRequestRepository.GetAllRequestsAsync();
+                var donation = _mapper.Map<List<RequestDonationModel>>(result);
+                return response.OkWithData(donation);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return response.BadRequestWithoutData(e.Message);
+            }
+
         }
     }
 }

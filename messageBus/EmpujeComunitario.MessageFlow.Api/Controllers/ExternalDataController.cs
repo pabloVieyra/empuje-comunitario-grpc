@@ -37,5 +37,12 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
             var result = await _externalDataService.GetAllOfferDonation();
             return StatusCode(result.StatusCode, result);
         }
+
+        [HttpGet(nameof(GetAllRequestsDonation))]
+        public async Task<IActionResult> GetAllRequestsDonation()
+        {
+            var result = await _externalDataService.GetAllRequestsDonation();
+            return StatusCode(result.StatusCode, result);
+        }
     }
 }
