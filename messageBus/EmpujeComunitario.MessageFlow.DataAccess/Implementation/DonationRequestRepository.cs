@@ -43,7 +43,7 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Implementation
         {
             return await _context.DonationRequests
                 .Include(r => r.Donations)
-                //.Where(r => !r.IsCancelled)
+                .Where(r => !r.IsCancelled)
                 .ToListAsync();
         }
 
