@@ -11,7 +11,7 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Interface
     {
         Task AddDonationRequestAsync(DonationRequest request);
         Task<DonationRequest?> GetByIdAsync(Guid requestId);
-        Task<List<DonationRequest>> GetActiveRequestsAsync();
         Task CancelDonationRequestAsync(Guid requestId);
+        Task<List<DonationRequest>> GetAllRequestsAsync();
     }
 }

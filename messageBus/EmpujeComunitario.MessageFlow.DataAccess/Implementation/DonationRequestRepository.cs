@@ -39,11 +39,11 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Implementation
                 .FirstOrDefaultAsync(r => r.RequestId == requestId);
         }
 
-        public async Task<List<DonationRequest>> GetActiveRequestsAsync()
+        public async Task<List<DonationRequest>> GetAllRequestsAsync()
         {
             return await _context.DonationRequests
                 .Include(r => r.Donations)
-                .Where(r => !r.IsCancelled)
+                //.Where(r => !r.IsCancelled)
                 .ToListAsync();
         }
 

@@ -61,7 +61,7 @@ builder.Services.AddConfigurationMessageFlow(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(EventProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(DonationProfile).Assembly);
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",

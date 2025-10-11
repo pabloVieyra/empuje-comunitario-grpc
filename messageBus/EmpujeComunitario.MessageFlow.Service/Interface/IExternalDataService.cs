@@ -13,5 +13,6 @@ namespace EmpujeComunitario.MessageFlow.Service.Interface
         Task<BaseObjectResponse<List<SolidaryEventModel>>> GetAllEvents();
         Task<BaseObjectResponse<List<VolunteerAdhesionModel>>> GetAllVolunteerByEvent(string eventId);
         Task<BaseObjectResponse<List<OfferDonationModel>>> GetAllOfferDonation();
+        Task<BaseObjectResponse<List<RequestDonationModel>>> GetAllRequestsDonation();
     }
 }

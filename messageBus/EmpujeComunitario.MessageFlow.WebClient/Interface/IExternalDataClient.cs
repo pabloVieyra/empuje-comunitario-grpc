@@ -12,5 +12,8 @@ namespace EmpujeComunitario.MessageFlow.WebClient.Interface
         Task<BaseObjectResponse<List<VolunteerAdhesionModel>>> GetAllVolunteerByEvent(string eventId);
         [Get("/ExternalData/GetAllOfferDonation")]
         Task<BaseObjectResponse<List<OfferDonationModel>>> GetAllOfferDonation();
+
+        [Get("/ExternalData/GetAllRequestsDonation")]
+        Task<BaseObjectResponse<List<RequestDonationModel>>> GetAllRequestsDonation();
     }
 }
