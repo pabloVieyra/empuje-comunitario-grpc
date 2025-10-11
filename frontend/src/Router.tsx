@@ -6,6 +6,7 @@ import Login from "./pages/login/Login";
 import NotFound from "./pages/NotFound";
 import { UserList } from "./pages/users/UserList";
 import { DonationList } from "./pages/donation/DonationList";
+import { EventList } from "./pages/event/EventList";
 
 
 export const router = createBrowserRouter([
@@ -30,6 +31,13 @@ export const router = createBrowserRouter([
           { index: true, element: <DonationList /> },
         ],
       },
+           {
+        path: "eventos",
+        element: <PresidenteLayout />,
+        children: [
+          { index: true, element: <EventList /> },
+        ],
+      }
     ],
   },
 

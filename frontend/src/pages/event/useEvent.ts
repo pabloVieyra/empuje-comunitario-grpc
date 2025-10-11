@@ -20,7 +20,7 @@ export const useEvents = () => {
 
   useEffect(() => { fetchEvents(); }, []);
 
-  const addEvent = async (eventData: Omit<Event, "eventId">) => {
+  const addEvent = async (eventData: Omit<Event, "id">) => {
     setLoading(true);
     try {
       const newEvent = await createEvent(eventData);
@@ -36,7 +36,7 @@ export const useEvents = () => {
     setLoading(true);
     try {
       const updated = await updateEvent(event);
-      setEvents(events.map(e => e.eventId === event.eventId ? updated : e));
+      setEvents(events.map(e => e.id === event.id ? updated : e));
     } catch (e: any) {
       setError(e.message || "Error modificando evento");
     } finally {
@@ -44,11 +44,11 @@ export const useEvents = () => {
     }
   };
 
-  const removeEvent = async (eventId: number, actorId: string) => {
+  const removeEvent = async (id: number, actorId: string) => {
     setLoading(true);
     try {
-      await deleteEvent(eventId, actorId);
-      setEvents(events.filter(e => e.eventId !== eventId));
+      await deleteEvent(id, actorId);
+      setEvents(events.filter(e => e.id !== id));
     } catch (e: any) {
       setError(e.message || "Error eliminando evento");
     } finally {

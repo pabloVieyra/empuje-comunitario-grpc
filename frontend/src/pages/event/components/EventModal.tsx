@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { ModalBg, ModalCard, ModalTitle, ModalFooter, Input, ErrorMsg, Label, InputWrapper, Btn } from "../styles";
+import { ModalBg, ModalCard, ModalTitle, ModalFooter, Input, ErrorMsg, Label, InputWrapper, Btn } from "../../users/styles";
 import type { Event } from "@/domain/Event";
 
 interface Props {
   event: Event | null;
   onClose: () => void;
-  onSave: (id: number | null, data: Omit<Event, "eventId">) => void;
+  onSave: (id: number | null, data: Omit<Event, "id">) => void;
   error: string | null;
 }
 
 export const EventModal: React.FC<Props> = ({ event, onClose, onSave, error }) => {
+  console.log(event)
   const [eventName, setEventName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [eventDateTime, setEventDateTime] = useState<string>("");
@@ -20,7 +21,7 @@ export const EventModal: React.FC<Props> = ({ event, onClose, onSave, error }) =
       setEventName(event.eventName);
       setDescription(event.description);
       setEventDateTime(event.eventDateTime.slice(0, 16)); // for input type="datetime-local"
-      setCreationUserId(event.creationUserId);
+      setCreationUserId(event.creationUserId || "");
     } else {
       setEventName("");
       setDescription("");
@@ -31,12 +32,22 @@ export const EventModal: React.FC<Props> = ({ event, onClose, onSave, error }) =
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(event ? event.eventId : null, {
+    if(event?.id){
+         onSave(event ? event.id : null, {
+        eventName,
+        description,
+        eventDateTime: new Date(eventDateTime).toISOString(),
+        modifiedUserId:  creationUserId,
+    });
+    }else{
+         onSave(event ? event.id : null, {
       eventName,
       description,
       eventDateTime: new Date(eventDateTime).toISOString(),
-      creationUserId,
+      creationUserId:   creationUserId ,
     });
+    }
+
   };
 
   return (
@@ -52,7 +63,7 @@ export const EventModal: React.FC<Props> = ({ event, onClose, onSave, error }) =
             <Label>Descripción</Label>
             <Input value={description} onChange={e => setDescription(e.target.value)} required />
           </InputWrapper>
-          <InputWrapper>
+            <InputWrapper>
             <Label>Fecha y Hora</Label>
             <Input
               type="datetime-local"
@@ -60,7 +71,7 @@ export const EventModal: React.FC<Props> = ({ event, onClose, onSave, error }) =
               onChange={e => setEventDateTime(e.target.value)}
               required
             />
-          </InputWrapper>
+            </InputWrapper>
           <InputWrapper>
             <Label>Usuario Creador (ID)</Label>
             <Input value={creationUserId} onChange={e => setCreationUserId(e.target.value)} required />

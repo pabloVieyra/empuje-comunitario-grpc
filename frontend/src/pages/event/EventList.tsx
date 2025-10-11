@@ -1,13 +1,29 @@
 import React, { useState } from "react";
-import { useEvents } from "@/hooks/useEvents";
-import { Btn, Card, ErrorMsg, UsersPage } from "../styles";
-import { EventTable } from "./EventTable";
-import { EventModal } from "./EventModal";
+import { useEvents } from "./useEvent";
+import { Btn, Card, ErrorMsg, UsersPage } from "../users/styles";
+import { EventModal } from "./components/EventModal";
+import { EventTable } from "./components/EventTable";
+import { EventMembersModal } from "./components/EventMembersModal";
+import { EventDonationsModal } from "./components/EventDonationsModal";
 
 export const EventList: React.FC = () => {
-  const { events, loading, error, addEvent, editEvent, removeEvent, setError } = useEvents();
+  const { events, loading, error, addEvent, editEvent, removeEvent, setError, fetchEvents } = useEvents();
   const [modalOpen, setModalOpen] = useState(false);
   const [editEventData, setEditEventData] = useState<any>(null);
+  const [membersModalOpen, setMembersModalOpen] = useState(false);
+  const [donationsModalOpen, setDonationsModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+
+  const openMembersModal = (event: Event) => {
+    setSelectedEvent(event);
+    setMembersModalOpen(true);
+  };
+
+  const openDonationsModal = (event: Event) => {
+    console.log("Opening donations modal for event:", event);
+    setSelectedEvent(event);
+    setDonationsModalOpen(true);
+  };
 
   const openNewModal = () => {
     setEditEventData(null);
@@ -23,11 +39,12 @@ export const EventList: React.FC = () => {
 
   const handleSave = async (id: number | null, data: any) => {
     if (id) {
-      await editEvent({ eventId: id, ...data });
+      await editEvent({ id: id, ...data });
     } else {
       await addEvent(data);
     }
     setModalOpen(false);
+    fetchEvents();
   };
 
   // actorId debería ser el usuario logueado, este es un ejemplo:
@@ -52,7 +69,9 @@ export const EventList: React.FC = () => {
         <EventTable
           events={events}
           onEdit={openEditModal}
-          onDelete={(eventId: number) => removeEvent(eventId, actorId)}
+          onDelete={(id: number) => removeEvent(id, actorId)}
+          onManageMembers={openMembersModal}
+          onManageDonations={openDonationsModal}
         />
       </Card>
       {modalOpen && (
@@ -61,6 +80,20 @@ export const EventList: React.FC = () => {
           onClose={() => setModalOpen(false)}
           onSave={handleSave}
           error={error}
+        />
+      )}
+      {membersModalOpen && selectedEvent && (
+        <EventMembersModal
+          event={selectedEvent}
+          onClose={() => setMembersModalOpen(false)}
+          onRefresh={fetchEvents}
+        />
+      )}
+      {donationsModalOpen && selectedEvent && (
+        <EventDonationsModal
+          event={selectedEvent}
+          onClose={() => setDonationsModalOpen(false)}
+          onRefresh={fetchEvents}
         />
       )}
     </UsersPage>

@@ -1,7 +1,7 @@
 import axios, { type AxiosRequestHeaders } from "axios";
 import { authService } from "./authService";
 
-const baseURL = "http://localhost/";
+const baseURL = "http://localhost:5169/";
 
 export const apiClient = axios.create({
   baseURL,
