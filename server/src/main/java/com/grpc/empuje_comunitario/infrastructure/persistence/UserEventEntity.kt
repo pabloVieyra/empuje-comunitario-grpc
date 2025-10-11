@@ -4,6 +4,7 @@ import jakarta.persistence.*
 import java.io.Serializable
 
 @Entity
+@IdClass(UserEventId::class)
 @Table(name = "user_events")
 class UserEventEntity() : Serializable {
     @Id

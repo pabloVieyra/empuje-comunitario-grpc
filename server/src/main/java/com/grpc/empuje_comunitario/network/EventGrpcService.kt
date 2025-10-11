@@ -196,12 +196,26 @@ open class EventGrpcService @Autowired constructor(
         }
 }
 
-// Mapper de Event -> EventProto
-private fun Event.toProto(): EventProto = EventProto.newBuilder()
-    .setId(this.id)
-    .setEventName(this.eventName)
-    .setDescription(this.description)
-    .setEventDateTime(this.eventDateTime.toString())
-    .setModificationUser(this.modificationUser ?: "")
-    .setModificationDate(this.modificationDate?.toString() ?: "")
-    .build()
+private fun Event.toProto(): EventProto {
+    val builder = EventProto.newBuilder()
+        .setId(this.id)
+        .setEventName(this.eventName)
+        .setDescription(this.description)
+        .setEventDateTime(this.eventDateTime.toString())
+        .setModificationUser(this.modificationUser ?: "")
+        .setModificationDate(this.modificationDate?.toString() ?: "")
+
+    // 👇 Agregar usuarios si existen
+    this.users?.let { users ->
+        val userProtos = users.map {
+            EventUserProto.newBuilder()
+                .setId(it.id.value)
+                .setName(it.name)
+                .setEmail(it.email)
+                .build()
+        }
+        builder.addAllUsers(userProtos)
+    }
+
+    return builder.build()
+}
