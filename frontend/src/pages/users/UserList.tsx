@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useUsers } from "./useUsers";
-import { Btn, Card, ErrorMsg, UsersPage } from "./styles";
+import { Btn, Card, ErrorMsg, Page } from "./styles";
 import { UserTable } from "./components/UserTable";
 import { UserModal } from "./components/UserModal";
 
@@ -32,7 +32,7 @@ export const UserList: React.FC = () => {
   };
 
   return (
-    <UsersPage>
+    <Page>
       <Card>
         <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "column", marginBottom: 18}}>
           <h2 style={{
@@ -61,6 +61,6 @@ export const UserList: React.FC = () => {
           error={error}
         />
       )}
-    </UsersPage>
+    </Page>
   );
 };

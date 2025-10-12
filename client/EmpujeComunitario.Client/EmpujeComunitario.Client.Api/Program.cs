@@ -70,6 +70,7 @@ builder.Services.AddCors(options =>
                         .AllowAnyMethod());
 });
 
+builder.Services.AddHttpContextAccessor();
 // Construye la app después de agregar todos los servicios
 var app = builder.Build();
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useEvents } from "./useEvent";
-import { Btn, Card, ErrorMsg, UsersPage } from "../users/styles";
+import { Btn, Card, ErrorMsg, Page } from "../users/styles";
 import { EventModal } from "./components/EventModal";
 import { EventTable } from "./components/EventTable";
 import { EventMembersModal } from "./components/EventMembersModal";
@@ -51,7 +51,7 @@ export const EventList: React.FC = () => {
   const actorId = "actorIdEjemplo";
 
   return (
-    <UsersPage>
+    <Page>
       <Card>
         <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "column", marginBottom: 18}}>
           <h2 style={{
@@ -96,6 +96,6 @@ export const EventList: React.FC = () => {
           onRefresh={fetchEvents}
         />
       )}
-    </UsersPage>
+    </Page>
   );
 };

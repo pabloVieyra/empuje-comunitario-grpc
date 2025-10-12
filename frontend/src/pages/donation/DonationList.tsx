@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Btn, Card, ErrorMsg, UsersPage } from "./../users/styles";
+import { Btn, Card, ErrorMsg, Page } from "./../users/styles";
 import { DonationTable } from "./components/DonationTable";
 import { DonationModal } from "./components/DonationModal";
 import { useDonations } from "./useDonations";
@@ -33,7 +33,7 @@ export const DonationList: React.FC = () => {
   console.log("Donations:", donations);
 
   return (
-    <UsersPage>
+    <Page>
       <Card>
         <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "column", marginBottom: 18}}>
           <h2 style={{
@@ -62,6 +62,6 @@ export const DonationList: React.FC = () => {
           error={error}
         />
       )}
-    </UsersPage>
+    </Page>
   );
 };

@@ -24,7 +24,7 @@ const Card = styled.div`
   box-shadow: 0 4px 32px #3252e715;
   padding: 96px 68px;
   min-width: 390px;
-  max-width: 420px;
+  max-width: 600px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -61,6 +61,8 @@ const Home: React.FC = () => (
         <NavBtn to="/usuarios">Ir a ABM de Usuarios</NavBtn>
         <NavBtn to="/donaciones">ABM de Donaciones</NavBtn>
         <NavBtn to="/eventos">ABM de Eventos</NavBtn>
+        <NavBtn to="/donaciones/dashboard">Dashboard Donaciones</NavBtn>
+        <NavBtn to="/eventos/dashboard">Dashboard Eventos</NavBtn>
       </Card>
     </CenterBox>
   </HomeBg>

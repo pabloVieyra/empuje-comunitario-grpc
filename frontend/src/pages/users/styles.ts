@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 // Fondo general tipo login
-export const UsersPage = styled.div`
+export const Page = styled.div`
   min-height: 100vh;
   background: #171822;
   display: flex;
