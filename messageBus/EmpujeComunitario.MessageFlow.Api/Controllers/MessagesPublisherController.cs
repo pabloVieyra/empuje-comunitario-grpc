@@ -26,9 +26,9 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
                 var errorResponse = BuildValidationErrorResponse<object>(ModelState);
                 return BadRequest(errorResponse);
             }
-            //var authorization = HttpContext.Items["Authorization"]?.ToString();
+            var userId = HttpContext.Items["UserId"]?.ToString();
 
-            var response = _rabbitMqService.Publish(Exchanges.RoutingKeyRequestDonation, JsonConvert.SerializeObject(request));
+            var response = _rabbitMqService.Publish(Exchanges.RoutingKeyRequestDonation, JsonConvert.SerializeObject(request), userId);
             return StatusCode(response.StatusCode, response);
         }
 
@@ -42,9 +42,9 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
                 var errorResponse = BuildValidationErrorResponse<object>(ModelState);
                 return BadRequest(errorResponse);
             }
-            var authorization = HttpContext.Items["Authorization"]?.ToString();
+            var UserId = HttpContext.Items["UserId"]?.ToString();
 
-            var response = _rabbitMqService.Publish(string.Format(Exchanges.RoutingKeyTransferDonation, IdOrganizacionSolicitante), JsonConvert.SerializeObject(request));
+            var response = _rabbitMqService.Publish(string.Format(Exchanges.RoutingKeyTransferDonation, IdOrganizacionSolicitante), JsonConvert.SerializeObject(request), UserId);
             return StatusCode(response.StatusCode, response);
         }
         //punto 3
@@ -56,9 +56,9 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
                 var errorResponse = BuildValidationErrorResponse<object>(ModelState);
                 return BadRequest(errorResponse);
             }
-            var authorization = HttpContext.Items["Authorization"]?.ToString();
+            var userId = HttpContext.Items["UserId"]?.ToString();
 
-            var response = _rabbitMqService.Publish(Exchanges.RoutingKeyOfferDonation, JsonConvert.SerializeObject(request));
+            var response = _rabbitMqService.Publish(Exchanges.RoutingKeyOfferDonation, JsonConvert.SerializeObject(request),userId);
             return StatusCode(response.StatusCode, response);
         }
 

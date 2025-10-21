@@ -25,11 +25,12 @@ namespace EmpujeComunitario.MessageFlow.Service.Implementation
             _cancelDonationRequestRepository = cancelledDonationRepository;
             _donationRequestRepository = donationRequestRepository;
         }
-        public async Task CreateRequest(RequestDonationModel request)
+        public async Task CreateRequest(RequestDonationModel request, string userId)
         {
             try
             {
                 var entitySolicitud = _mapper.Map<DonationRequest>(request);
+                entitySolicitud.Creation_user_id = Guid.Parse(userId);
                 var isCanceled = await _cancelDonationRequestRepository.Find(request.RequesterOrgId, request.RequestId);
                 if (isCanceled == null)
                 {

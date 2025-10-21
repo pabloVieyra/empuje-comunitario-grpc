@@ -11,5 +11,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Interface
     {
         Task<Donation> GetDonation(string description, string category);
         Task<bool> UppdateDonation(string Id, int quantity);
+        Task<bool> CreateDonationAsync(string category, string description, int quantity, string userId);
     }
 }

@@ -4,6 +4,6 @@ namespace EmpujeComunitario.MessageFlow.Service.Interface
 {
     public interface IRequestDonationService
     {
-        Task CreateRequest(RequestDonationModel request);
+        Task CreateRequest(RequestDonationModel request, string userId);
     }
 }

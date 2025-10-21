@@ -25,11 +25,11 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Implementation
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<DonationTransfer>> GetByRequestAsync(Guid requestId)
+        public async Task<List<DonationTransfer>> GetByRequestAsync(Guid transferId)
         {
             return await _context.DonationTransfers
                 .Include(t => t.Donations)
-                .Where(t => t.RequestId == requestId)
+                .Where(t => t.TransferId == transferId)
                 .ToListAsync();
         }
     }

@@ -3,6 +3,7 @@ using System;
 using EmpujeComunitario.MessageFlow.DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
 {
     [DbContext(typeof(MessageFlowDbContext))]
-    partial class MessageFlowDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251020231114_FixTables")]
+    partial class FixTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,9 +103,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("Create_user_id")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -123,9 +123,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("Creation_user_id")
-                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsCancelled")
                         .HasColumnType("boolean");

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,9 +19,7 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.EntitiesEmpujeComunitario
         public string CreationUserId { get; set; }
         public string? ModificationUserId { get; set; }
 
-        // Navegación
-        public User CreationUser { get; set; }
-        public User? ModificationUser { get; set; }
-        public ICollection<EventDonation> EventDonations { get; set; }
+   
+        
     }
 }

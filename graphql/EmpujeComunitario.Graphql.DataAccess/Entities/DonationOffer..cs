@@ -8,7 +8,6 @@ namespace EmpujeComunitario.Graphql.DataAccess.Entities
 {
     public class DonationOffer
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
         public Guid OfferId { get; set; }
         public string DonationOrganizationId { get; set; }
 

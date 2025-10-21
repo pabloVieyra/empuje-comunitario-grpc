@@ -20,8 +20,8 @@ namespace EmpujeComunitario.Graphql.Api.Controllers
             _soapClientService = soapClientService;
         }
 
-        [HttpPost(nameof(ReporteDeEjemplo))]
-        public IActionResult ReporteDeEjemplo([FromBody] dynamic request)
+        [HttpPost(nameof(SaveQuery))]
+        public IActionResult SaveQuery([FromBody] dynamic request)
         {
             if (!ModelState.IsValid)
             {

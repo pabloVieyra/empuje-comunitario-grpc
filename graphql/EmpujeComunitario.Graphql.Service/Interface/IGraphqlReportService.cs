@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EmpujeComunitario.Graphql.Common.Model;
+
 
 namespace EmpujeComunitario.Graphql.Service.Interface
 {
     public interface IGraphqlReportService
     {
+        Task<IEnumerable<DonationSummaryGroup>> GetSummaryAsync(string category, DateTime? from, DateTime? to, bool? isCancelled);
     }
 }

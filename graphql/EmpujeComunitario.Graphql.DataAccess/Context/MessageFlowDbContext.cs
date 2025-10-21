@@ -21,53 +21,58 @@ namespace EmpujeComunitario.Graphql.DataAccess.Context
             {
                 entity.HasKey(d => d.Id);
 
-                // Relación con DonationRequest
-                entity.HasOne<DonationRequest>()
+                entity.HasOne(d => d.Request)
                       .WithMany(r => r.Donations)
                       .HasForeignKey(d => d.RequestId)
                       .OnDelete(DeleteBehavior.Cascade)
                       .IsRequired(false);
 
-                // Relación con DonationOffer
-                entity.HasOne<DonationOffer>()
+                entity.HasOne(d => d.Offer)
                       .WithMany(o => o.Donations)
                       .HasForeignKey(d => d.OfferId)
                       .OnDelete(DeleteBehavior.Cascade)
                       .IsRequired(false);
 
-                // Relación con TransferDonation
-                entity.HasOne<DonationTransfer>()
+                entity.HasOne(d => d.Transfer)
                       .WithMany(t => t.Donations)
                       .HasForeignKey(d => d.TransferId)
                       .OnDelete(DeleteBehavior.Cascade)
                       .IsRequired(false);
             });
 
-            // ===== DonationRequest =====
+
             modelBuilder.Entity<DonationRequest>(entity =>
             {
-                entity.HasKey(r => r.Id);
+                entity.HasKey(r => r.RequestId);
                 entity.Property(r => r.RequesterOrgId).IsRequired();
-                entity.Property(r => r.RequestId).IsRequired();
+                entity.HasMany(r => r.Donations)
+                      .WithOne(d => d.Request)
+                      .HasForeignKey(d => d.RequestId)
+                      .OnDelete(DeleteBehavior.Cascade);
             });
+
 
             // ===== DonationOffer =====
             modelBuilder.Entity<DonationOffer>(entity =>
             {
-                entity.HasKey(o => o.Id);
-                entity.Property(o => o.OfferId).IsRequired();
+                entity.HasKey(o => o.OfferId);
                 entity.Property(o => o.DonationOrganizationId).IsRequired();
+                entity.HasMany(o => o.Donations)
+                      .WithOne(d => d.Offer)
+                      .HasForeignKey(d => d.OfferId)
+                      .OnDelete(DeleteBehavior.Cascade);
             });
 
-            // ===== TransferDonation =====
             modelBuilder.Entity<DonationTransfer>(entity =>
             {
-                entity.HasKey(t => t.Id);
-                entity.Property(t => t.RequestId).IsRequired();
+                entity.HasKey(t => t.TransferId);
+                entity.Property(t => t.TransferId).IsRequired();
                 entity.Property(t => t.DonationOrgId).IsRequired();
+                entity.HasMany(t => t.Donations)
+                      .WithOne(d => d.Transfer)
+                      .HasForeignKey(d => d.TransferId);
             });
 
-           
 
             base.OnModelCreating(modelBuilder);
         }

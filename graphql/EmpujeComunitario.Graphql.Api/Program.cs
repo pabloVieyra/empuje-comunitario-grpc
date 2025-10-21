@@ -1,3 +1,4 @@
+using EmpujeComunitario.Graphql.Api.GraphqlQuery;
 using EmpujeComunitario.Graphql.DataAccess.Context;
 using EmpujeComunitario.Graphql.DataAccess.Implementation;
 using EmpujeComunitario.Graphql.DataAccess.Interface;
@@ -21,16 +22,18 @@ builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IGraphqlReportService, GraphqlReportService>();
 builder.Services.AddScoped<ISoapClientService, SoapClientService>();
 
-builder.Services.AddScoped<IDonationRequestRepository, DonationRequestRepository>();
+builder.Services.AddScoped<IDonationRepository, DonationRepository>();
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<DonationQuery>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.MapGraphQL("/graphql");
+app.MapNitroApp("/bcp");
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

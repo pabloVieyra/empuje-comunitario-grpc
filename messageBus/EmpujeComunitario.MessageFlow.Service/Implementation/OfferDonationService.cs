@@ -20,11 +20,12 @@ namespace EmpujeComunitario.MessageFlow.Service.Implementation
             _offerRepository = offerRepository;
             _mapper = mapper;
         }
-        public async Task CreateOffer(OfferDonationModel donationOffer)
+        public async Task CreateOffer(OfferDonationModel donationOffer, string userId)
         {
             try
             {
                 var request = _mapper.Map<DonationOffer>(donationOffer);
+                request.Create_user_id = Guid.Parse(userId);
                 await _offerRepository.AddOfferDonationAsync(request);
             }
             catch (Exception ex)
