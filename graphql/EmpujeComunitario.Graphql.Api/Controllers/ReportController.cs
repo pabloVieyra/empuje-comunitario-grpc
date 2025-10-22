@@ -11,10 +11,28 @@ namespace EmpujeComunitario.Graphql.Api.Controllers
     [Route("[controller]")]
     public class ReportController : BaseController
     {
-        public ReportController()
+        private readonly IReportService _reportService;
+        public ReportController(IReportService reportService)
         {
+            _reportService = reportService;
 
-        } 
-        
+        }
+        [HttpPost(nameof(GenerateExcel))]
+        public async Task<IActionResult> GenerateExcel([FromBody] FilterDonation request)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errorResponse = BuildValidationErrorResponse<object>(ModelState);
+                return BadRequest(errorResponse);
+            }
+            var userId = HttpContext.Request.Headers["UserId"];
+            var response = await _reportService.GenerateExcel(request);
+
+            return File(
+                response.Data.Content,                     // contenido del Excel
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // MIME type
+                response.Data.FileName                      // nombre del archivo
+            );
+        }
     }
 }

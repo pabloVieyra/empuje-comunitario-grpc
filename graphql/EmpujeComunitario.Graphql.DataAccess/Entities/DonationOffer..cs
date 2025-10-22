@@ -12,7 +12,8 @@ namespace EmpujeComunitario.Graphql.DataAccess.Entities
         public string DonationOrganizationId { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
+        public Guid Creation_user_id { get; set; }
+        public User User { get; set; }
         public ICollection<DonationItem> Donations { get; set; }
     }
 }

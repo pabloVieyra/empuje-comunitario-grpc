@@ -68,6 +68,8 @@ namespace EmpujeComunitario.Graphql.DataAccess.Implementation
                     Items = g.Select(x => new DonationSummaryItem
                     {
                         RequestId = x.RequestId,
+                        Description = x.Description,
+                        User = x.Offer != null ? x.Offer.User.Email  : x.Request.User.Email,
                         DonationOrganizationId = x.Offer != null ? x.Offer.DonationOrganizationId : null,
                         CreatedAt = x.Request != null ? x.Request.CreatedAt : x.Offer.CreatedAt,
                         Quantity = x.Quantity
@@ -78,57 +80,65 @@ namespace EmpujeComunitario.Graphql.DataAccess.Implementation
             return grouped;
         }
 
-
-        public async Task AddDonationRequestAsync(DonationRequest request)
+        public async Task<IEnumerable<DonationSummaryGroup>> GetDonationExcel(
+            string category = null,
+            DateTime? from = null,
+            DateTime? to = null,
+            bool? isCancelled = null)
         {
-            try
-            {
-                await _context.DonationRequests.AddAsync(request);
-                await _context.SaveChangesAsync();
+            var query = _context.DonationItems
+                .Include(d => d.Request)
+                .ThenInclude(d=> d.User)
+                .Include(d => d.Offer)
+                .ThenInclude(d => d.User)
+                .Where(d => d.TransferId == null)
+                .AsQueryable();
 
+            if (!string.IsNullOrEmpty(category))
+                query = query.Where(d => d.Category.ToUpper() == category.ToUpper());
+
+            if (from.HasValue)
+            {
+                var fromUtc = DateTime.SpecifyKind(from.Value, DateTimeKind.Utc);
+                query = query.Where(d =>
+                    (d.Request != null && d.Request.CreatedAt >= fromUtc) ||
+                    (d.Offer != null && d.Offer.CreatedAt >= fromUtc));
             }
-            catch (Exception e)
+
+            if (to.HasValue)
             {
-                Console.WriteLine(e.Message);
+                var toUtc = DateTime.SpecifyKind(to.Value, DateTimeKind.Utc);
+                query = query.Where(d =>
+                    (d.Request != null && d.Request.CreatedAt <= toUtc) ||
+                    (d.Offer != null && d.Offer.CreatedAt <= toUtc));
             }
-        }
 
-        public async Task<DonationRequest> GetByIdAsync(Guid requestId)
-        {
-            return await _context.DonationRequests
-                .Include(r => r.Donations)
-                .FirstOrDefaultAsync(r => r.RequestId == requestId);
-        }
+            if (isCancelled.HasValue)
+                query = query.Where(d =>
+                    (d.Request != null && d.Request.IsCancelled == isCancelled) ||
+                    (d.Request == null && isCancelled == false));
 
-        public async Task<List<DonationRequest>> GetAllRequestsAsync()
-        {
-            return await _context.DonationRequests
-                .Include(r => r.Donations)
-                .Where(r => !r.IsCancelled)
-                .ToListAsync();
-        }
-
-        public async Task CancelDonationRequestAsync(Guid requestId)
-        {
-            try
-            {
-                var request = await _context.DonationRequests
-                    .Include(r => r.Donations)
-                    .FirstOrDefaultAsync(r => r.RequestId == requestId);
-
-                if (request != null)
+            // Agrupamos por categoría para generar una hoja por categoría
+            var grouped = await query
+                .GroupBy(d => d.Category)
+                .Select(g => new DonationSummaryGroup
                 {
-                    // Marcar como cancelada
-                    request.IsCancelled = true;
+                    Category = g.Key,
+                    Items = g.Select(x => new DonationSummaryItem
+                    {
+                        RequestId = x.RequestId,
+                        Description = x.Description,
+                        DonationOrganizationId = x.Offer != null ? x.Offer.DonationOrganizationId : x.Request.RequesterOrgId,
+                        User = x.Offer != null ? x.Offer.User.Email : x.Request.User.Email,
+                        CreatedAt = x.Request != null ? x.Request.CreatedAt : x.Offer.CreatedAt,
+                        Quantity = x.Quantity,
+                        
+                    }).ToList()
+                }).ToListAsync();
 
-                    // Guardar cambios
-                    await _context.SaveChangesAsync();
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            return grouped;
         }
+
+        
     }
 }

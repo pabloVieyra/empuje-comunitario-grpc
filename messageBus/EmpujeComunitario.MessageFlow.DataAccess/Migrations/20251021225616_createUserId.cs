@@ -14,16 +14,16 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
             migrationBuilder.AddColumn<Guid>(
                 name: "Creation_user_id",
                 table: "DonationRequests",
-                type: "uuid",
+                type: "varchar(255)",
                 nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+                defaultValue: "");
 
             migrationBuilder.AddColumn<Guid>(
-                name: "Create_user_id",
+                name: "Creation_user_id",
                 table: "DonationOffers",
-                type: "uuid",
+                type: "varchar(255)",
                 nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+                defaultValue: "");
         }
 
         /// <inheritdoc />
@@ -34,7 +34,7 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Migrations
                 table: "DonationRequests");
 
             migrationBuilder.DropColumn(
-                name: "Create_user_id",
+                name: "Creation_user_id",
                 table: "DonationOffers");
         }
     }
