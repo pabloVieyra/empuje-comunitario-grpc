@@ -26,7 +26,7 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
                 var errorResponse = BuildValidationErrorResponse<object>(ModelState);
                 return BadRequest(errorResponse);
             }
-            var userId = HttpContext.Items["UserId"]?.ToString();
+            var userId = HttpContext.Request.Headers["UserId"]; ;
 
             var response = _rabbitMqService.Publish(Exchanges.RoutingKeyRequestDonation, JsonConvert.SerializeObject(request), userId);
             return StatusCode(response.StatusCode, response);
@@ -42,7 +42,7 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
                 var errorResponse = BuildValidationErrorResponse<object>(ModelState);
                 return BadRequest(errorResponse);
             }
-            var UserId = HttpContext.Items["UserId"]?.ToString();
+            var UserId = HttpContext.Request.Headers["UserId"];
 
             var response = _rabbitMqService.Publish(string.Format(Exchanges.RoutingKeyTransferDonation, IdOrganizacionSolicitante), JsonConvert.SerializeObject(request), UserId);
             return StatusCode(response.StatusCode, response);
@@ -56,7 +56,7 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
                 var errorResponse = BuildValidationErrorResponse<object>(ModelState);
                 return BadRequest(errorResponse);
             }
-            var userId = HttpContext.Items["UserId"]?.ToString();
+            var userId = HttpContext.Request.Headers["UserId"];
 
             var response = _rabbitMqService.Publish(Exchanges.RoutingKeyOfferDonation, JsonConvert.SerializeObject(request),userId);
             return StatusCode(response.StatusCode, response);
@@ -71,7 +71,6 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
                 var errorResponse = BuildValidationErrorResponse<object>(ModelState);
                 return BadRequest(errorResponse);
             }
-            var authorization = HttpContext.Items["Authorization"]?.ToString();
 
             var response = _rabbitMqService.Publish(Exchanges.RoutingKeyRequestCancel, JsonConvert.SerializeObject(request));
             return StatusCode(response.StatusCode, response);
@@ -87,7 +86,6 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
                 var errorResponse = BuildValidationErrorResponse<object>(ModelState);
                 return BadRequest(errorResponse);
             }
-            var authorization = HttpContext.Items["Authorization"]?.ToString();
 
             var response = _rabbitMqService.Publish(Exchanges.RoutingKeyEventSolidary, JsonConvert.SerializeObject(request));
             return StatusCode(response.StatusCode, response);
@@ -102,8 +100,7 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
                 var errorResponse = BuildValidationErrorResponse<object>(ModelState);
                 return BadRequest(errorResponse);
             }
-            var authorization = HttpContext.Items["Authorization"]?.ToString();
-
+            
             var response = _rabbitMqService.Publish(Exchanges.RoutingKeyEventCancel, JsonConvert.SerializeObject(request));
             return StatusCode(response.StatusCode, response);
         }
@@ -117,8 +114,7 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
                 var errorResponse = BuildValidationErrorResponse<object>(ModelState);
                 return BadRequest(errorResponse);
             }
-            var authorization = HttpContext.Items["Authorization"]?.ToString();
-
+            
             var response = _rabbitMqService.Publish(string.Format(Exchanges.RoutingKeyEventVolunteer,idOrganizador), JsonConvert.SerializeObject(request));
             return StatusCode(response.StatusCode, response);
         }

@@ -7,7 +7,7 @@ namespace EmpujeComunitario.Graphql.DataAccess.Context
     public class MessageFlowDbContext : DbContext
     {
         public MessageFlowDbContext(DbContextOptions<MessageFlowDbContext> options) : base(options) { }
-
+        public DbSet<UserSavedFilter> UserSavedFilters { get; set; }
         public DbSet<DonationRequest> DonationRequests { get; set; }
         public DbSet<DonationOffer> DonationOffers { get; set; }
         public DbSet<DonationItem> DonationItems { get; set; }
@@ -74,6 +74,7 @@ namespace EmpujeComunitario.Graphql.DataAccess.Context
             });
 
 
+            modelBuilder.ApplyConfiguration(new UserSavedFilterConfiguration());
             base.OnModelCreating(modelBuilder);
         }
     }
