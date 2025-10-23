@@ -12,13 +12,29 @@ namespace EmpujeComunitario.Graphql.Service.Implementation
     public class GraphqlReportService : IGraphqlReportService
     {
         private readonly IDonationRepository _donationRepository;
-        public GraphqlReportService(IDonationRepository donationRepository)
+        private readonly IEventRepository _eventRepository;
+        public GraphqlReportService(IDonationRepository donationRepository, IEventRepository eventRepository)
         {
             _donationRepository = donationRepository;
+            _eventRepository = eventRepository;
         }
         public async Task<IEnumerable<DonationSummaryGroup>> GetSummaryAsync(string category, DateTime? from, DateTime? to, bool? isCancelled)
         {
             return await _donationRepository.GetDonationSummaryAsync(category, from, to, isCancelled);
+        }
+        public async Task<IEnumerable<EventParticipationSummary>> GetEventParticipationAsync(
+                    string userId,
+                    DateTime? from = null,
+                    DateTime? to = null,
+                    bool? donationGiven = null)
+        {
+            // 1. Obtener todos los eventos según filtros
+            var events = await _eventRepository.GetEventParticipationAsync(userId, from, to, donationGiven);
+
+            // 2. Agrupar por año y mes
+            
+
+            return events;
         }
     }
 }

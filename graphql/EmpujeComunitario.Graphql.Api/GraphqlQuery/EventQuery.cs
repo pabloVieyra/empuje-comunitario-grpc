@@ -4,19 +4,9 @@ using HotChocolate;
 
 namespace EmpujeComunitario.Graphql.Api.GraphqlQuery
 {
-    public class DonationQuery
+    public class EventQuery
     {
-        public async Task<IEnumerable<DonationSummaryGroup>> GetDonationSummaryAsync(
-            [Service] IGraphqlReportService service,
-            string category = null,
-            DateTime? from = null,
-            DateTime? to = null,
-            bool? isCancelled = null)
-        {
-            return await service.GetSummaryAsync(category, from, to, isCancelled);
-        }
-
-
+        [GraphQLName("participationSummary")]
         public async Task<IEnumerable<EventParticipationSummary>> GetEventParticipationAsync(
             [Service] IGraphqlReportService service,
             string userId,               // filtro obligatorio

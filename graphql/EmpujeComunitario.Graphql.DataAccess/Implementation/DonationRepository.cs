@@ -55,11 +55,14 @@ namespace EmpujeComunitario.Graphql.DataAccess.Implementation
             if (isCancelled.HasValue)
                 query = query.Where(d =>
                     (d.Request != null && d.Request.IsCancelled == isCancelled) ||
-                    (d.Offer != null && isCancelled == false));
+                    (d.Offer != null ));
 
             // agrupación y proyección
             var grouped = await query
-                .GroupBy(d => new { d.Category, IsCancelled = d.Request != null ? d.Request.IsCancelled : false })
+                .GroupBy(d => new 
+                { 
+                    d.Category, 
+                    IsCancelled = d.Request != null ? d.Request.IsCancelled : false })
                 .Select(g => new DonationSummaryGroup
                 {
                     Category = g.Key.Category,

@@ -12,6 +12,10 @@ namespace EmpujeComunitario.Graphql.DataAccess.Context
         public DbSet<DonationOffer> DonationOffers { get; set; }
         public DbSet<DonationItem> DonationItems { get; set; }
         public DbSet<DonationTransfer> DonationTransfers { get; set; }
+        public DbSet<EventDonation> EventDonations { get; set; }
+
+        public DbSet<UserEvent> UserEvents{ get; set; }
+        public DbSet<Event> Events { get; set; }
 
         public DbSet<User> Users { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -47,10 +51,7 @@ namespace EmpujeComunitario.Graphql.DataAccess.Context
                 entity.Property(r => r.RequesterOrgId).IsRequired();
                 entity.Property(r => r.Creation_user_id)
                     .HasColumnName("Creation_user_id")
-                    .HasConversion(
-                      v => v.ToString(),     // de Guid a string para C#
-                      v => Guid.Parse(v)     // de string a Guid para la BD
-                    );
+                    ;
                 entity.HasMany(r => r.Donations)
                       .WithOne(d => d.Request)
                       .HasForeignKey(d => d.RequestId)
@@ -70,10 +71,7 @@ namespace EmpujeComunitario.Graphql.DataAccess.Context
                 entity.HasKey(o => o.OfferId);
                 entity.Property(r => r.Creation_user_id)
                     .HasColumnName("Creation_user_id")
-                    .HasConversion(
-                          v => v.ToString(),     // de Guid a string para C#
-                          v => Guid.Parse(v)     // de string a Guid para la BD
-                      );
+                    ;
                 entity.Property(o => o.DonationOrganizationId).IsRequired();
                 entity.HasMany(o => o.Donations)
                       .WithOne(d => d.Offer)
@@ -107,10 +105,7 @@ namespace EmpujeComunitario.Graphql.DataAccess.Context
                       .HasName("users_pkey");
                 entity.Property(u => u.Id)
                       .HasColumnName("id")
-                      .HasConversion(
-                          v => v.ToString(),      // EF Core convierte Guid a string en memoria
-                          v => Guid.Parse(v)      // EF Core convierte string a Guid para consultas
-                      );
+                     ;
                 // Columnas
                 entity.Property(u => u.Id)
                       .HasColumnName("id")
@@ -167,6 +162,68 @@ namespace EmpujeComunitario.Graphql.DataAccess.Context
             });
 
             modelBuilder.ApplyConfiguration(new UserSavedFilterConfiguration());
+
+            //------------------------
+            modelBuilder.Entity<Event>(entity =>
+            {
+            entity.ToTable("events", "public");
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Id).HasColumnName("id").ValueGeneratedOnAdd();
+            entity.Property(e => e.EventName).HasColumnName("event_name").IsRequired().HasMaxLength(255);
+            entity.Property(e => e.Description).IsRequired().HasColumnName("description").HasMaxLength(255);
+            entity.Property(e => e.EventDateTime).HasColumnName("event_date_time").IsRequired();
+            entity.Property(e => e.ModificationDate).HasColumnName("modification_date").IsRequired(false);
+            entity.Property(e => e.ModificationUserId).HasColumnName("modification_user_id").IsRequired(false);
+                // FK a User
+                entity.HasOne(e => e.ModificationUser)
+                      .WithMany()
+                      .HasForeignKey(e => e.ModificationUserId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.Donations)
+                      .WithOne(d => d.Event)
+                      .HasForeignKey(d => d.EventId);
+
+                entity.HasMany(e => e.UserEvents)
+                      .WithOne(ue => ue.Event)
+                      .HasForeignKey(ue => ue.EventId);
+            });
+
+            // ===== EventDonation =====
+            modelBuilder.Entity<EventDonation>(entity =>
+            {
+                entity.ToTable("event_donations", "public");
+                entity.HasKey(ed => new { ed.DonationId, ed.EventId });
+
+                entity.Property(ed => ed.Quantity).HasColumnName("quantity").IsRequired();
+                entity.Property(ed => ed.EventId).HasColumnName("event_id").IsRequired();
+                entity.Property(ed => ed.DonationId).HasColumnName("donation_id").IsRequired();
+
+                entity.HasOne(ed => ed.Event)
+                      .WithMany(e => e.Donations)
+                      .HasForeignKey(ed => ed.EventId);
+
+                //entity.HasOne(ed => ed.Donation)
+                //      .WithMany()
+                //      .HasForeignKey(ed => ed.DonationId);
+            });
+
+            // ===== UserEvent =====
+            modelBuilder.Entity<UserEvent>(entity =>
+            {
+                entity.ToTable("user_events", "public");
+                entity.HasKey(ue => new { ue.EventId, ue.UserId });
+                entity.Property(ed => ed.UserId).HasColumnName("user_id").IsRequired();
+                entity.Property(ed => ed.EventId).HasColumnName("event_id").IsRequired();
+                entity.HasOne(ue => ue.User)
+                      .WithMany()
+                      .HasForeignKey(ue => ue.UserId);
+
+                entity.HasOne(ue => ue.Event)
+                      .WithMany(e => e.UserEvents)
+                      .HasForeignKey(ue => ue.EventId);
+            });
             base.OnModelCreating(modelBuilder);
         }
     }

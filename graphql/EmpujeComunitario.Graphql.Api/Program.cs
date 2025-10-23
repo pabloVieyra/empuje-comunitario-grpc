@@ -26,6 +26,8 @@ builder.Services.AddScoped<IFilterService, FilterService>();
 
 builder.Services.AddScoped<IDonationRepository, DonationRepository>();
 builder.Services.AddScoped<IUserSavedFilterRepository, UserSavedFilterRepository>();
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<DonationQuery>();
