@@ -20,7 +20,6 @@ namespace EmpujeComunitario.Graphql.DataAccess.Implementation
 
             if (existing != null)
             {
-                // Actualizar los campos necesarios
                 existing.Filter = filter.Filter;
                 existing.Name = filter.Name;
                 
@@ -28,7 +27,6 @@ namespace EmpujeComunitario.Graphql.DataAccess.Implementation
             }
             else
             {
-                // Crear nuevo
                 _context.UserSavedFilters.Add(filter);
             }
 

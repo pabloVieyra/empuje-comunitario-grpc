@@ -57,10 +57,10 @@ namespace EmpujeComunitario.Graphql.DataAccess.Context
                       .HasForeignKey(d => d.RequestId)
                       .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasOne(x => x.User)               // cada DonationRequest tiene 1 User
-                  .WithMany()                   // no necesitamos colección de Requests en User
-                  .HasForeignKey(r => r.Creation_user_id) // FK en DonationRequest
-                  .HasPrincipalKey(u => u.Id)   // PK en User
+                entity.HasOne(x => x.User)              
+                  .WithMany()
+                  .HasForeignKey(r => r.Creation_user_id) 
+                  .HasPrincipalKey(u => u.Id)
                   .OnDelete(DeleteBehavior.Restrict);
             });
 

@@ -22,7 +22,6 @@ namespace EmpujeComunitario.Graphql.Service.Implementation
             var response = new BaseObjectResponse<ExcelGenerate>();
             try
             {
-                // Traemos los datos
                 var result = await _donationRepository.GetDonationExcel(filter.category, filter.from, filter.to, filter.isCancelled);
 
                 using var workbook = new XLWorkbook();
@@ -46,12 +45,11 @@ namespace EmpujeComunitario.Graphql.Service.Implementation
                         ws.Cell(row, 2).Value = item.Description;
                         ws.Cell(row, 3).Value = item.Quantity;
                         ws.Cell(row, 4).Value = group.IsCancelled ? "Sí" : "No";
-                        ws.Cell(row, 5).Value = item.User; // Usuario (Email o Id, según tengas)
-                        ws.Cell(row, 6).Value = "";        // Usuario Modificación
+                        ws.Cell(row, 5).Value = item.User; 
+                        ws.Cell(row, 6).Value = "";        
                         row++;
                     }
 
-                    // Opcional: Auto-ajustar columnas
                     ws.Columns().AdjustToContents();
                 }
 

@@ -29,9 +29,9 @@ namespace EmpujeComunitario.Graphql.Api.Controllers
             var response = await _reportService.GenerateExcel(request);
 
             return File(
-                response.Data.Content,                     // contenido del Excel
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // MIME type
-                response.Data.FileName                      // nombre del archivo
+                response.Data.Content,                     
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+                response.Data.FileName
             );
         }
     }

@@ -28,12 +28,7 @@ namespace EmpujeComunitario.Graphql.Service.Implementation
                     DateTime? to = null,
                     bool? donationGiven = null)
         {
-            // 1. Obtener todos los eventos según filtros
             var events = await _eventRepository.GetEventParticipationAsync(userId, from, to, donationGiven);
-
-            // 2. Agrupar por año y mes
-            
-
             return events;
         }
     }

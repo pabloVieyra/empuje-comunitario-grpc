@@ -9,7 +9,6 @@ namespace EmpujeComunitario.Graphql.DataAccess.Context
         public MessageFlowDbContext CreateDbContext(string[] args)
         {
             var configuration = new ConfigurationBuilder()
-            // Asegúrate de que este path apunta al proyecto que tiene appsettings.json
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false)
             .Build();

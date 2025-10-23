@@ -19,13 +19,12 @@ namespace EmpujeComunitario.Graphql.Api.GraphqlQuery
 
         public async Task<IEnumerable<EventParticipationSummary>> GetEventParticipationAsync(
             [Service] IGraphqlReportService service,
-            string userId,               // filtro obligatorio
-            DateTime? from = null,     // rango de fechas opcional
+            string userId,            
+            DateTime? from = null,    
             DateTime? to = null,
-            bool? donationGiven = null // filtro opcional: sí/no/ambos
+            bool? donationGiven = null
         )
         {
-            // Llamada al servicio que implementará la lógica de repositorio
             return await service.GetEventParticipationAsync(userId, from, to, donationGiven);
         }
     }

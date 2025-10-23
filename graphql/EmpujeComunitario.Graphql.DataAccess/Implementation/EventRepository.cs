@@ -28,24 +28,19 @@ namespace EmpujeComunitario.Graphql.DataAccess.Implementation
 
             var query = _context.Events
                 .AsNoTracking()
-                .Include(e => e.Donations) // Incluir Donaciones
-                .Include(e => e.UserEvents) // Incluir la tabla pivote de participación
-                    .ThenInclude(ue => ue.User).AsQueryable(); // Incluir los detalles del Usuario
-                //.Where(e => e. == false);
-
-            // 🔒 Filtro de usuario obligatorio
+                .Include(e => e.Donations) 
+                .Include(e => e.UserEvents)
+                    .ThenInclude(ue => ue.User).AsQueryable();
             if (!isAdmin)
             {
                 query = query.Where(e => e.UserEvents.Any(ue => ue.UserId == userId));
             }
 
-            // 📅 Filtro por rango de fechas
             if (from.HasValue)
                 query = query.Where(e => e.EventDateTime >= from.Value);
             if (to.HasValue)
                 query = query.Where(e => e.EventDateTime <= to.Value);
 
-            // 🎁 Filtro por reparto de donaciones
             if (hasDonations.HasValue)
             {
                 if (hasDonations.Value)
@@ -55,42 +50,36 @@ namespace EmpujeComunitario.Graphql.DataAccess.Implementation
             }
 
             var monthlyEventDetails = await query
-            .OrderBy(e => e.EventDateTime) // Opcional, pero bueno para la presentación
+            .OrderBy(e => e.EventDateTime) 
             .Select(e => new
             {
-                // Propiedades para la Agrupación (Mes/Año)
                 Year = e.EventDateTime.Year,
                 Month = e.EventDateTime.Month,
 
-                // Propiedades del Evento (MonthlyEventDetail)
                 Day = e.EventDateTime.Day,
                 e.EventName,
                 e.Description,
 
-                // Donaciones (mapeo directo a DTO)
                 Donations = e.Donations.Select(d => new EventDonationDto
                 {
-                    DonationId = d.DonationId, // Asumo que DonationId es una propiedad válida de EventDonation
+                    DonationId = d.DonationId, 
                     Quantity = d.Quantity
                 }).ToList(),
 
-                // Participantes (mapeo directo a DTO)
                 Participants = e.UserEvents.Select(ue => new EventParticipantDto
                 {
                     UserId = ue.UserId,
                     UserName = ue.User.Name + " " + ue.User.LastName
                 }).ToList()
             })
-            .ToListAsync(); // Traemos los datos una sola vez a memoria
+            .ToListAsync(); 
 
-                    // 5. Agrupación final en memoria (Agrupar por Año/Mes)
             var result = monthlyEventDetails
                 .GroupBy(x => new { x.Year, x.Month })
                 .Select(g => new EventParticipationSummary
                 {
                     Year = g.Key.Year,
                     Month = g.Key.Month,
-                    // Mapeamos los eventos dentro del grupo
                     Events = g.Select(e => new MonthlyEventDetail
                     {
                         Day = e.Day,
