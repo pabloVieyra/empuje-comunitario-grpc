@@ -38,7 +38,7 @@ namespace EmpujeComunitario.MessageFlow.Service.Implementation
             _mapper = mapper;
             _context = context;
         }
-        public async Task ConfirmTransferAsync(TransferDonationModel transferMessage)
+        public async Task ConfirmTransferAsync(TransferDonationModel transferMessage, string userId)
         {
             
             try
@@ -55,14 +55,14 @@ namespace EmpujeComunitario.MessageFlow.Service.Implementation
                 // 2️⃣ Actualizar inventario de tu organización
                 foreach (var item in transferMessage.Donations)
                 {
+
                     var inventoryItem = await _donationsRepository.GetDonation(item.Description, item.Category);
-
-                    if (inventoryItem == null)
-                        throw new Exception($"No hay inventario suficiente para {item.Description}");
-
                     // Si somos la organización donante
                     if (transferMessage.DonationOrgId == Organization.Id)
                     {
+
+                        if (inventoryItem == null)
+                            throw new Exception($"No hay inventario suficiente para {item.Description}");
                         if (inventoryItem.Quantity < item.Quantity)
                             throw new Exception($"Cantidad insuficiente en inventario para {item.Description}");
 
@@ -70,8 +70,14 @@ namespace EmpujeComunitario.MessageFlow.Service.Implementation
                     }
                     else
                     {
-                        // Si somos la receptora
-                        await _donationsRepository.UppdateDonation(inventoryItem.Id, item.Quantity);
+                        if(inventoryItem == null)
+                        {
+                            await _donationsRepository.CreateDonationAsync(item.Category, item.Description, item.Quantity, userId);
+                        }
+                        else
+                        {
+                            await _donationsRepository.UppdateDonation(inventoryItem.Id, item.Quantity);
+                        }
                     }
                 }
 

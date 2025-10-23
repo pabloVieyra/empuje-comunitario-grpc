@@ -8,7 +8,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Entities
 {
     public class VolunteerAdhesion
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
         public Guid EventId { get; set; }
         public SolidaryEvent Event { get; set; }
 

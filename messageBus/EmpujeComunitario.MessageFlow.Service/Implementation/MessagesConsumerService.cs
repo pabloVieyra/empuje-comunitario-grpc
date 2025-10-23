@@ -78,6 +78,14 @@ namespace EmpujeComunitario.MessageFlow.Service.Implementation
                 Task.Run(async () =>
                 {
 
+                    string? userId = null;
+
+                    // 🔹 Intentamos leer el header "userId" si está presente
+                    if (ea.BasicProperties?.Headers != null &&
+                        ea.BasicProperties.Headers.TryGetValue("userId", out var userHeader))
+                    {
+                        userId = Encoding.UTF8.GetString((byte[])userHeader);
+                    }
 
                     var json = Encoding.UTF8.GetString(ea.Body.ToArray());
 
@@ -92,20 +100,20 @@ namespace EmpujeComunitario.MessageFlow.Service.Implementation
                             case var rk when rk == Exchanges.RoutingKeyRequestDonation:
                                 var solicitud = JsonConvert.DeserializeObject<RequestDonationModel>(json);
                                 var donationService = scope.ServiceProvider.GetRequiredService<IRequestDonationService>();
-                                await donationService.CreateRequest(solicitud);
+                                await donationService.CreateRequest(solicitud, userId);
                                 break;
                              //2
                             case var rk when rk == string.Format(Exchanges.RoutingKeyTransferDonation, Organization.Id):
 
                                 var transferencia = JsonConvert.DeserializeObject<TransferDonationModel>(json);
                                 var transferDonationService = scope.ServiceProvider.GetRequiredService<ITransferDonationService>();
-                                await transferDonationService.ConfirmTransferAsync(transferencia);
+                                await transferDonationService.ConfirmTransferAsync(transferencia, userId);
                                 break;
                             //3
                             case var rk when rk == Exchanges.RoutingKeyOfferDonation:
                                 var offer = JsonConvert.DeserializeObject<OfferDonationModel>(json);
                                 var offerDonationService = scope.ServiceProvider.GetRequiredService<IOfferDonationService>();
-                                await offerDonationService.CreateOffer(offer);
+                                await offerDonationService.CreateOffer(offer, userId);
                                 break;
                             //4
                             case var rk when rk == Exchanges.RoutingKeyRequestCancel:

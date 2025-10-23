@@ -14,9 +14,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Context
         {
         }
         public DbSet<Donation> Donations { get; set; }
-        public DbSet<EventDonation> EventDonations { get; set; }
-        public DbSet<Event> Events { get; set; }
-        public DbSet<UserEvent> UserEvents { get; set; }
         public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -24,85 +21,120 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Context
             // Donations
             modelBuilder.Entity<Donation>(entity =>
             {
+                // Tabla y esquema
                 entity.ToTable("donations", "public");
-                entity.HasKey(d => d.Id);
-                entity.Property(d => d.Id).HasMaxLength(255);
-                entity.Property(d => d.Category).HasMaxLength(255).IsRequired();
-                entity.Property(d => d.Description).HasMaxLength(255).IsRequired();
-                entity.Property(d => d.CreationDate).IsRequired();
-                entity.Property(d => d.ModificationDate).IsRequired(false);
 
-                entity.HasOne(d => d.CreationUser)
-                      .WithMany(u => u.DonationsCreated)
-                      .HasForeignKey(d => d.CreationUserId)
-                      .OnDelete(DeleteBehavior.Restrict);
+                // Clave primaria
+                entity.HasKey(d => d.Id)
+                      .HasName("donations_pkey"); // nombre del constraint
 
-                entity.HasOne(d => d.ModificationUser)
-                      .WithMany(u => u.DonationsModified)
-                      .HasForeignKey(d => d.ModificationUserId)
-                      .OnDelete(DeleteBehavior.Restrict);
+                // Columnas
+                entity.Property(d => d.Id)
+                      .HasColumnName("id")
+                      .HasMaxLength(255)
+                      .IsRequired();
+
+                entity.Property(d => d.Category)
+                      .HasColumnName("category")
+                      .HasMaxLength(255)
+                      .IsRequired();
+
+                entity.Property(d => d.CreationDate)
+                      .HasColumnName("creation_date")
+                      .IsRequired();
+
+                entity.Property(d => d.Description)
+                      .HasColumnName("description")
+                      .HasMaxLength(255)
+                      .IsRequired();
+
+                entity.Property(d => d.IsDeleted)
+                      .HasColumnName("is_deleted")
+                      .IsRequired();
+
+                entity.Property(d => d.ModificationDate)
+                      .HasColumnName("modification_date")
+                      .IsRequired(false);
+
+                entity.Property(d => d.Quantity)
+                      .HasColumnName("quantity")
+                      .IsRequired();
+
+                entity.Property(d => d.CreationUserId)
+                      .HasColumnName("creation_user_id")
+                      .HasMaxLength(255)
+                      .IsRequired();
+
+                entity.Property(d => d.ModificationUserId)
+                      .HasColumnName("modification_user_id")
+                      .HasMaxLength(255)
+                      .IsRequired(false);
             });
 
-            // EventDonations
-            modelBuilder.Entity<EventDonation>(entity =>
-            {
-                entity.ToTable("event_donations", "public");
-                entity.HasKey(ed => new { ed.DonationId, ed.EventId });
-
-                entity.HasOne(ed => ed.Donation)
-                      .WithMany(d => d.EventDonations)
-                      .HasForeignKey(ed => ed.DonationId);
-
-                entity.HasOne(ed => ed.Event)
-                      .WithMany(e => e.EventDonations)
-                      .HasForeignKey(ed => ed.EventId);
-            });
-
-            // Events
-            modelBuilder.Entity<Event>(entity =>
-            {
-                entity.ToTable("events", "public");
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Description).HasMaxLength(255).IsRequired();
-                entity.Property(e => e.EventName).HasMaxLength(255).IsRequired();
-                entity.Property(e => e.EventDateTime).IsRequired();
-                entity.Property(e => e.ModificationDate).IsRequired(false);
-
-                entity.HasOne(e => e.ModificationUser)
-                      .WithMany(u => u.EventsModified)
-                      .HasForeignKey(e => e.ModificationUserId)
-                      .OnDelete(DeleteBehavior.Restrict);
-            });
-
-            // UserEvents
-            modelBuilder.Entity<UserEvent>(entity =>
-            {
-                entity.ToTable("user_events", "public");
-                entity.HasKey(ue => new { ue.EventId, ue.UserId });
-
-                entity.HasOne(ue => ue.User)
-                      .WithMany(u => u.UserEvents)
-                      .HasForeignKey(ue => ue.UserId);
-
-                entity.HasOne(ue => ue.Event)
-                      .WithMany(e => e.UserEvents)
-                      .HasForeignKey(ue => ue.EventId);
-            });
-
-            // Users
             modelBuilder.Entity<User>(entity =>
             {
+                // Tabla y esquema
                 entity.ToTable("users", "public");
-                entity.HasKey(u => u.Id);
-                entity.Property(u => u.Id).HasMaxLength(255);
-                entity.Property(u => u.Email).HasMaxLength(255).IsRequired();
-                entity.Property(u => u.LastName).HasMaxLength(255).IsRequired();
-                entity.Property(u => u.Name).HasMaxLength(255).IsRequired();
-                entity.Property(u => u.Password).HasMaxLength(255).IsRequired();
-                entity.Property(u => u.Username).HasMaxLength(255).IsRequired();
-                entity.Property(u => u.Phone).HasMaxLength(255).IsRequired(false);
-                entity.Property(u => u.Role).HasMaxLength(255).IsRequired();
+
+                // Clave primaria
+                entity.HasKey(u => u.Id)
+                      .HasName("users_pkey");
+
+                // Columnas
+                entity.Property(u => u.Id)
+                      .HasColumnName("id")
+                      .HasMaxLength(255)
+                      .IsRequired();
+
+                entity.Property(u => u.Active)
+                      .HasColumnName("active")
+                      .IsRequired();
+
+                entity.Property(u => u.Email)
+                      .HasColumnName("email")
+                      .HasMaxLength(255)
+                      .IsRequired();
+
+                entity.Property(u => u.LastName)
+                      .HasColumnName("lastname")
+                      .HasMaxLength(255)
+                      .IsRequired();
+
+                entity.Property(u => u.Name)
+                      .HasColumnName("name")
+                      .HasMaxLength(255)
+                      .IsRequired();
+
+                entity.Property(u => u.Password)
+                      .HasColumnName("password")
+                      .HasMaxLength(255)
+                      .IsRequired();
+
+                entity.Property(u => u.Phone)
+                      .HasColumnName("phone")
+                      .HasMaxLength(255)
+                      .IsRequired(false);
+
+                entity.Property(u => u.Role)
+                      .HasColumnName("role")
+                      .HasMaxLength(255)
+                      .IsRequired();
+
+                entity.Property(u => u.Username)
+                      .HasColumnName("username")
+                      .HasMaxLength(255)
+                      .IsRequired();
+
+                // Índices únicos
+                entity.HasIndex(u => u.Email)
+                      .IsUnique()
+                      .HasDatabaseName("uk6dotkott2kjsp8vw4d0m25fb7");
+
+                entity.HasIndex(u => u.Username)
+                      .IsUnique()
+                      .HasDatabaseName("ukr43af9ap4edm43mmtq01oddj6");
             });
+
         }
     }
 }

@@ -17,10 +17,5 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.EntitiesEmpujeComunitario
         public string? Phone { get; set; }
         public string Role { get; set; }
         public string Username { get; set; }
-
-        public ICollection<Donation> DonationsCreated { get; set; }
-        public ICollection<Donation> DonationsModified { get; set; }
-        public ICollection<Event> EventsModified { get; set; }
-        public ICollection<UserEvent> UserEvents { get; set; }
     }
 }

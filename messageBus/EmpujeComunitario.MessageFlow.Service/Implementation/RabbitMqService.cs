@@ -39,19 +39,28 @@ namespace EmpujeComunitario.MessageFlow.Service.Implementation
                 arguments: null
             );
         }
-        public BaseObjectResponse<string> Publish(string routingKey, string message)
+        public BaseObjectResponse<string> Publish(string routingKey, string message, string userId = "")
         {
             var response = new BaseObjectResponse<string>();
             try
             {
                 var body = Encoding.UTF8.GetBytes(message);
+                var properties = _model.CreateBasicProperties();
                 ReadOnlyMemory<byte> bodyMemory = new ReadOnlyMemory<byte>(body);
+
+                if (!string.IsNullOrWhiteSpace(userId))
+                {
+                    properties.Headers = new Dictionary<string, object>
+                    {
+                        { "userId", Encoding.UTF8.GetBytes(userId) }
+                    };
+                }
 
                 _model.BasicPublish(
                      exchange: ONG_EXCHANGE_NAME,
                      routingKey: routingKey,
                      mandatory: true,
-                     basicProperties: null,
+                     basicProperties: properties,
                      body: bodyMemory
                 );
 

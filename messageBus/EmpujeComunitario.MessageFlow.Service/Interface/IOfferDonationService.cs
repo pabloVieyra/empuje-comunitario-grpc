@@ -9,6 +9,6 @@ namespace EmpujeComunitario.MessageFlow.Service.Interface
 {
     public interface IOfferDonationService
     {
-        Task CreateOffer(OfferDonationModel donationOffer);
+        Task CreateOffer(OfferDonationModel donationOffer, string userId);
     }
 }

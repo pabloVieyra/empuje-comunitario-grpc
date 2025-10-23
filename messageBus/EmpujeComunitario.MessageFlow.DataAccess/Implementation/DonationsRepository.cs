@@ -22,7 +22,22 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Implementation
             var result = await _context.Donations.FirstOrDefaultAsync(x => x.Category == category && x.Description == description);
             return result;
         }
+        public async Task<bool> CreateDonationAsync(string category, string description, int quantity, string userId)
+        {
+            await _context.Donations.AddAsync(new Donation
+            {
+                Id = Guid.NewGuid().ToString(),
+                Category = category,
+                CreationDate = DateTime.UtcNow,
+                Description = description,
+                IsDeleted = false,
+                Quantity = quantity,
+                CreationUserId = userId
 
+            });
+            await _context.SaveChangesAsync();
+            return true;
+        }
         public async Task<bool> UppdateDonation(string Id, int quantity)
         {
             try

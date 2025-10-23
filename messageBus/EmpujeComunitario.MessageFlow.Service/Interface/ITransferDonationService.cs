@@ -9,6 +9,6 @@ namespace EmpujeComunitario.MessageFlow.Service.Interface
 {
     public interface ITransferDonationService
     {
-        Task ConfirmTransferAsync(TransferDonationModel transferMessage);
+        Task ConfirmTransferAsync(TransferDonationModel transferMessage, string userId);
     }
 }
