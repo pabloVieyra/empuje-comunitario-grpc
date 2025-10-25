@@ -1,3 +1,4 @@
+using EmpujeComunitario.Graphql.Api.Configuration;
 using EmpujeComunitario.Graphql.Api.GraphqlQuery;
 using EmpujeComunitario.Graphql.DataAccess.Context;
 using EmpujeComunitario.Graphql.DataAccess.Implementation;
@@ -6,6 +7,7 @@ using EmpujeComunitario.Graphql.Service.Implementation;
 using EmpujeComunitario.Graphql.Service.Infrastructure;
 using EmpujeComunitario.Graphql.Service.Interface;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +16,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Filter API", Version = "v1" });
+
+    options.OperationFilter<AddRequiredHeaderParameter>(
+        "UserId", // El nombre del header
+        "ID del usuario para identificar la sesión.", 
+        true 
+    );
+});
 
 builder.Services.AddDbContext<MessageFlowDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));

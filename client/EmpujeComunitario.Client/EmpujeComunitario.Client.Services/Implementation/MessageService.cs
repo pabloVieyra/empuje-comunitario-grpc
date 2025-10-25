@@ -37,14 +37,14 @@ namespace EmpujeComunitario.Client.Services.Implementation
             }
         }
 
-        public Task<BaseObjectResponse<string>> RequestDonationAsync(RequestDonationModel request) =>
-            SafeCall(() => _messagesPublisherClient.RequestDonation(request));
+        public Task<BaseObjectResponse<string>> RequestDonationAsync(RequestDonationModel request, string userid) =>
+            SafeCall(() => _messagesPublisherClient.RequestDonation(request, userid));
 
-        public Task<BaseObjectResponse<string>> TransfersDonationAsync(TransferDonationModel request, string idOrganizacionSolicitante) =>
-            SafeCall(() => _messagesPublisherClient.TransfersDonation(request, idOrganizacionSolicitante));
+        public Task<BaseObjectResponse<string>> TransfersDonationAsync(TransferDonationModel request, string idOrganizacionSolicitante, string userid) =>
+            SafeCall(() => _messagesPublisherClient.TransfersDonation(request, idOrganizacionSolicitante, userid));
 
-        public Task<BaseObjectResponse<string>> OffersDonationsAsync(OfferDonationModel request) =>
-            SafeCall(() => _messagesPublisherClient.OffersDonations(request));
+        public Task<BaseObjectResponse<string>> OffersDonationsAsync(OfferDonationModel request, string userid) =>
+            SafeCall(() => _messagesPublisherClient.OffersDonations(request, userid));
 
         public Task<BaseObjectResponse<string>> RequestsCancelAsync(CancelRequestModel request) =>
             SafeCall(() => _messagesPublisherClient.RequestsCancel(request));

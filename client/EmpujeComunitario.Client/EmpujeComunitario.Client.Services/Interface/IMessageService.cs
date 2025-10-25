@@ -6,11 +6,11 @@ namespace EmpujeComunitario.Client.Services.Interface
 {
     public interface IMessageService
     {
-        Task<BaseObjectResponse<string>> RequestDonationAsync(RequestDonationModel request);
+        Task<BaseObjectResponse<string>> RequestDonationAsync(RequestDonationModel request, string userid);
 
-        Task<BaseObjectResponse<string>> TransfersDonationAsync(TransferDonationModel request, string idOrganizacionSolicitante);
+        Task<BaseObjectResponse<string>> TransfersDonationAsync(TransferDonationModel request, string idOrganizacionSolicitante, string userid);
 
-        Task<BaseObjectResponse<string>> OffersDonationsAsync(OfferDonationModel request);
+        Task<BaseObjectResponse<string>> OffersDonationsAsync(OfferDonationModel request, string userid);
 
         Task<BaseObjectResponse<string>> RequestsCancelAsync(CancelRequestModel request);
 

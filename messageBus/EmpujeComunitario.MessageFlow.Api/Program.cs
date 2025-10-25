@@ -1,3 +1,4 @@
+using EmpujeComunitario.MessageFlow.Api.Configuration;
 using EmpujeComunitario.MessageFlow.Common.Settings;
 using EmpujeComunitario.MessageFlow.DataAccess.Context;
 using EmpujeComunitario.MessageFlow.DataAccess.Implementation;
@@ -6,15 +7,21 @@ using EmpujeComunitario.MessageFlow.Service.Implementation;
 using EmpujeComunitario.MessageFlow.Service.Infrastructure;
 using EmpujeComunitario.MessageFlow.Service.Interface;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MessageFlow API", Version = "v1" });
+
+    options.OperationFilter<ApplySwaggerHeaderOperationFilter>();
+});
 
 builder.Services.Configure<RabbitMqSettings>(
     builder.Configuration.GetSection(nameof(RabbitMqSettings)));

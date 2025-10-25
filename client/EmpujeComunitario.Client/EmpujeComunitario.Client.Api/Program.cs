@@ -1,14 +1,16 @@
+using EmpujeComunitario.Client.Api.Configuration;
 using EmpujeComunitario.Client.Api.Infrastructure;
 using EmpujeComunitario.Client.Common.Settings;
 using EmpujeComunitario.Client.Services.Implementation;
 using EmpujeComunitario.Client.Services.Infrastructure;
 using EmpujeComunitario.Client.Services.Interface;
 using EmpujeComunitario.MessageFlow.WebClient.Infrastructure;
+using Grpc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using System;
-using Grpc;
 using System.IO;
 using System.Reflection;
 
@@ -49,7 +51,12 @@ builder.Services.AddGrpcClient<DonationInventoryService.DonationInventoryService
 
 builder.Services.Configure<RabbitMq>(
     builder.Configuration.GetSection(nameof(RabbitMq)));
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Client API", Version = "v1" });
+
+    options.OperationFilter<ApplySwaggerHeaderOperationFilter>();
+});
 builder.Services.AddScoped<IUserManagerServices, UserManagerServices>();
 builder.Services.AddScoped<IAuthManagerServices, AuthManagerServices>();
 builder.Services.AddScoped<IEventManagerServices, EventManagerServices>();
