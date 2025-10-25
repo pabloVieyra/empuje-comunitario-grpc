@@ -1,4 +1,5 @@
-﻿using EmpujeComunitario.MessageFlow.Common.Constants;
+﻿using EmpujeComunitario.MessageFlow.Api.Configuration;
+using EmpujeComunitario.MessageFlow.Common.Constants;
 using EmpujeComunitario.MessageFlow.Common.Model;
 using EmpujeComunitario.MessageFlow.Common.Model.MessagesRabbitMQ;
 using EmpujeComunitario.MessageFlow.Service.Interface;
@@ -18,6 +19,7 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
             _rabbitMqService = rabbitMqService;
         }
         //punto 1
+        [SwaggerHeader("UserId")]
         [HttpPost("solicitud-donaciones")]
         public IActionResult RequestDonation([FromBody] RequestDonationModel request)
         {
@@ -33,6 +35,7 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
         }
 
         //punto 2
+        [SwaggerHeader("UserId")]
         [HttpPost("/transferencia-donaciones/{IdOrganizacionSolicitante}")]
         [ProducesResponseType(typeof(TransferDonationModel), 200)]
         public IActionResult TransfersDonation([FromBody] TransferDonationModel request, [FromRoute]string IdOrganizacionSolicitante)
@@ -48,6 +51,7 @@ namespace EmpujeComunitario.MessageFlow.Api.Controllers
             return StatusCode(response.StatusCode, response);
         }
         //punto 3
+        [SwaggerHeader("UserId")]
         [HttpPost("oferta-donaciones")]
         public IActionResult OffersDonations([FromBody] OfferDonationModel request)
         {

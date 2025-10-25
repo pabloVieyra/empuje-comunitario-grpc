@@ -13,15 +13,15 @@ namespace EmpujeComunitario.MessageFlow.WebClient.Interface
     {
         // Punto 1
         [Post("/MessagesPublisher/solicitud-donaciones")]
-        Task<BaseObjectResponse<string>> RequestDonation([Body] RequestDonationModel request);
+        Task<BaseObjectResponse<string>> RequestDonation([Body] RequestDonationModel request,[Header("UserId")] string userId);
 
         // Punto 2
         [Post("/MessagesPublisher/transferencia-donaciones/{IdOrganizacionSolicitante}")]
-        Task<BaseObjectResponse<string>> TransfersDonation([Body] TransferDonationModel request, string IdOrganizacionSolicitante);
+        Task<BaseObjectResponse<string>> TransfersDonation([Body] TransferDonationModel request, string IdOrganizacionSolicitante, [Header("UserId")] string userId);
 
         // Punto 3
         [Post("/MessagesPublisher/oferta-donaciones")]
-        Task<BaseObjectResponse<string>> OffersDonations([Body] OfferDonationModel request);
+        Task<BaseObjectResponse<string>> OffersDonations([Body] OfferDonationModel request, [Header("UserId")] string userId);
 
         // Punto 4
         [Post("/MessagesPublisher/baja-solicitud-donaciones")]
