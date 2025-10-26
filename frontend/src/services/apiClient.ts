@@ -1,6 +1,5 @@
 import axios, { type AxiosRequestHeaders } from "axios";
 import { authService } from "./authService";
-import { use } from "react";
 
 const baseURL = "http://localhost:5169/";
 

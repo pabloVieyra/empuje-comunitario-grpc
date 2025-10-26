@@ -9,6 +9,9 @@ import { DonationList } from "./pages/donation/DonationList";
 import { EventList } from "./pages/event/EventList";
 import EventDashboard from "./pages/event/dashboard/EventDashboard";
 import { DonationDashboard } from "./pages/donation/dashboard/DonationDashboard";
+import DonationReport from "./pages/donation/report/DonationReport";
+import EventParticipationReport from "./pages/event/report/EventParticipationReport";
+import OrganizationConsult from "./pages/organization/OrganizationConsult";
 
 
 export const router = createBrowserRouter([
@@ -32,6 +35,8 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <DonationList /> },
           { path: "dashboard", element: <DonationDashboard /> },
+          { path: "informe", element: <DonationReport /> },
+
         ],
       },
       {
@@ -40,8 +45,17 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <EventList /> },
           { path: "dashboard", element: <EventDashboard /> },
+          { path: "informe", element: <EventParticipationReport /> }
+
         ],
-      }
+      },
+      {
+  path: "organization",
+  element: <PresidenteLayout />,
+  children: [
+    { path: "consulta", element: <OrganizationConsult /> }
+  ]
+},
     ],
   },
 

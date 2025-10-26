@@ -14,6 +14,6 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public ICollection<DonationItem> Donations { get; set; }
-        public Guid Create_user_id { get; set; }  
+        public string Create_user_id { get; set; }  
     }
 }
