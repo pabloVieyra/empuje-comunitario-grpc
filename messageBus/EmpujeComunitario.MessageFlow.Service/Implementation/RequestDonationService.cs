@@ -30,7 +30,7 @@ namespace EmpujeComunitario.MessageFlow.Service.Implementation
             try
             {
                 var entitySolicitud = _mapper.Map<DonationRequest>(request);
-                entitySolicitud.Creation_user_id = Guid.Parse(userId);
+                entitySolicitud.Creation_user_id = userId;
                 var isCanceled = await _cancelDonationRequestRepository.Find(request.RequesterOrgId, request.RequestId);
                 if (isCanceled == null)
                 {

@@ -63,6 +63,11 @@ const Home: React.FC = () => (
         <NavBtn to="/eventos">ABM de Eventos</NavBtn>
         <NavBtn to="/donaciones/dashboard">Dashboard Donaciones</NavBtn>
         <NavBtn to="/eventos/dashboard">Dashboard Eventos</NavBtn>
+        <NavBtn to="/donaciones/informe">Informe de Donaciones</NavBtn>
+        <NavBtn to="/eventos/informe">Informe de Eventos</NavBtn>
+        <NavBtn to="/organization/consulta">Consulta Presidentes y ONGs</NavBtn>
+
+
       </Card>
     </CenterBox>
   </HomeBg>

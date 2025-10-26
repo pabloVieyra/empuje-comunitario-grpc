@@ -14,7 +14,7 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Entities
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public bool IsCancelled { get; set; } = false;
-        public Guid Creation_user_id { get; set; }
+        public string Creation_user_id { get; set; }
         public ICollection<DonationItem> Donations { get; set; }
     }
 }

@@ -43,6 +43,7 @@ namespace EmpujeComunitario.Graphql.DataAccess.Implementation
         {
             var filter = await _context.UserSavedFilters.FirstOrDefaultAsync(x => x.Name == name && x.UserId == userId);
             _context.UserSavedFilters.Remove(filter);
+            await _context.SaveChangesAsync();
             return true;
         }
     }

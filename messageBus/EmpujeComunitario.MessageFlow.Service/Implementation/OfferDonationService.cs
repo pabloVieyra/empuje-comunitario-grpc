@@ -25,7 +25,7 @@ namespace EmpujeComunitario.MessageFlow.Service.Implementation
             try
             {
                 var request = _mapper.Map<DonationOffer>(donationOffer);
-                request.Create_user_id = Guid.Parse(userId);
+                request.Create_user_id = userId;
                 await _offerRepository.AddOfferDonationAsync(request);
             }
             catch (Exception ex)

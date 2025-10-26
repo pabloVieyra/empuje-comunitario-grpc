@@ -52,6 +52,7 @@ builder.Services.AddScoped<ITransferDonationService, TransferDonationService>();
 builder.Services.AddScoped<IOfferDonationService, OfferDonationService>();
 builder.Services.AddScoped<IEventSolidaryService , EventSolidaryService>();
 builder.Services.AddScoped<IExternalDataService, ExternalDataService>();
+builder.Services.AddScoped<IVolunteerAdhesionService, VolunteerAdhesionService>();
 
 
 builder.Services.AddAutoMapper(typeof(RabbitMqMappingProfile));

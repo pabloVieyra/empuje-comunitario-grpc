@@ -67,6 +67,7 @@ namespace EmpujeComunitario.MessageFlow.DataAccess.Context
             {
                 entity.HasKey(o => o.OfferId);
                 entity.Property(o => o.DonationOrganizationId).IsRequired();
+                entity.Property(o => o.Create_user_id).HasColumnName("Creation_user_id");
                 entity.HasMany(o => o.Donations)
                       .WithOne(d => d.Offer)
                       .HasForeignKey(d => d.OfferId)
